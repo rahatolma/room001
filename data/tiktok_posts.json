@@ -1,0 +1,34 @@
+[
+    {
+        "id": "tiktok-1",
+        "curatorId": "sofia-richie_1771013147950",
+        "imageUrl": "https://is4.revolveassets.com/images/p4/n/z/KHAITE-WJ12_V1.jpg",
+        "caption": "GRWM for dinner 🍝",
+        "date": "2 days ago",
+        "productIds": [
+            "prod-6",
+            "2"
+        ]
+    },
+    {
+        "id": "tiktok-2",
+        "curatorId": "sofia-richie_1771013147950",
+        "imageUrl": "https://is4.revolveassets.com/images/p4/n/z/LPA-WK230_V1.jpg",
+        "caption": "Cozy vibes only ☁️",
+        "date": "5 days ago",
+        "productIds": [
+            "1",
+            "prod-7"
+        ]
+    },
+    {
+        "id": "tiktok-3",
+        "curatorId": "sofia-richie_1771013147950",
+        "imageUrl": "https://is4.revolveassets.com/images/p4/n/z/TOMF-WI5_V1.jpg",
+        "caption": "Styling the suede jacket 3 ways",
+        "date": "1 week ago",
+        "productIds": [
+            "prod-4"
+        ]
+    }
+]

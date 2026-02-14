@@ -1,0 +1,320 @@
+"use client";
+
+import React, { useState, useMemo } from 'react';
+import ProfileHeader from '@/components/ProfileHeader';
+import ProductGrid from '@/components/ProductGrid';
+
+interface Product {
+    id: string;
+    image: string;
+    brand: string;
+    title: string;
+    price: string;
+    sectionId: string;
+    category?: string;
+    curator: {
+        name: string;
+        avatar: string;
+    };
+}
+
+interface Section {
+    id: string;
+    title: string;
+}
+
+interface CuratorShopProps {
+    profile: any;
+    sections: Section[];
+    products: any[];
+    instagramPosts?: any[];
+    tiktokPosts?: any[];
+}
+
+export default function CuratorShop({ profile, sections, products, instagramPosts = [], tiktokPosts = [] }: CuratorShopProps) {
+    const [activeSection, setActiveSection] = useState<string>('all');
+    const [activeCategory, setActiveCategory] = useState<string>('all');
+    const [activePost, setActivePost] = useState<any>(null);
+
+    React.useEffect(() => {
+        const handleSwitchIG = () => {
+            setActiveSection('instagram');
+            setActiveCategory('all');
+            // Smooth scroll to nav content
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+        };
+        const handleSwitchTT = () => {
+            setActiveSection('tiktok');
+            setActiveCategory('all');
+            // Smooth scroll to nav content
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+        };
+        window.addEventListener('switchToInstagram', handleSwitchIG);
+        window.addEventListener('switchToTiktok', handleSwitchTT);
+        return () => {
+            window.removeEventListener('switchToInstagram', handleSwitchIG);
+            window.removeEventListener('switchToTiktok', handleSwitchTT);
+        }
+    }, []);
+
+    const getPostProducts = (post: any) => {
+        if (!post || !post.productIds) return [];
+        return products.filter(p => post.productIds.includes(p.id));
+    };
+
+    // Calculate Category Counts
+    const categoryCounts = useMemo(() => {
+        const counts: Record<string, number> = {};
+        products.forEach(p => {
+            if (p.category) {
+                counts[p.category] = (counts[p.category] || 0) + 1;
+            }
+        });
+        return counts;
+    }, [products]);
+
+    // Filter Products
+    const filteredProducts = useMemo(() => {
+        return products.filter(product => {
+            const matchesSection = activeSection === 'all' || product.sectionId === activeSection;
+            const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
+            return matchesSection && matchesCategory;
+        });
+    }, [products, activeSection, activeCategory]);
+
+    // Available Categories
+    const categories = [
+        "APPAREL", "MAKEUP", "SKINCARE", "FOOTWEAR",
+        "COATS & OUTERWEAR", "BAGS & PURSES", "HAIRCARE",
+        "SWIMWEAR", "EYEWEAR", "BATH & BODY", "JEWELRY"
+    ];
+
+    const formatProductsForGrid = (prods: any[]) => {
+        return prods.map(p => ({
+            ...p,
+            curator: {
+                name: profile.name.split(' ')[0],
+                avatar: 'https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=100' // Fallback or real avatar
+            }
+        }));
+    };
+
+    if (activePost) {
+        const postProducts = getPostProducts(activePost);
+        return (
+            <main style={{ backgroundColor: 'white', minHeight: '100vh', padding: '20px' }}>
+                <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+                    <button
+                        onClick={() => setActivePost(null)}
+                        style={{
+                            background: 'none', border: 'none', cursor: 'pointer',
+                            fontSize: '0.9rem', fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase',
+                            marginBottom: 30, display: 'flex', alignItems: 'center', gap: 5
+                        }}
+                    >
+                        ← Back
+                    </button>
+
+                    <div style={{ textAlign: 'center', marginBottom: 40 }}>
+                        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2.5rem', margin: '0 0 10px 0' }}>{activePost.caption}</h1>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>
+                            <img src={profile.initials ? `https://ui-avatars.com/api/?name=${profile.initials}&background=random` : "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=100"} alt="Avatar" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+                            <span>{profile.name}</span>
+                            <span>|</span>
+                            <span>{postProducts.length} Products</span>
+                            <span>|</span>
+                            <span>More on this collection</span>
+                        </div>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 60 }}>
+                        <div style={{ maxWidth: 500, width: '100%' }}>
+                            <img src={activePost.imageUrl} alt="Post" style={{ width: '100%', borderRadius: 4 }} />
+                        </div>
+                    </div>
+
+                    <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+                        <ProductGrid products={formatProductsForGrid(postProducts)} />
+                    </div>
+                </div>
+            </main>
+        );
+    }
+
+    return (
+        <main style={{ backgroundColor: 'white', minHeight: '100vh' }}>
+            {/* Header Section */}
+            <ProfileHeader
+                name={profile.name}
+                bio={profile.bio}
+                avatarInitials={profile.initials}
+                socialLinks={profile.socials}
+            />
+
+            {/* Sticky Navigation Bars */}
+            <div style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'white', borderBottom: '1px solid #eee' }}>
+                {/* Primary Nav (Sections) */}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: 30,
+                    padding: '15px 0',
+                    borderBottom: '1px solid #f0f0f0',
+                    fontSize: '0.85rem',
+                    color: '#333',
+                    fontWeight: 500,
+                    overflowX: 'auto',
+                    whiteSpace: 'nowrap'
+                }}>
+                    <span
+                        onClick={() => { setActiveSection('all'); setActiveCategory('all'); }}
+                        style={{
+                            border: activeSection === 'all' ? '1px solid black' : '1px solid transparent',
+                            borderRadius: '20px',
+                            padding: '5px 15px',
+                            cursor: 'pointer',
+                            opacity: activeSection === 'all' ? 1 : 0.6
+                        }}
+                    >
+                        Tümü
+                    </span>
+
+                    {sections.filter((s: any) => ['latest-finds', 'most-popular', 'fashion', 'beauty', 'baby', 'x-sofia'].includes(s.id)).map((section: any) => (
+                        <span
+                            key={section.id}
+                            onClick={() => { setActiveSection(section.id); setActiveCategory('all'); }}
+                            style={{
+                                border: activeSection === section.id ? '1px solid black' : '1px solid transparent',
+                                borderRadius: '20px',
+                                padding: '5px 15px',
+                                cursor: 'pointer',
+                                opacity: activeSection === section.id ? 1 : 0.6
+                            }}
+                        >
+                            {section.title}
+                        </span>
+                    ))}
+
+                    <span
+                        onClick={() => { setActiveSection('instagram'); setActiveCategory('all'); }}
+                        style={{
+                            border: activeSection === 'instagram' ? '1px solid black' : '1px solid transparent',
+                            borderRadius: '20px',
+                            padding: '5px 15px',
+                            cursor: 'pointer',
+                            opacity: activeSection === 'instagram' ? 1 : 0.6
+                        }}
+                    >
+                        Instagram
+                    </span>
+
+                    <span
+                        onClick={() => { setActiveSection('tiktok'); setActiveCategory('all'); }}
+                        style={{
+                            border: activeSection === 'tiktok' ? '1px solid black' : '1px solid transparent',
+                            borderRadius: '20px',
+                            padding: '5px 15px',
+                            cursor: 'pointer',
+                            opacity: activeSection === 'tiktok' ? 1 : 0.6
+                        }}
+                    >
+                        Tiktok
+                    </span>
+
+                    {sections.filter((s: any) => !['latest-finds', 'most-popular', 'fashion', 'beauty', 'baby', 'x-sofia'].includes(s.id)).map((section: any) => (
+                        <span
+                            key={section.id}
+                            onClick={() => { setActiveSection(section.id); setActiveCategory('all'); }}
+                            style={{
+                                border: activeSection === section.id ? '1px solid black' : '1px solid transparent',
+                                borderRadius: '20px',
+                                padding: '5px 15px',
+                                cursor: 'pointer',
+                                opacity: activeSection === section.id ? 1 : 0.6
+                            }}
+                        >
+                            {section.title}
+                        </span>
+                    ))}
+                </div>
+
+                {/* Secondary Nav (Categories with counts) */}
+                {activeSection !== 'instagram' && (
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: 40,
+                        padding: '12px 0',
+                        fontSize: '0.7rem',
+                        color: '#999',
+                        letterSpacing: '1px',
+                        textTransform: 'uppercase',
+                        overflowX: 'auto',
+                        whiteSpace: 'nowrap'
+                    }}>
+                        {categories.map(cat => {
+                            const count = categoryCounts[cat] || 0;
+                            if (count === 0) return null; // Hide empty categories
+
+                            return (
+                                <span
+                                    key={cat}
+                                    onClick={() => setActiveCategory(cat === activeCategory ? 'all' : cat)}
+                                    style={{
+                                        color: activeCategory === cat ? 'black' : '#999',
+                                        fontWeight: activeCategory === cat ? 600 : 400,
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {cat} {count}
+                                </span>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+            {/* Product Feed */}
+            <div style={{ padding: '0 40px' }}>
+                {activeSection === 'instagram' ? (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                        {instagramPosts?.map((post) => (
+                            <div
+                                key={post.id}
+                                onClick={() => setActivePost(post)}
+                                style={{
+                                    aspectRatio: '1/1',
+                                    backgroundColor: '#eee',
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                <img
+                                    src={post.imageUrl}
+                                    alt={post.caption}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
+                                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                />
+                            </div>
+                        ))}
+                        {instagramPosts?.length === 0 && (
+                            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 50, color: '#999' }}>
+                                Henüz Instagram postu yok.
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    filteredProducts.length > 0 ? (
+                        <ProductGrid products={formatProductsForGrid(filteredProducts)} />
+                    ) : (
+                        <div style={{ textAlign: 'center', padding: 50, color: '#999' }}>
+                            Bu kategoride henüz ürün yok.
+                        </div>
+                    )
+                )}
+            </div>
+        </main>
+    );
+}

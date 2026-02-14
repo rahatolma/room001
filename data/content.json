@@ -1,0 +1,85 @@
+{
+  "hero": {
+    "title": "Shop by",
+    "subtitle": "Curator",
+    "description": "Insider access to your favorite tastemakers' most loved and trusted products.",
+    "cta": "SHOP ALL CURATORS"
+  },
+  "sections": {
+    "curators": {
+      "title": "Shop by Curator",
+      "featuredIds": [
+        "sofia-richie",
+        "marianna-hewitt",
+        "hailey-bieber"
+      ]
+    },
+    "circles": {
+      "title": "Shop by Circle",
+      "items": [
+        {
+          "name": "The ShopMy Team",
+          "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=500"
+        },
+        {
+          "name": "Interior Design Experts",
+          "image": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=500"
+        },
+        {
+          "name": "Stylists",
+          "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=500"
+        },
+        {
+          "name": "Dermatologists",
+          "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=500"
+        }
+      ]
+    },
+    "categories": {
+      "title": "Shop by Category",
+      "items": [
+        {
+          "name": "Necklaces",
+          "image": "https://images.unsplash.com/photo-1599643478518-17488fbbcd75?q=80&w=500"
+        },
+        {
+          "name": "Jeans",
+          "image": "https://images.unsplash.com/photo-1582552938357-32b906df40cb?q=80&w=500"
+        },
+        {
+          "name": "Sandals",
+          "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=500"
+        },
+        {
+          "name": "Dresses",
+          "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=500"
+        }
+      ]
+    },
+    "brands": {
+      "title": "Shop by Brand",
+      "items": [
+        {
+          "name": "Khaite",
+          "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=500"
+        },
+        {
+          "name": "Prada",
+          "image": "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=500"
+        },
+        {
+          "name": "Toteme",
+          "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=500"
+        },
+        {
+          "name": "Crown Affair",
+          "image": "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=500"
+        },
+        {
+          "name": "Crown Affair",
+          "image": "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=500"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,90 @@
+[
+    {
+        "id": "prod-1",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/SRGR-WO22_V1.jpg",
+        "brand": "SRG",
+        "title": "Erin Faux Fur Jacket",
+        "price": "$698",
+        "category": "COATS & OUTERWEAR",
+        "link": "https://www.fwrd.com/product-srg-erin-faux-fur-jacket-in-cream/SRGR-WO22"
+    },
+    {
+        "id": "prod-2",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/COMM-WI14_V1.jpg",
+        "brand": "Comme Si",
+        "title": "The Piped Silk Twill Set",
+        "price": "$820",
+        "category": "APPAREL",
+        "link": "https://commesi.com/products/the-piped-silk-twill-set"
+    },
+    {
+        "id": "prod-3",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/SRGR-WO33_V1.jpg",
+        "brand": "SRG",
+        "title": "Bruno Suede Coat",
+        "price": "$1,450",
+        "category": "COATS & OUTERWEAR",
+        "link": "https://www.fwrd.com"
+    },
+    {
+        "id": "prod-4",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/TOMF-WI5_V1.jpg",
+        "brand": "Tom Ford",
+        "title": "Polka Dot Silk Shawl Collar Robe",
+        "price": "$6,490",
+        "category": "APPAREL",
+        "link": "https://www.fwrd.com"
+    },
+    {
+        "id": "prod-5",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/THEF-WZ403_V1.jpg",
+        "brand": "The Row",
+        "title": "Ballerina Flats",
+        "price": "$900",
+        "category": "FOOTWEAR",
+        "link": "https://www.fwrd.com"
+    },
+    {
+        "id": "prod-6",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/KHAITE-WJ12_V1.jpg",
+        "brand": "KHAITE",
+        "title": "Scarlet Cardigan",
+        "price": "$1,880",
+        "category": "APPAREL",
+        "link": "https://www.fwrd.com"
+    },
+    {
+        "id": "prod-7",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/BOTTEGA-WA122_V1.jpg",
+        "brand": "Bottega Veneta",
+        "title": "Mini Jodie Bag",
+        "price": "$2,650",
+        "category": "BAGS & PURSES",
+        "link": "https://www.fwrd.com"
+    },
+    {
+        "id": "prod-8",
+        "curatorId": "rahatolma_1771013147950",
+        "sectionId": "sr-favorites",
+        "image": "https://is4.revolveassets.com/images/p4/n/z/ALAIA-WD155_V1.jpg",
+        "brand": "Azzedine Alaia",
+        "title": "Crushed Velvet Dress",
+        "price": "$4,200",
+        "category": "APPAREL",
+        "link": "https://www.fwrd.com"
+    }
+]

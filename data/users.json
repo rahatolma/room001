@@ -1,0 +1,106 @@
+[
+  {
+    "id": "sofia-richie_1771013147950",
+    "username": "sofia-richie",
+    "email": "sofia@shopmy.ai",
+    "password": "123",
+    "fullName": "Sofia Richie Grainge",
+    "avatarInitials": "IMG",
+    "bio": "Trendsetter • Trusted by 17.7k shoppers. Eloise's mom 🌻",
+    "permissions": {
+      "role": "creator"
+    },
+    "socialStats": [
+      {
+        "platform": "instagram",
+        "url": "https://instagram.com/sofiarichiegrainge"
+      },
+      {
+        "platform": "tiktok",
+        "url": "https://tiktok.com/@sofiarichiegrainge"
+      }
+    ],
+    "themePreferences": {
+      "primaryColor": "#000000",
+      "backgroundColor": "#ffffff",
+      "fontFamily": "Playfair Display",
+      "buttonStyle": "sharp"
+    },
+    "sections": [
+      {
+        "id": "latest-finds",
+        "title": "Latest Finds",
+        "order": 0
+      },
+      {
+        "id": "most-popular",
+        "title": "Most Popular",
+        "order": 1
+      },
+      {
+        "id": "fashion",
+        "title": "Fashion",
+        "order": 2
+      },
+      {
+        "id": "beauty",
+        "title": "Beauty",
+        "order": 3
+      },
+      {
+        "id": "baby",
+        "title": "Baby",
+        "order": 4
+      },
+      {
+        "id": "x-sofia",
+        "title": "X Sofia",
+        "order": 5
+      },
+      {
+        "id": "srg",
+        "title": "Srg",
+        "order": 6
+      },
+      {
+        "id": "my-favorite-things-2025",
+        "title": "My Favorite Things of 2025",
+        "order": 7
+      },
+      {
+        "id": "for-you",
+        "title": "For You",
+        "order": 8
+      }
+    ],
+    "instagramConnected": false
+  },
+  {
+    "id": "rahatolma_1771013147950",
+    "username": "rahatolma",
+    "email": "rahatolma@gmail.com",
+    "password": "654",
+    "fullName": "rahatolma",
+    "avatarInitials": "RA",
+    "socialStats": [],
+    "themePreferences": {
+      "primaryColor": "#000000",
+      "backgroundColor": "#ffffff",
+      "fontFamily": "Courier New",
+      "buttonStyle": "pill"
+    },
+    "sections": [
+      {
+        "id": "sr-favorites",
+        "title": "SRG Favorites",
+        "order": 0
+      },
+      {
+        "id": "recently-worn",
+        "title": "Recently Worn",
+        "order": 1
+      }
+    ],
+    "instagramConnected": false
+  }
+]
