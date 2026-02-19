@@ -1,228 +1,265 @@
-"use client";
+'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import styles from './Header.module.css';
-import Button from './Button';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import RegisterModal from './RegisterModal';
+import { Menu, X, ChevronDown, Search } from 'lucide-react';
 import LoginModal from './LoginModal';
 import SignupSelectionModal from './SignupSelectionModal';
-import HeaderMenuModal from './HeaderMenuModal';
+import Button from './Button';
 
-const SearchIcon = () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8 }}><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-);
+// --- MENU DATA ---
+const MENU_ITEMS = {
+    shoppers: {
+        label: 'Alışveriş Severler',
+        items: [
+            { title: 'Insider Keşfet', description: 'Favori Insider\'larınızın önerilerine içeriden erişim.', href: '/creators' },
+            { title: 'Kolektif Keşfet', description: 'Stilinizi paylaşan Insider grupları.', href: '/circles' },
+            { title: 'Marka Keşfet', description: 'Bildiğiniz ve seveceğiniz yeni markaları keşfedin.', href: '/brands' },
+            { title: 'Kategori Keşfet', description: 'Her kategorinin en iyilerini güvenle alışveriş yapın.', href: '/categories' },
+            { title: 'Kolektiflerim', description: 'Kendi kişisel mağazalarınız, favori kişileriniz tarafından düzenlenmiş.', href: '/my-circles' },
+            { title: 'Zevk Profilim', description: 'Size özel bir stil oluşturmak için 25 ürünü beğenin.', href: '/style' },
+        ]
+    },
+    creators: {
+        label: 'Insider\'lar',
+        items: [
+            { title: 'Insider\'lar İçin', description: 'Zevkinizi paraya dönüştürün.', href: '/creators-info' },
+            { title: 'Dijital Mağazalar', description: 'Kitleniz için basitleştirilmiş ve premium bir alışveriş deneyimi.', href: '/digital-shops' },
+            { title: 'Affiliate Linkler', description: 'Önerileri kalıcı gelire dönüştüren profesyonel altyapı.', href: '/affiliate-links' },
+            { title: 'Marka İşbirlikleri', description: 'Otantik zevk arayan premium markalara doğrudan erişim.', href: '/brand-partnerships' },
+            { title: 'Insider Ol', description: 'Kolektif ağımıza katılın ve premium araçlara erişin.', href: '/become-creator' },
+        ]
+    },
+    brands: {
+        label: 'Markalar',
+        items: [
+            { title: 'Markalar İçin', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/brands-info' },
+            { title: 'Keşfet', description: 'Gerçek satışları yönlendiren 185.000+ zevk sahibinden oluşan ağımıza erişin.', href: '/brands/discover' },
+            { title: 'Etkileşim', description: 'Premium zevk sahiplerini performans verileri ve zevk profilleri aracılığıyla bulun.', href: '/brands/engage' },
+            { title: 'Takip', description: 'Kalıcı marka inşası için altyapı aracılığıyla gerçek performansı ve ROI\'yi izleyin.', href: '/brands/track' },
+            { title: 'Büyüt', description: 'Reklamları otantik önerilerle değiştiren ağızdan ağıza altyapı ile ölçeklenin.', href: '/brands/amplify' },
+        ]
+    }
+};
 
-const MenuIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-);
-
-const Header = () => {
+export default function Header() {
     const { user, logout } = useAuth();
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
-    const [isRegisterOpen, setIsRegisterOpen] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    // Helper to check if user is a creator
-    const isCreator = user?.role === 'creator' || user?.role === 'admin' || (user?.niche && !user.role);
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    // URL handling for modals
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 10) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const loginParam = searchParams.get('login');
+        const signupParam = searchParams.get('signup');
+
+        if (loginParam === 'true') {
+            setIsLoginOpen(true);
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete('login');
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        } else if (signupParam === 'true') {
+            setIsSignupOpen(true);
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete('signup');
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        }
+    }, [searchParams, router, pathname]);
+
+    const handleMouseEnter = (key: string) => {
+        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+        setActiveDropdown(key);
+    };
+
+    const handleMouseLeave = () => {
+        hoverTimeoutRef.current = setTimeout(() => {
+            setActiveDropdown(null);
+        }, 150);
+    };
+
+    const isHome = pathname === '/';
+    // Header should be transparent ONLY if: It's Home AND It's at the top AND No menu is open
+    const isTransparan = isHome && !isScrolled && !activeDropdown && !mobileMenuOpen;
+
+
 
     return (
         <>
-            {/* Top Banner */}
-            <div style={{ background: '#f5f5f5', padding: '10px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '1px' }}>
-                <span>MOBİLDE DAHA İYİ.</span>
-                <button style={{ background: 'black', color: 'white', border: 'none', padding: '5px 10px', borderRadius: 4, display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                    <span style={{ marginRight: 5 }}>İndir</span>
-                    <strong>App Store</strong>
-                </button>
-            </div>
+            <header style={{
+                position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
+                backgroundColor: isTransparan ? 'transparent' : 'white',
+                color: isTransparan ? 'white' : 'black',
+                borderBottom: !isTransparan ? '1px solid #eaeaea' : 'none',
+                transition: 'all 0.3s ease',
+                height: 80,
+                // We handle this in the layout or page wrapper usually, but header itself is fine.
+            }}>
+                <div style={{ maxWidth: pathname.startsWith('/dashboard') ? '100%' : 1400, margin: '0 auto', padding: pathname.startsWith('/dashboard') ? '0 40px' : '0 20px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
-            <header className={styles.header}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Link href="/" className={styles.logo}>
+                    {/* LOGO */}
+                    <Link href="/" style={{ fontSize: '2rem', fontFamily: 'var(--font-dm-sans), sans-serif', fontWeight: 700, letterSpacing: -1, textDecoration: 'none', color: 'inherit' }}>
                         room001
                     </Link>
 
-                    <nav className={styles.nav}>
-                        <Link href="/creators" className={styles.navLink}>Küratörler</Link>
-                        <Link href="/circles" className={styles.navLink}>Çemberler</Link>
-                        <Link href="/brands" className={styles.navLink}>Markalar</Link>
-                        <Link href="/categories" className={styles.navLink}>Kategoriler</Link>
-                        {user && (
-                            <>
-                                <Link href="/my-circles" className={styles.navLink}>Çemberlerim</Link>
-                                <Link href="/wishlists" className={styles.navLink}>İstek Listeleri</Link>
-                                <Link href="/style" className={styles.navLink}>Zevk Profili</Link>
-                            </>
-                        )}
-                    </nav>
-                </div>
-
-                <div className={styles.authButtons}>
-                    {/* Progress Indicator (Mock) */}
-                    {user && (
-                        <div style={{
-                            background: '#333', color: '#fff', fontSize: '0.7rem', padding: '4px 8px', borderRadius: 12, marginRight: 15
-                        }}>
-                            0/3 tamamlandı
-                        </div>
-                    )}
-
-                    {/* Search Bar */}
-                    <div style={{
-                        display: 'flex', alignItems: 'center', background: '#444', color: '#ccc',
-                        padding: '8px 15px', borderRadius: 20, marginRight: 20, width: 250
-                    }}>
-                        <SearchIcon />
-                        <span style={{ fontSize: '0.85rem' }}>Ne arıyorsun?</span>
-                    </div>
-
-                    {/* Mobile Menu Icon (Visible on small screens conceptually, or just part of the design) */}
-                    <div style={{ marginRight: 20, cursor: 'pointer', display: 'none' }}>
-                        <MenuIcon />
-                    </div>
-
-                    {user ? (
-                        <>
-                            {isCreator ? (
-                                <Link href="/dashboard" className={styles.navLink} style={{ marginRight: '10px', color: 'white' }}>
-                                    Panel
-                                </Link>
-                            ) : null}
-
-                            <button
-                                onClick={() => setIsMenuOpen(true)}
-                                style={{
-                                    background: '#fff',
-                                    color: 'black',
-                                    border: 'none',
-                                    borderRadius: '50%',
-                                    width: 35,
-                                    height: 35,
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '0.9rem',
-                                    fontWeight: 'bold'
-                                }}
+                    {/* DESKTOP NAV */}
+                    <nav style={{ display: 'flex', gap: 40, height: '100%', alignItems: 'center' }} className="desktop-nav">
+                        {Object.entries(MENU_ITEMS).map(([key, section]) => (
+                            <div
+                                key={key}
+                                onMouseEnter={() => handleMouseEnter(key)}
+                                onMouseLeave={handleMouseLeave}
+                                style={{ height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer', position: 'relative' }}
                             >
-                                {user.avatarInitials || user.fullName?.substring(0, 2) || 'U'}
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <Button variant="secondary" onClick={() => setIsLoginOpen(true)} style={{ color: 'white', borderColor: 'white' }}>
-                                Log In
-                            </Button>
-                            <Button variant="primary" onClick={() => setIsSignupOpen(true)} style={{ background: 'white', color: 'black', border: 'none' }}>
-                                Join
-                            </Button>
-                        </>
-                    )}
+                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.95rem', fontWeight: 500, fontFamily: 'var(--font-dm-sans), sans-serif' }}>
+                                    {section.label} <ChevronDown size={14} />
+                                </span>
+                            </div>
+                        ))}
+                    </nav>
+
+                    {/* RIGHT ACTIONS */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                        {!user ? (
+                            <>
+                                <button onClick={() => setIsLoginOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem' }}>
+                                    Giriş Yap
+                                </button>
+                                <Button onClick={() => setIsSignupOpen(true)} style={{ background: activeDropdown || mobileMenuOpen ? 'black' : 'white', color: activeDropdown || mobileMenuOpen ? 'white' : 'black', padding: '12px 24px', borderRadius: 4 }}>
+                                    Üye Ol
+                                </Button>
+                            </>
+                        ) : (
+                            <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
+                                <div style={{ width: 36, height: 36, background: '#eee', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black', fontWeight: 700 }}>
+                                    {user.avatarInitials}
+                                </div>
+                            </Link>
+                        )}
+
+                        <button onClick={() => setMobileMenuOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', marginLeft: 10 }}>
+                            <Menu size={28} />
+                        </button>
+                    </div>
                 </div>
+
+                {/* MEGA MENU DROPDOWN */}
+                {activeDropdown && (
+                    <div
+                        onMouseEnter={() => { if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current); }}
+                        onMouseLeave={handleMouseLeave}
+                        style={{
+                            position: 'absolute', top: 80, left: 0, right: 0, background: 'white',
+                            padding: '40px 0 60px', borderTop: '1px solid #f0f0f0', boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
+                            color: 'black'
+                        }}
+                    >
+                        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, padding: '0 40px' }}>
+                            {MENU_ITEMS[activeDropdown as keyof typeof MENU_ITEMS].items.map((item: any, idx) => (
+                                <Link key={idx} href={item.href} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                                    <h3 style={{ fontSize: '1.2rem', fontFamily: 'var(--font-dm-sans), sans-serif', marginBottom: 8, fontWeight: 700 }}>{item.title}</h3>
+                                    <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.5, margin: 0 }}>{item.description}</p>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </header>
 
+            {/* SPACER FOR FIXED HEADER (Only on non-home pages AND non-dashboard pages) */}
+            {/* Dashboard layout handles its own top spacing/padding */}
+            {!isHome && !pathname?.startsWith('/dashboard') && <div style={{ height: 80 }} />}
+
+            {/* MOBILE / OFF-CANVAS MENU */}
+            {mobileMenuOpen && (
+                <div style={{ position: 'fixed', inset: 0, zIndex: 2000 }}>
+                    {/* Backdrop */}
+                    <div
+                        onClick={() => setMobileMenuOpen(false)}
+                        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', opacity: mobileMenuOpen ? 1 : 0, transition: 'opacity 0.3s' }}
+                    />
+
+                    {/* Panel */}
+                    <div style={{
+                        position: 'absolute', top: 0, right: 0, bottom: 0, width: 400, maxWidth: '90vw', background: 'white',
+                        padding: '40px', overflowY: 'auto', display: 'flex', flexDirection: 'column'
+                    }}>
+                        <button onClick={() => setMobileMenuOpen(false)} style={{ alignSelf: 'flex-end', background: 'none', border: 'none', cursor: 'pointer', marginBottom: 40 }}>
+                            <X size={28} />
+                        </button>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 40, flex: 1 }}>
+                            {Object.entries(MENU_ITEMS).map(([key, section]) => (
+                                <div key={key}>
+                                    <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: '#999', margin: '0 0 20px', letterSpacing: 1 }}>{section.label}</h4>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                                        {section.items.map((item: any, idx) => (
+                                            <Link key={idx} href={item.href} onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', color: 'black', fontSize: '1.1rem' }}>
+                                                {item.title}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Footer in Menu */}
+                        <div style={{ marginTop: 40, borderTop: '1px solid #eee', paddingTop: 30 }}>
+                            {!user ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                                    <Button onClick={() => { setIsSignupOpen(true); setMobileMenuOpen(false); }} style={{ width: '100%', padding: '15px 0' }}>BAŞVUR</Button>
+                                    <Button variant="outline" onClick={() => { setIsLoginOpen(true); setMobileMenuOpen(false); }} style={{ width: '100%', padding: '15px 0' }}>GİRİŞ YAP</Button>
+                                </div>
+                            ) : (
+                                <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                                    <Button style={{ width: '100%', padding: '15px 0' }}>PANELİM</Button>
+                                </Link>
+                            )}
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+            {/* Modals */}
             <LoginModal
                 isOpen={isLoginOpen}
                 onClose={() => setIsLoginOpen(false)}
-                onSwitchToSignup={() => {
-                    setIsLoginOpen(false);
-                    setIsSignupOpen(true);
-                }}
+                type="shopper"
+                onSwitchToSignup={() => { setIsLoginOpen(false); setIsSignupOpen(true); }}
+                onLoginSuccess={() => router.push('/dashboard')}
             />
             <SignupSelectionModal
                 isOpen={isSignupOpen}
                 onClose={() => setIsSignupOpen(false)}
-                onLoginClick={() => {
-                    setIsSignupOpen(false);
-                    setIsLoginOpen(true);
-                }}
-                onSignupClick={() => {
-                    setIsSignupOpen(false);
-                    setIsRegisterOpen(true);
-                }}
+                onLoginClick={() => { setIsSignupOpen(false); setIsLoginOpen(true); }}
+                onSignupClick={() => { setIsSignupOpen(false); setIsLoginOpen(true); }}
+                onCreatorClick={() => { setIsSignupOpen(false); router.push('/become-creator'); }}
+                onBrandClick={() => { setIsSignupOpen(false); router.push('/become-brand'); }}
             />
-            <RegisterModal
-                isOpen={isRegisterOpen}
-                onClose={() => setIsRegisterOpen(false)}
-                onSwitchToLogin={() => {
-                    setIsRegisterOpen(false);
-                    setIsLoginOpen(true);
-                }}
-            />
-            {isMenuOpen && (
-                <>
-                    <div
-                        style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: 100 }}
-                        onClick={() => setIsMenuOpen(false)}
-                    />
-                    <div style={{
-                        position: 'absolute',
-                        top: '80px', // Below header
-                        right: '40px',
-                        width: 200,
-                        background: 'white',
-                        borderRadius: 12,
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-                        zIndex: 101,
-                        padding: '10px 0',
-                        overflow: 'hidden'
-                    }}>
-                        <div style={{ padding: '10px 20px', borderBottom: '1px solid #eee', marginBottom: 5 }}>
-                            <div style={{ fontWeight: 600 }}>{user?.fullName}</div>
-                            <div style={{ fontSize: '0.8rem', color: '#666' }}>{user?.email}</div>
-                        </div>
-                        {isCreator && (
-                            <Link
-                                href="/dashboard"
-                                style={{ display: 'block', padding: '10px 20px', textDecoration: 'none', color: '#333', fontSize: '0.9rem', width: '100%' }}
-                                onClick={() => setIsMenuOpen(false)}
-                            >
-                                Panel
-                            </Link>
-                        )}
-                        <Link
-                            href="/dashboard/settings"
-                            style={{ display: 'block', padding: '10px 20px', textDecoration: 'none', color: '#333', fontSize: '0.9rem', width: '100%' }}
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Hesap Ayarları
-                        </Link>
-                        <button
-                            onClick={() => {
-                                logout();
-                                setIsMenuOpen(false);
-                            }}
-                            style={{
-                                display: 'block',
-                                width: '100%',
-                                padding: '10px 20px',
-                                textAlign: 'left',
-                                background: 'none',
-                                border: 'none',
-                                borderTop: '1px solid #eee',
-                                marginTop: 5,
-                                color: '#e00',
-                                cursor: 'pointer',
-                                fontSize: '0.9rem'
-                            }}
-                        >
-                            Çıkış Yap
-                        </button>
-                    </div>
-                </>
-            )}
-            {/* 
-            <HeaderMenuModal
-                isOpen={isMenuOpen}
-                onClose={() => setIsMenuOpen(false)}
-            /> 
-            */}
         </>
     );
-};
-
-export default Header;
+}

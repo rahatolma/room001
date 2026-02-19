@@ -4,30 +4,51 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: black;
+    background: rgba(0, 0, 0, 0.85);
     z-index: 2000;
-    /* Higher than normal modal */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modalWrapper {
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    background: none;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .closeButton {
     position: absolute;
-    top: 20px;
-    right: 30px;
+    top: -40px;
+    right: 0;
     background: none;
     border: none;
     color: white;
-    font-size: 3rem;
+    font-size: 2rem;
     cursor: pointer;
     z-index: 2001;
     line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.closeButton:hover {
+    opacity: 1;
 }
 
 .container {
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 500px;
+    background: #000;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .column {
@@ -37,10 +58,11 @@
     align-items: flex-end;
     /* Align content to bottom */
     justify-content: center;
-    padding-bottom: 80px;
+    padding-bottom: 40px;
     background-size: cover;
     background-position: center;
     transition: transform 0.3s ease;
+    cursor: default;
 }
 
 .column::before {
@@ -52,20 +74,24 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.3);
     /* Dark overlay for text readability */
+    transition: background 0.3s ease;
+}
+
+.column:hover::before {
+    background: rgba(0, 0, 0, 0.1);
 }
 
 /* Background Gradients/Colors directly to simulate images */
 .shopper {
     background-image: linear-gradient(to bottom, #2c3e50, #000000);
-    /* In real app, use url('/path-to-shopper.jpg') */
 }
 
 .creator {
-    background-image: linear-gradient(to bottom, #8e44ad, #2c3e50);
+    background-image: linear-gradient(to bottom, #4a4a4a, #1a1a1a);
 }
 
 .brand {
-    background-image: linear-gradient(to bottom, #c0392b, #8e44ad);
+    background-image: linear-gradient(to bottom, #666666, #333333);
 }
 
 .content {
@@ -73,37 +99,39 @@
     z-index: 2;
     text-align: center;
     color: white;
-    padding: 0 40px;
+    padding: 0 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     width: 100%;
 }
 
 .title {
-    font-family: serif;
-    font-size: 3.5rem;
-    font-weight: 400;
+    font-family: var(--font-dm-sans), sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
     margin: 0;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
 }
 
 .description {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    max-width: 300px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    max-width: 220px;
     margin: 0 auto;
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
 }
 
 .button {
-    margin-top: 20px;
+    margin-top: 15px;
     background: transparent;
     border: 1px solid white;
     color: white;
-    padding: 12px 30px;
-    font-size: 0.9rem;
+    padding: 10px 24px;
+    font-size: 0.75rem;
     letter-spacing: 1px;
     text-transform: uppercase;
     cursor: pointer;
@@ -116,16 +144,15 @@
 }
 
 .footer {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
     width: 100%;
-    z-index: 10;
+    margin-top: 20px;
     display: flex;
-    justify-content: center;
-    gap: 40px;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .footerLink {
@@ -133,9 +160,13 @@
     border: none;
     color: white;
     font-weight: bold;
-    text-decoration: underline;
+    text-decoration: none;
     cursor: pointer;
     font-size: inherit;
     padding: 0;
-    margin-left: 5px;
+    margin-left: 3px;
+}
+
+.footerLink:hover {
+    text-decoration: underline;
 }

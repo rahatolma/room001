@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import styles from './layout.module.css';
 import {
     LayoutDashboard,
     ShoppingBag,
@@ -18,23 +17,26 @@ import {
     LogOut,
     Home,
     Search,
-    Share2
+    Share2,
+    Palette,
+    User,
+    Heart,
+    Megaphone,
+    Compass,
+    Target,
+    Link as LinkIcon,
+    Store,
+    MessageCircle, // Chat
+    Gift,          // Gifting
+    Ticket,        // Discount Codes
+    Zap,           // Opportunities
+    Globe,         // Latest
+    ShoppingCart,   // Shopping
+    Award,         // Creator Tier
+    CreditCard,    // Connected Accounts
+    UserCheck,      // Talent Card
+    BookOpen       // Guide
 } from 'lucide-react';
-
-// Map icons to existing usage
-const HomeIcon = () => <LayoutDashboard size={20} />;
-const CollectionsIcon = () => <Layers size={20} />;
-const MediaKitIcon = () => <FileText size={20} />;
-const SettingsIcon = () => <Settings size={20} />;
-// New Icons
-const SectionsIcon = () => <List size={20} />;
-const ProductsIcon = () => <ShoppingBag size={20} />;
-const AdminIcon = () => <ShieldCheck size={20} />;
-// Other icons used in layout
-const EarnIcon = () => <DollarSign size={20} />;
-const BellIcon = () => <Bell size={20} />;
-const LogoutIcon = () => <LogOut size={20} />;
-const SearchIcon = () => <Search size={20} />;
 
 export default function DashboardLayout({
     children,
@@ -44,136 +46,176 @@ export default function DashboardLayout({
     const pathname = usePathname();
     const { user, loading, logout } = useAuth();
 
-    if (loading) return <div>Yükleniyor...</div>;
+    if (loading) return <div style={{ padding: 50, textAlign: 'center' }}>Yükleniyor...</div>;
 
-    // Check recursive role or direct role
-    const isCreator = user?.permissions?.role === 'creator' || user?.role === 'creator' || user?.role === 'admin';
+    const isAdminPath = pathname.startsWith('/dashboard/admin');
+    // FORCE CREATOR MODE: Removed to respect actual user role
+    const isCreator = user?.role === 'creator' || user?.role === 'admin';
+    const isAdmin = user?.role === 'admin' || isAdminPath;
 
-    const navigation = isCreator ? [
-        { name: 'Metrikler', href: '/dashboard', icon: <HomeIcon /> },
-        { name: 'Menu Başlıkları', href: '/dashboard/sections', icon: <SectionsIcon /> },
-        { name: 'Ürünler', href: '/dashboard/products', icon: <ProductsIcon /> },
-        { name: 'Koleksiyonlar', href: '/dashboard/collections', icon: <CollectionsIcon /> },
-        { name: 'Medya Kiti', href: '/dashboard/media-kit', icon: <MediaKitIcon /> },
-        { name: 'Entegrasyonlar', href: '/dashboard/integrations', icon: <Share2 size={20} /> },
-        { name: 'Ayarlar', href: '/dashboard/settings', icon: <SettingsIcon /> },
-        ...(user?.role === 'admin' ? [{ name: 'Yönetici Paneli', href: '/dashboard/admin', icon: <AdminIcon /> }] : []),
-    ] : [
-        // 'Tümü' removed as requested
-        { name: 'Hesap Ayarları', href: '/dashboard/settings', icon: <SettingsIcon /> },
-        { name: 'Kazanmak İçin Yükselt', href: '/dashboard/upgrade', icon: <EarnIcon /> },
-        { name: 'Bildirimler', href: '/dashboard/notifications', icon: <BellIcon /> },
+    // --- NAVIGATION STRUCTURE ---
+
+    // Helper to render separator
+    const Separator = () => <div style={{ height: 1, background: '#f0f0f0', margin: '20px 0' }} />;
+    // Helper to render Section Title
+    const SectionTitle = ({ title }: { title: string }) => (
+        <div style={{ fontSize: '0.7rem', color: '#999', fontWeight: 600, padding: '0 10px', marginBottom: 8, marginTop: 15, letterSpacing: 1, textTransform: 'uppercase' }}>
+            {title}
+        </div>
+    );
+
+    const CreatorNavigation = [
+        { type: 'title', label: 'AFFILIATES & KAZANÇLAR' },
+        { name: 'Linklerim', href: '/dashboard/links', icon: <LinkIcon size={18} /> },
+        { name: 'Mağazam', href: '/dashboard/appearance', icon: <Store size={18} /> },
+        { name: 'Ürünler', href: '/dashboard/products', icon: <ShoppingBag size={18} /> },
+        { name: 'Tasarım & Tema', href: '/dashboard/theme', icon: <Palette size={18} /> },
+        { name: 'Koleksiyonlar', href: '/dashboard/sections', icon: <Layers size={18} /> },
+        { name: 'Öne Çıkar', href: '/dashboard/promote', icon: <Megaphone size={18} /> },
+        { name: 'Kazançlar', href: '/dashboard/earnings', icon: <DollarSign size={18} /> },
+        { name: 'Insider Seviyesi', href: '/dashboard/tier', icon: <Award size={18} /> },
+
+        { type: 'separator' },
+
+        { type: 'title', label: 'MARKA İŞBİRLİKLERİ' },
+        { name: 'Mesajlar', href: '/dashboard/chat', icon: <MessageCircle size={18} />, badge: 2 },
+        { name: 'Hediyeleşme', href: '/dashboard/collaborations?tab=GIFTING', icon: <Gift size={18} /> },
+        { name: 'Fırsatlar', href: '/dashboard/collaborations?tab=OPPORTUNITIES', icon: <Zap size={18} /> },
+        { name: 'İndirim Kodları', href: '/dashboard/collaborations?tab=CODES', icon: <Ticket size={18} /> },
+
+        { type: 'separator' },
+
+        { type: 'title', label: 'ALIŞVERİŞ' },
+        { name: 'Marka Eşleşmeleri', href: '/dashboard/brand-match', icon: <Compass size={18} /> },
+        { name: 'Favorilerim', href: '/dashboard/favorites', icon: <Heart size={18} /> },
+
+        { type: 'separator' },
+
+        { type: 'title', label: 'GENEL' },
+        { name: 'Insider Kartı', href: '/dashboard/talent-card', icon: <UserCheck size={18} /> },
+        { name: 'Medya Kiti', href: '/dashboard/media-kit', icon: <FileText size={18} /> },
+        { name: 'Bağlı Hesaplar', href: '/dashboard/connected-accounts', icon: <CreditCard size={18} /> },
+        { name: 'Hesap Ayarları', href: '/dashboard/settings', icon: <Settings size={18} /> },
+        { name: 'Yardım & Rehber', href: '/dashboard/guide', icon: <BookOpen size={18} /> },
     ];
 
+    const RegularNavigation = [
+        { name: 'Favorilerim', href: '/dashboard/favorites', icon: <Heart size={18} /> },
+        { name: 'Kazanmak İçin Yükselt', href: '/dashboard/upgrade', icon: <DollarSign size={18} /> },
+        { name: 'Bildirimler', href: '/dashboard/notifications', icon: <Bell size={18} /> },
+        { name: 'Hesap Ayarları', href: '/dashboard/settings', icon: <Settings size={18} /> },
+    ];
+
+    const AdminNavigation = [
+        { type: 'separator' },
+        { type: 'title', label: 'YÖNETİCİ' },
+        { name: 'Admin Paneli', href: '/dashboard/admin', icon: <ShieldCheck size={18} /> },
+        { name: 'CMS', href: '/dashboard/admin/cms', icon: <FileText size={18} /> },
+    ];
+
+    const fullNavigation = isCreator ? [...CreatorNavigation, ...(isAdmin ? AdminNavigation : [])] : RegularNavigation;
+
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'white' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#fff' }}>
+
+            {/* SIDEBAR */}
             <aside style={{
-                width: 300,
-                background: 'white',
-                borderRight: '1px solid #eee',
-                padding: '40px 30px',
-                display: 'flex',
-                flexDirection: 'column',
-                // Changed from fixed to sticky for better flow with header
-                position: 'sticky',
-                top: 0,
-                height: '100vh',
-                flexShrink: 0,
+                width: 260,
+                borderRight: '1px solid #eaeaea',
+                height: 'calc(100vh - 80px)',
+                top: 80,
+                position: 'fixed',
+                overflowY: 'auto',
+                background: '#fff',
                 zIndex: 10
             }}>
-                {/* User Profile Summary */}
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 30 }}>
-                    <div style={{
-                        width: 50, height: 50, borderRadius: '50%', background: '#999',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '1rem', color: 'white', marginRight: 15
-                    }}>
-                        {user?.avatarInitials || user?.fullName?.substring(0, 2) || 'U'}
-                    </div>
-                    <div>
-                        <div style={{ fontWeight: 700, fontSize: '1rem' }}>{user?.fullName || 'Kullanıcı'}</div>
-                        <div style={{ fontSize: '0.8rem', color: '#666' }}>{isCreator ? 'İçerik Üreticisi' : 'Alışveriş Tutkunu'}</div>
-                    </div>
-                </div>
+                {/* Logo Removed */}
 
-                {/* Search Bar - Shopper Only */}
-                {!isCreator && (
-                    <div style={{ marginBottom: 40, position: 'relative' }}>
-                        <div style={{ position: 'absolute', left: 15, top: '50%', transform: 'translateY(-50%)', display: 'flex' }}>
-                            <SearchIcon />
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Ara"
-                            style={{
-                                width: '100%',
-                                padding: '12px 12px 12px 45px',
-                                background: '#f5f5f5',
-                                border: '1px solid transparent',
-                                borderRadius: 8,
-                                fontSize: '0.9rem',
-                                color: '#333',
-                                outline: 'none'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = '#ddd'}
-                            onBlur={(e) => e.target.style.borderColor = 'transparent'}
-                        />
-                    </div>
-                )}
+                <nav style={{ padding: '20px' }}>
+                    <Link
+                        href="/dashboard"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 12,
+                            padding: '10px 12px',
+                            borderRadius: 8,
+                            marginBottom: 4,
+                            textDecoration: 'none',
+                            color: pathname === '/dashboard' ? 'black' : '#666',
+                            fontWeight: pathname === '/dashboard' ? 600 : 400,
+                            background: pathname === '/dashboard' ? '#f7f7f7' : 'transparent',
+                            fontSize: '0.9rem'
+                        }}
+                    >
+                        <Home size={18} />
+                        <span>Panel</span>
+                    </Link>
 
-                {/* Navigation */}
-                <nav style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                    {navigation.map((item) => {
-                        const isActive = pathname === item.href;
+                    {fullNavigation.map((item: any, index) => {
+                        if (item.type === 'separator') return <Separator key={index} />;
+                        if (item.type === 'title') return <SectionTitle key={index} title={item.label} />;
+
+                        // Determine Active State
+                        let isActive = false;
+                        if (item.href) {
+                            const itemPath = item.href.split('?')[0];
+                            // Exact match check logic is slightly different here due to explicit "Panel" link above
+                            if (itemPath !== '/dashboard' && pathname.startsWith(itemPath)) isActive = true;
+                        }
+
                         return (
                             <Link
-                                key={item.href}
+                                key={index}
                                 href={item.href}
                                 style={{
                                     display: 'flex',
+                                    justifyContent: 'space-between',
                                     alignItems: 'center',
-                                    padding: '12px 15px',
+                                    padding: '10px 12px',
                                     borderRadius: 8,
+                                    marginBottom: 4,
                                     textDecoration: 'none',
-                                    color: isActive ? '#000' : '#666',
+                                    color: isActive ? 'black' : '#666',
                                     fontWeight: isActive ? 600 : 400,
-                                    background: isActive ? '#f9f9f9' : 'transparent',
-                                    transition: 'all 0.2s ease'
+                                    background: isActive ? '#f7f7f7' : 'transparent',
+                                    transition: 'background 0.2s',
+                                    fontSize: '0.9rem'
                                 }}
                             >
-                                <span style={{ marginRight: 15, display: 'flex', width: 20, justifyContent: 'center' }}>{item.icon}</span>
-                                {item.name}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                    {item.icon}
+                                    <span>{item.name}</span>
+                                </div>
+                                {item.badge && (
+                                    <span style={{
+                                        background: '#ea4335', color: 'white', fontSize: '0.7rem', fontWeight: 700,
+                                        padding: '2px 6px', borderRadius: 10, minWidth: 18, textAlign: 'center'
+                                    }}>
+                                        {item.badge}
+                                    </span>
+                                )}
                             </Link>
                         );
                     })}
-                </nav>
 
-                {/* Logout */}
-                <button
-                    onClick={logout}
-                    style={{
-                        marginTop: 20, // Fixed margin instead of auto
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: '12px 15px',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        color: '#666',
-                        fontSize: '1rem'
-                    }}
-                >
-                    <span style={{ marginRight: 15, display: 'flex', width: 20, justifyContent: 'center' }}><LogoutIcon /></span>
-                    Çıkış Yap
-                </button>
+                    <button
+                        onClick={logout}
+                        style={{
+                            marginTop: 30, display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px',
+                            width: '100%', border: 'none', background: 'none', cursor: 'pointer', color: '#999', fontSize: '0.9rem'
+                        }}
+                    >
+                        <LogOut size={18} />
+                        <span>Çıkış Yap</span>
+                    </button>
+                </nav>
             </aside>
 
-            <main style={{ flex: 1, padding: 40, background: 'white', minHeight: '100vh', width: 0 }}>
-                {/* minHeight handles full height, width:0 ensures flex child doesn't overflow */}
-                <div style={{ minHeight: '85vh', padding: 0 }}>
-                    {children}
-                </div>
+            {/* MAIN CONTENT */}
+            <main style={{ flex: 1, marginLeft: 260, padding: 40, marginTop: 80, maxWidth: 1600 }}>
+                {children}
             </main>
-        </div >
+        </div>
     );
 }

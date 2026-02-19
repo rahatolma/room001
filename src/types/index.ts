@@ -23,6 +23,16 @@ export interface User {
     role?: 'shopper' | 'creator' | 'admin';
     permissions?: { role: string }; // For legacy/nested structure support
     instagramConnected?: boolean;
+
+    // Extended profile fields
+    avatarUrl?: string;
+    websiteUrl?: string;
+    location?: string;
+    instagramUrl?: string;
+    tiktokUrl?: string;
+    youtubeUrl?: string;
+    dolapAccountUrl?: string;
+    gardropsAccountUrl?: string;
 }
 
 export interface ThemePreferences {

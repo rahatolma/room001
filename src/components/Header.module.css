@@ -1,8 +1,8 @@
 .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 15px 40px;
+    padding: 15px 0;
     background-color: #222;
     /* Dark background */
     color: white;
@@ -10,7 +10,7 @@
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: white;
     text-decoration: none;
@@ -26,7 +26,7 @@
 .navLink {
     text-decoration: none;
     color: #ccc;
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     font-weight: 500;
     text-transform: capitalize;
     transition: color 0.2s;
@@ -45,6 +45,19 @@
 @media (max-width: 768px) {
     .nav {
         display: none;
-        /* Mobile menu to be implemented later */
+    }
+
+    .desktopOnly {
+        display: none !important;
+    }
+
+    .mobileOnly {
+        display: block !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .mobileOnly {
+        display: none !important;
     }
 }

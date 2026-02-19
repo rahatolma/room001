@@ -1,14 +1,16 @@
 import ShopByPageLayout from '@/components/ShopByPageLayout';
-import { featuredCurators } from '@/lib/shopData';
+import { getFeaturedCurators } from '@/actions/admin';
 
-export default function CuratorsPage() {
+export default async function CuratorsPage() {
+    const featuredCurators = await getFeaturedCurators();
+
     return (
         <ShopByPageLayout
-            title="Küratör"
+            title="INSIDER"
             subtitle="Göz At"
             heroTitle="Sofia Richie Grainge"
             heroDescription="Vogue tarafından modern bir güzellik ilham perisi olarak kabul edilen Sofia, sade zarafet ve sessiz lükse dayanan zamansız moda ve güzelliği kürate ediyor. Stil anı kültür boyunca dalgalanıyor ve bir nesil için yeni standartlar belirliyor."
-            heroImage="https://images.unsplash.com/photo-1611601679655-7c642d4735fb?q=80&w=1000"
+            heroImage="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000"
             heroSlug="sofia-richie"
             items={featuredCurators}
             type="curator"

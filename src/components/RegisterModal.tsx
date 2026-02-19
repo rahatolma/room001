@@ -45,76 +45,76 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ isOpen, onClose, onSwitch
     if (!isOpen) return null; // Render nothing if not open, as the new structure doesn't use the Modal component wrapper
 
     return (
-        <div className={styles.overlay}>
-            <div className={styles.modal}>
-                <button onClick={onClose} className={styles.closeButton}>&times;</button>
+        <Modal isOpen={isOpen} onClose={onClose} title="Room001'e Katıl">
+            <p className={styles.subtitle} style={{ marginBottom: 20, fontSize: '0.9rem', color: '#666' }}>
+                {role === 'creator'
+                    ? 'İçerik üreticileri ve küratörler için.'
+                    : 'Alışveriş yapanlar ve kaşifler için.'}
+            </p>
 
-                <h2 className={styles.title}>Room001'e Katıl</h2>
-                <p className={styles.subtitle}>
-                    {role === 'creator'
-                        ? 'İçerik üreticileri ve küratörler için.'
-                        : 'Alışveriş yapanlar ve kaşifler için.'}
-                </p>
+            <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.inputGroup}>
+                    <label>Ad Soyad</label>
+                    <input
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
+                        placeholder="Adınız Soyadınız"
+                        className={styles.input}
+                    />
+                </div>
 
-                <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.inputGroup}>
+                    <label>E-posta</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        placeholder="ornek@email.com"
+                        className={styles.input}
+                    />
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label>Şifre</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        placeholder="••••••••"
+                        className={styles.input}
+                    />
+                </div>
+
+                {role === 'creator' && (
                     <div className={styles.inputGroup}>
-                        <label>Ad Soyad</label>
+                        <label>Instagram / TikTok Kullanıcı Adı</label>
                         <input
                             type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
                             required
-                            placeholder="Adınız Soyadınız"
+                            placeholder="@kullaniciadi"
+                            className={styles.input}
                         />
                     </div>
+                )}
 
-                    <div className={styles.inputGroup}>
-                        <label>E-posta</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            placeholder="ornek@email.com"
-                        />
-                    </div>
+                {error && <div className={styles.error} style={{ color: 'red', fontSize: '0.9rem' }}>{error}</div>}
 
-                    <div className={styles.inputGroup}>
-                        <label>Şifre</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            placeholder="••••••••"
-                        />
-                    </div>
-
-                    {role === 'creator' && (
-                        <div className={styles.inputGroup}>
-                            <label>Instagram / TikTok Kullanıcı Adı</label>
-                            <input
-                                type="text"
-                                required
-                                placeholder="@kullaniciadi"
-                            />
-                        </div>
-                    )}
-
-                    {error && <div className={styles.error}>{error}</div>}
-
-                    <Button type="submit" fullWidth>
-                        {role === 'creator' ? 'Küratör Olarak Başvur' : 'Kayıt Ol'}
-                    </Button>
-                </form>
+                <Button type="submit" fullWidth>
+                    {role === 'creator' ? 'Küratör Olarak Başvur' : 'Kayıt Ol'}
+                </Button>
 
                 <div className={styles.footer}>
-                    Zaten hesabın var mı? <button type="button" onClick={handleSwitchToLogin} className={styles.linkButton}>Giriş Yap</button>
-                    <br />
-                    <button type="button" onClick={onBack} className={styles.backButton}>&larr; Rol Seçimine Dön</button>
+                    Zaten hesabın var mı? <button type="button" onClick={handleSwitchToLogin} className={styles.linkBtn}>Giriş Yap</button>
+                    <div style={{ marginTop: 10 }}>
+                        <button type="button" onClick={onBack} style={{ background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', color: '#888' }}>&larr; Rol Seçimine Dön</button>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </form>
+        </Modal>
     );
 };
 

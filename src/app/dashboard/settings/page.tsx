@@ -1,146 +1,126 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Button from '@/components/Button';
+import Image from 'next/image';
 
 export default function SettingsPage() {
-    const { user, updateProfile } = useAuth();
-    const [fullName, setFullName] = useState(user?.fullName || '');
-    const [email, setEmail] = useState(user?.email || '');
-    // Password usually managed safely, simplfied here
-    const [password, setPassword] = useState('');
-    const [isEditingPassword, setIsEditingPassword] = useState(false);
+    const { user } = useAuth();
 
-    // Photo upload reference
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
-
-    const handlePhotoClick = () => {
-        fileInputRef.current?.click();
-    };
-
-    const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            // Mock upload - in real app, upload to storage and get URL
-            // const mockUrl = URL.createObjectURL(file);
-            await updateProfile({ avatarInitials: 'IMG' }); // Just updating visuals for now
-            alert("Profil fotoğrafı güncellendi! (Simülasyon)");
-        }
-    };
-
-    const handleSave = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const updates: any = { fullName, email };
-        let message = 'Profil bilgileri güncellendi!';
-
-        if (isEditingPassword && password) {
-            updates.password = password;
-            message = 'Profil ve şifre başarıyla güncellendi!';
-        }
-
-        await updateProfile(updates);
-        setIsEditingPassword(false);
-        setPassword('');
-        alert(message);
-    };
+    // States
+    const [email, setEmail] = useState('asena@asenasaribatur.com');
+    const [username, setUsername] = useState('asenasaribatur');
+    const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
+    const [amazonCode, setAmazonCode] = useState('');
 
     return (
-        <div style={{ maxWidth: 800 }}>
-            <h1 style={{ fontSize: '2rem', marginBottom: 10, fontFamily: 'Playfair Display, serif' }}>Hesap Ayarları</h1>
-            <p style={{ color: '#666', marginBottom: 40 }}>Profil bilgilerinizi ve hesap tercihlerinizi yönetin.</p>
+        <div style={{ paddingBottom: 100, fontFamily: 'sans-serif' }}>
 
-            <div style={{ background: 'white', borderRadius: 12, border: '1px solid #eee', padding: 30 }}>
-                {/* Profile Header */}
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 40 }}>
-                    <div style={{
-                        width: 80, height: 80, borderRadius: '50%', background: '#999',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '1.5rem', color: 'white', marginRight: 20
-                    }}>
-                        {user?.avatarInitials || 'SR'}
-                    </div>
-                    <div>
-                        <h2 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: 5 }}>{user?.fullName}</h2>
+            <h1 style={{ fontSize: '2.5rem', fontFamily: 'serif', fontWeight: 500, marginBottom: 50 }}>Hesap Ayarları</h1>
+
+            {/* Profile Photo Change Section */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 50 }}>
+                <div style={{ width: 60, height: 60, borderRadius: '50%', overflow: 'hidden', background: '#eee', position: 'relative' }}>
+                    {user?.avatarUrl && <Image src={user.avatarUrl} alt="Profile" fill style={{ objectFit: 'cover' }} />}
+                </div>
+                <div>
+                    <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{user?.fullName}</div>
+                    <button style={{ fontSize: '0.85rem', color: '#666', background: 'none', border: 'none', padding: 0, textDecoration: 'underline', cursor: 'pointer' }}>
+                        Profil Fotoğrafını Değiştir
+                    </button>
+                </div>
+            </div>
+
+            {/* Form Fields */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 30, maxWidth: 600 }}>
+
+                {/* Email */}
+                <div>
+                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: 8 }}>Birincil E-posta</label>
+                    <div style={{ fontSize: '0.75rem', color: '#999', marginBottom: 8 }}>Giriş yapmak ve bildirim almak için kullanılan e-posta.</div>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{ width: '100%', padding: '12px 15px', borderRadius: 8, border: '1px solid #ccc', background: 'white', fontSize: '0.95rem' }}
+                    />
+                </div>
+
+                {/* Username */}
+                <div>
+                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: 8 }}>Kullanıcı Adı</label>
+                    <div style={{ fontSize: '0.75rem', color: '#999', marginBottom: 8 }}>Genel mağaza URL'nizi tanımlamak için kullanılacak kullanıcı adı.</div>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        style={{ width: '100%', padding: '12px 15px', borderRadius: 8, border: '1px solid #ccc', background: 'white', fontSize: '0.95rem' }}
+                    />
+                </div>
+
+                {/* Password */}
+                <div>
+                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: 8 }}>Şifre</label>
+                    <div style={{ display: 'flex', gap: 10 }}>
                         <input
-                            type="file"
-                            ref={fileInputRef}
-                            style={{ display: 'none' }}
-                            onChange={handlePhotoChange}
-                            accept="image/*"
+                            type="password"
+                            value="dummy-password"
+                            readOnly
+                            style={{ flex: 1, padding: '12px 15px', borderRadius: 8, border: '1px solid #eee', background: '#f5f5f5', color: '#999' }}
                         />
-                        <button
-                            type="button"
-                            onClick={handlePhotoClick}
-                            style={{ color: '#666', fontSize: '0.9rem', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
-                        >
-                            Profil Fotoğrafını Değiştir
-                        </button>
+                        <Button variant="outline" style={{ background: 'white', color: 'black', border: '1px solid #ddd' }}>DÜZENLE</Button>
                     </div>
                 </div>
 
-                <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                    <div>
-                        <label style={{ display: 'block', marginBottom: 8, fontWeight: 500, fontSize: '0.9rem' }}>Ad Soyad</label>
+                {/* Address */}
+                <div>
+                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: 8 }}>Hediye Gönderim Adresi</label>
+                    <div style={{ fontSize: '0.75rem', color: '#999', marginBottom: 8 }}>Markalarla hediye kabul ettiğinizde paylaşılacak adres.</div>
+                    <textarea
+                        rows={3}
+                        placeholder="Hediye Adresi"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        style={{ width: '100%', padding: '12px 15px', borderRadius: 8, border: '1px solid #ccc', background: 'white', fontSize: '0.95rem', fontFamily: 'inherit' }}
+                    />
+                </div>
+
+                {/* Phone */}
+                <div>
+                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: 8 }}>Telefon Numarası</label>
+                    <div style={{ display: 'flex', borderRadius: 8, border: '1px solid #ccc', overflow: 'hidden' }}>
+                        <div style={{ padding: '12px 15px', background: '#f5f5f5', borderRight: '1px solid #ccc', fontSize: '1.2rem' }}>🇹🇷</div>
                         <input
-                            type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            style={{ width: '100%', padding: '12px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem' }}
+                            type="tel"
+                            placeholder="Telefon Numarası"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            style={{ flex: 1, padding: '12px 15px', border: 'none', outline: 'none', fontSize: '0.95rem' }}
                         />
                     </div>
+                </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: 8, fontWeight: 500, fontSize: '0.9rem' }}>Email Adresi</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            style={{ width: '100%', padding: '12px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem' }}
-                        />
-                        <p style={{ fontSize: '0.8rem', color: '#666', marginTop: 5 }}>Bu email adresi giriş yapmak ve bildirim almak için kullanılır.</p>
+                {/* Amazon Affiliate */}
+                <div>
+                    <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: 8 }}>Amazon Affiliate Kodu</label>
+                    <div style={{ fontSize: '0.75rem', color: '#999', marginBottom: 8 }}>
+                        Kendi Amazon affiliate kodunuzu kullanmak isterseniz aşağıya girin. ShopMy linklerini otomatik olarak dönüştüreceğiz.
                     </div>
+                    <input
+                        type="text"
+                        placeholder="Örnek: my-code-20"
+                        value={amazonCode}
+                        onChange={(e) => setAmazonCode(e.target.value)}
+                        style={{ width: '100%', padding: '12px 15px', borderRadius: 8, border: '1px solid #ccc', background: 'white', fontSize: '0.95rem' }}
+                    />
+                </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: 8, fontWeight: 500, fontSize: '0.9rem' }}>Şifre</label>
-                        <div style={{ display: 'flex', gap: 10 }}>
-                            <input
-                                type="password"
-                                value={isEditingPassword ? password : ""}
-                                onChange={(e) => setPassword(e.target.value)}
-                                disabled={!isEditingPassword}
-                                placeholder={isEditingPassword ? "Yeni şifre giriniz" : "•••••••••••••"}
-                                style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', background: isEditingPassword ? 'white' : '#f9f9f9', cursor: isEditingPassword ? 'text' : 'not-allowed' }}
-                            />
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    if (isEditingPassword) {
-                                        setIsEditingPassword(false);
-                                        setPassword('');
-                                    } else {
-                                        setIsEditingPassword(true);
-                                    }
-                                }}
-                                style={{
-                                    padding: '10px 20px',
-                                    borderRadius: 8,
-                                    border: '1px solid #ddd',
-                                    background: isEditingPassword ? '#fff' : '#f9f9f9',
-                                    cursor: 'pointer',
-                                    fontSize: '0.9rem',
-                                    fontWeight: 500
-                                }}
-                            >
-                                {isEditingPassword ? 'İptal' : 'Değiştir'}
-                            </button>
-                        </div>
-                    </div>
+                <div style={{ marginTop: 20 }}>
+                    <Button style={{ width: '100%', padding: '15px 0', fontSize: '1rem', fontWeight: 600, background: 'black', color: 'white' }}>DEĞİŞİKLİKLERİ KAYDET</Button>
+                </div>
 
-                    <div style={{ marginTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button type="submit">Değişiklikleri Kaydet</Button>
-                    </div>
-                </form>
             </div>
         </div>
     );

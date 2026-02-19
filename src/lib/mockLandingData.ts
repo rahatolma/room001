@@ -48,10 +48,10 @@ export const CURATORS = [
 ];
 
 export const CIRCLES = [
-    { name: "The ShopMy Team", image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=500" },
-    { name: "Interior Design Experts", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=500" },
-    { name: "Stylists", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=500" },
-    { name: "Dermatologists", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=500" }
+    { name: "Room001 Ekibi", image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=500" },
+    { name: "İç Mimarlar", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=500" },
+    { name: "Stilistler", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=500" },
+    { name: "Dermatologlar", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=500" }
 ];
 
 export const CATEGORIES = [

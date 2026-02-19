@@ -21,7 +21,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             alignItems: 'center',
             textAlign: 'center',
             padding: '40px 20px 60px',
-            fontFamily: 'Playfair Display, serif'
+            fontFamily: 'var(--font-primary, var(--font-dm-sans), sans-serif)',
+            color: 'var(--text-primary, #000)'
         }}>
             <div className={styles.avatarContainer} style={{ marginBottom: 20 }}>
                 <div className={styles.avatar} style={{
@@ -43,32 +44,39 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
             <div className={styles.content} style={{ maxWidth: 600 }}>
                 <span style={{
-                    fontFamily: 'Playfair Display, serif',
-                    fontStyle: 'italic',
-                    fontSize: '1rem',
-                    color: '#333',
-                    marginBottom: 5,
+                    fontFamily: 'var(--font-primary, var(--font-dm-sans), sans-serif)',
+                    fontStyle: 'normal',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: 2,
+                    color: 'var(--text-primary, #666)',
+                    marginBottom: 10,
                     display: 'block'
                 }}>
-                    Curated by
+                    INSIDER
                 </span>
                 <h1 className={styles.name} style={{
+                    fontFamily: 'var(--font-primary, var(--font-dm-sans), sans-serif)',
                     fontSize: '3.5rem',
-                    fontWeight: 400,
+                    fontWeight: 800,
                     margin: '0 0 10px 0',
-                    lineHeight: 1.1
+                    lineHeight: 1.1,
+                    color: 'var(--text-primary, #000)'
                 }}>{name}</h1>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '0.9rem', color: '#666', marginBottom: 25 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '0.9rem', color: 'var(--text-primary, #666)', marginBottom: 25 }}>
                     <span>{name.split(' ').map(n => n[0]).join('')}</span>
-                    <span style={{ color: '#2962ff' }}>●</span>
+                    <span style={{ color: 'var(--color-primary, #2962ff)' }}>●</span>
                     <span>{bio}</span>
                 </div>
 
                 <button style={{
-                    background: 'black',
+                    background: 'var(--color-primary, black)',
                     color: 'white',
+                    fontFamily: 'var(--font-dm-sans), sans-serif',
                     border: 'none',
+                    borderRadius: 'var(--btn-radius, 0px)',
                     padding: '14px 28px',
                     fontSize: '0.75rem',
                     fontWeight: 600,
@@ -77,17 +85,17 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     marginBottom: 30,
                     textTransform: 'uppercase'
                 }}>
-                    ADD TO CIRCLE
+                    TAKİP ET
                 </button>
 
-                <p style={{
+                {/* <p style={{
                     fontFamily: 'Playfair Display, serif',
                     fontStyle: 'italic',
                     fontSize: '0.9rem',
                     color: '#666'
                 }}>
                     Trendsetter • Trusted by 17.7k shoppers
-                </p>
+                </p> */}
 
                 {socialLinks.length > 0 && (
                     <div className={styles.socials} style={{ marginTop: 20, display: 'flex', justifyContent: 'center', gap: 15 }}>
@@ -119,6 +127,20 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
                                     </svg>
+                                ) : link.platform === 'Dolap' ? (
+                                    <div title="Dolap Hesabı" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.8rem', fontWeight: 600, border: '1px solid #ddd', padding: '5px 10px', borderRadius: 20 }}>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
+                                        </svg>
+                                        Dolap
+                                    </div>
+                                ) : link.platform === 'Gardrops' ? (
+                                    <div title="Gardrops Hesabı" style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.8rem', fontWeight: 600, border: '1px solid #ddd', padding: '5px 10px', borderRadius: 20 }}>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                                        </svg>
+                                        Gardrops
+                                    </div>
                                 ) : link.platform}
                             </a>
                         ))}

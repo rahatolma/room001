@@ -1,22 +1,27 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function CircleGrid({ items }: { items?: any[] }) {
     if (!items) return null;
 
     return (
         <section style={{ width: '100%', paddingBottom: 100 }}>
-            <div style={{ padding: '0 40px', marginBottom: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div style={{ padding: '0 0', marginBottom: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
-                    <h2 style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: '1.2rem', marginBottom: 0 }}>Shop by</h2>
-                    <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '4rem', fontWeight: 400, marginTop: -5, lineHeight: 1 }}>Circle</h1>
+                    <h2 style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '1.2rem', fontWeight: 700, marginBottom: 0 }}>Keşfet</h2>
+                    <h1 style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '3.5rem', fontWeight: 800, marginTop: 5, lineHeight: 1 }}>Topluluklar</h1>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                     <p style={{ maxWidth: 400, fontSize: '0.9rem', color: '#666', marginBottom: 20 }}>
-                        Create groups of curators who share your style and shop their top recommendations.
+                        Tarzını paylaşan küratör grupları oluştur ve onların en iyi önerilerini keşfet.
                     </p>
                     <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-                        <button style={{ padding: '10px 20px', background: 'transparent', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer' }}>Create Circle</button>
-                        <button style={{ padding: '10px 20px', background: 'black', color: 'white', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer' }}>Shop All Circles</button>
+                        <Link href="/circles/new">
+                            <button style={{ padding: '10px 20px', background: 'transparent', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer' }}>Topluluk Başvurusu</button>
+                        </Link>
+                        <Link href="/circles">
+                            <button style={{ padding: '10px 20px', background: 'black', color: 'white', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer' }}>Tüm Toplulukları Gör</button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -27,13 +32,14 @@ export default function CircleGrid({ items }: { items?: any[] }) {
                 gap: 0 // Full bleed
             }}>
                 {items.map((circle, index) => (
-                    <div key={index} style={{
+                    <Link key={index} href={`/circles/${circle.slug || '#'}`} style={{
                         position: 'relative',
                         aspectRatio: '3/4',
                         overflow: 'hidden',
                         cursor: 'pointer',
                         borderRight: '1px solid white',
-                        borderBottom: '1px solid white'
+                        borderBottom: '1px solid white',
+                        display: 'block'
                     }}>
                         <img
                             src={circle.image}
@@ -61,26 +67,16 @@ export default function CircleGrid({ items }: { items?: any[] }) {
                             color: 'white',
                             pointerEvents: 'none'
                         }}>
-                            <span style={{
-                                fontFamily: 'Playfair Display, serif',
-                                fontStyle: 'italic',
-                                fontSize: '0.9rem',
-                                display: 'block',
-                                marginBottom: 5,
-                                opacity: 0.9
-                            }}>
-                                Circle
-                            </span>
                             <h3 style={{
-                                fontFamily: 'Playfair Display, serif',
-                                fontSize: '2rem',
-                                fontWeight: 400,
+                                fontFamily: 'var(--font-dm-sans)',
+                                fontSize: '1.8rem',
+                                fontWeight: 700,
                                 lineHeight: 1.1
                             }}>
                                 {circle.name}
                             </h3>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </section>

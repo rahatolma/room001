@@ -31,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
         <div className={styles.overlay} onClick={onClose}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <button className={styles.closeButton} onClick={onClose}>&times;</button>
-                {title && <h2 className={styles.title}>{title}</h2>}
+                {title && <h2 className={styles.title} style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontWeight: 700 }}>{title}</h2>}
                 <div className={styles.content}>
                     {children}
                 </div>

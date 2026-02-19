@@ -3,69 +3,72 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function CuratorGrid({ hero, curators }: { hero?: any, curators?: any[] }) {
-    if (!hero) return null;
-
     // Fallback to empty array if no curators found
     const displayCurators = curators || [];
 
     return (
         <section style={{ width: '100%', position: 'relative' }}>
-            {/* Header Section */}
-            <div style={{
-                padding: '40px 40px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'baseline'
-            }}>
-                <div>
-                    <h2 style={{
-                        fontFamily: 'Playfair Display, serif',
-                        fontStyle: 'italic',
-                        fontSize: '1.2rem',
-                        marginBottom: 0
-                    }}>
-                        {hero.title}
-                    </h2>
-                    <h1 style={{
-                        fontFamily: 'Playfair Display, serif',
-                        fontSize: '4rem',
-                        fontWeight: 400,
-                        lineHeight: 1,
-                        marginTop: -5
-                    }}>
-                        {hero.subtitle}
-                    </h1>
-                </div>
-
-                <div style={{ textAlign: 'right' }}>
-                    <Link href="/curators">
-                        <button style={{
-                            background: 'black',
-                            color: 'white',
-                            padding: '14px 28px',
-                            fontSize: '0.75rem',
-                            letterSpacing: '1px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            textTransform: 'uppercase'
+            {/* Header Section - Only Show if Hero exists */}
+            {hero && (
+                <div style={{
+                    padding: '40px 0',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'baseline'
+                }}>
+                    <div>
+                        <h2 style={{
+                            fontFamily: 'var(--font-dm-sans)',
+                            fontSize: '1.2rem',
+                            fontWeight: 700,
+                            marginBottom: 0
                         }}>
-                            {hero.cta}
-                        </button>
-                    </Link>
+                            {hero.title}
+                        </h2>
+                        <h1 style={{
+                            fontFamily: 'var(--font-dm-sans)',
+                            fontSize: '3.5rem', // Slightly smaller for DM Sans
+                            fontWeight: 800,
+                            lineHeight: 1,
+                            marginTop: 5
+                        }}>
+                            {hero.subtitle}
+                        </h1>
+                    </div>
+
+                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 20 }}>
+                        <p style={{ maxWidth: 400, fontSize: '0.9rem', color: '#666', marginBottom: 0 }}>
+                            {hero.description}
+                        </p>
+                        <Link href="/creators">
+                            <button style={{
+                                background: 'black',
+                                color: 'white',
+                                padding: '14px 28px',
+                                fontSize: '0.75rem',
+                                letterSpacing: '1px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                textTransform: 'uppercase'
+                            }}>
+                                {hero.cta}
+                            </button>
+                        </Link>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Full Width Grid */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)', // CHANGED: 3 to 4 columns
+                gridTemplateColumns: 'repeat(4, 1fr)', // 4 columns
                 gap: 0 // No gap for full bleed
             }}>
                 {displayCurators.map((curator, index) => (
-                    <Link key={curator.id} href={`/${curator.slug}`} style={{
+                    <Link key={curator.id} href={curator.slug ? `/${curator.slug}` : '#'} style={{
                         position: 'relative',
                         aspectRatio: '3/4',
-                        overflow: 'hidden',
+                        overflow: 'hidden', // Changed from hidden to auto if needed, but hidden is safer for card
                         borderRight: '1px solid white',
                         borderBottom: '1px solid white',
                         display: 'block'
@@ -100,20 +103,10 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
                             color: 'white',
                             pointerEvents: 'none'
                         }}>
-                            <span style={{
-                                fontFamily: 'Playfair Display, serif',
-                                fontStyle: 'italic',
-                                fontSize: '0.9rem',
-                                display: 'block',
-                                marginBottom: 5,
-                                opacity: 0.9
-                            }}>
-                                Curated by
-                            </span>
                             <h3 style={{
-                                fontFamily: 'Playfair Display, serif',
-                                fontSize: '2rem',
-                                fontWeight: 400,
+                                fontFamily: 'var(--font-dm-sans)',
+                                fontSize: '1.8rem',
+                                fontWeight: 700,
                                 lineHeight: 1.1
                             }}>
                                 {curator.name}
@@ -122,13 +115,6 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
                     </Link>
                 ))}
             </div>
-
-            {/* Description overlay or bottom bar */}
-            <div style={{ padding: '20px 40px', display: 'flex', justifyContent: 'flex-end' }}>
-                <p style={{ maxWidth: 400, fontSize: '0.9rem', color: '#666' }}>
-                    {hero.description}
-                </p>
-            </div>
-        </section>
+        </section >
     );
 }

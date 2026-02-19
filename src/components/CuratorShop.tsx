@@ -29,9 +29,24 @@ interface CuratorShopProps {
     products: any[];
     instagramPosts?: any[];
     tiktokPosts?: any[];
+    theme?: {
+        primaryColor: string;
+        backgroundColor: string;
+        fontFamily: string;
+        buttonStyle: string;
+    };
 }
 
-export default function CuratorShop({ profile, sections, products, instagramPosts = [], tiktokPosts = [] }: CuratorShopProps) {
+const THEME_COLORS: Record<string, string> = {
+    black: '#000000',
+    midnight: '#1e3a8a',
+    emerald: '#059669',
+    rose: '#be123c',
+    purple: '#7e22ce',
+    orange: '#ea580c',
+};
+
+export default function CuratorShop({ profile, sections, products, instagramPosts = [], tiktokPosts = [], theme }: CuratorShopProps) {
     const [activeSection, setActiveSection] = useState<string>('all');
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [activePost, setActivePost] = useState<any>(null);
@@ -102,7 +117,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
     if (activePost) {
         const postProducts = getPostProducts(activePost);
         return (
-            <main style={{ backgroundColor: 'white', minHeight: '100vh', padding: '20px' }}>
+            <main style={{ backgroundColor: theme?.backgroundColor === 'white' ? 'white' : 'black', color: theme?.backgroundColor === 'white' ? 'black' : 'white', minHeight: '100vh', padding: '20px' }}>
                 <div style={{ maxWidth: 1200, margin: '0 auto' }}>
                     <button
                         onClick={() => setActivePost(null)}
@@ -116,7 +131,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     </button>
 
                     <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                        <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2.5rem', margin: '0 0 10px 0' }}>{activePost.caption}</h1>
+                        <h1 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '2.5rem', fontWeight: 700, margin: '0 0 10px 0' }}>{activePost.caption}</h1>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>
                             <img src={profile.initials ? `https://ui-avatars.com/api/?name=${profile.initials}&background=random` : "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=100"} alt="Avatar" style={{ width: 24, height: 24, borderRadius: '50%' }} />
                             <span>{profile.name}</span>
@@ -141,8 +156,29 @@ export default function CuratorShop({ profile, sections, products, instagramPost
         );
     }
 
+    const themeStyle = useMemo(() => {
+        if (!theme) return {};
+
+        const primaryColor = THEME_COLORS[theme.primaryColor] || theme.primaryColor;
+
+        let borderRadius = '0px';
+        if (theme.buttonStyle === 'rounded') borderRadius = '8px';
+        if (theme.buttonStyle === 'pill') borderRadius = '50px';
+
+        return {
+            '--color-primary': primaryColor,
+            '--font-primary': `var(--font-${theme.fontFamily})`,
+            '--bg-primary': theme.backgroundColor === 'white' ? '#ffffff' : '#000000',
+            '--text-primary': theme.backgroundColor === 'white' ? '#000000' : '#ffffff',
+            '--btn-radius': borderRadius,
+            fontFamily: `var(--font-${theme.fontFamily})`,
+            backgroundColor: theme.backgroundColor === 'white' ? '#ffffff' : '#000000',
+            color: theme.backgroundColor === 'white' ? '#000000' : '#ffffff',
+        } as React.CSSProperties;
+    }, [theme]);
+
     return (
-        <main style={{ backgroundColor: 'white', minHeight: '100vh' }}>
+        <main style={{ minHeight: '100vh', ...themeStyle }}>
             {/* Header Section */}
             <ProfileHeader
                 name={profile.name}
@@ -152,7 +188,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
             />
 
             {/* Sticky Navigation Bars */}
-            <div style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: 'white', borderBottom: '1px solid #eee' }}>
+            <div style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: theme?.backgroundColor === 'white' ? 'white' : 'black', borderBottom: '1px solid #eee' }}>
                 {/* Primary Nav (Sections) */}
                 <div style={{
                     display: 'flex',
@@ -169,7 +205,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     <span
                         onClick={() => { setActiveSection('all'); setActiveCategory('all'); }}
                         style={{
-                            border: activeSection === 'all' ? '1px solid black' : '1px solid transparent',
+                            border: activeSection === 'all' ? '1px solid var(--color-primary, black)' : '1px solid transparent',
                             borderRadius: '20px',
                             padding: '5px 15px',
                             cursor: 'pointer',
@@ -184,7 +220,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                             key={section.id}
                             onClick={() => { setActiveSection(section.id); setActiveCategory('all'); }}
                             style={{
-                                border: activeSection === section.id ? '1px solid black' : '1px solid transparent',
+                                border: activeSection === section.id ? '1px solid var(--color-primary, black)' : '1px solid transparent',
                                 borderRadius: '20px',
                                 padding: '5px 15px',
                                 cursor: 'pointer',
@@ -198,7 +234,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     <span
                         onClick={() => { setActiveSection('instagram'); setActiveCategory('all'); }}
                         style={{
-                            border: activeSection === 'instagram' ? '1px solid black' : '1px solid transparent',
+                            border: activeSection === 'instagram' ? '1px solid var(--color-primary, black)' : '1px solid transparent',
                             borderRadius: '20px',
                             padding: '5px 15px',
                             cursor: 'pointer',
@@ -211,7 +247,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     <span
                         onClick={() => { setActiveSection('tiktok'); setActiveCategory('all'); }}
                         style={{
-                            border: activeSection === 'tiktok' ? '1px solid black' : '1px solid transparent',
+                            border: activeSection === 'tiktok' ? '1px solid var(--color-primary, black)' : '1px solid transparent',
                             borderRadius: '20px',
                             padding: '5px 15px',
                             cursor: 'pointer',
@@ -226,7 +262,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                             key={section.id}
                             onClick={() => { setActiveSection(section.id); setActiveCategory('all'); }}
                             style={{
-                                border: activeSection === section.id ? '1px solid black' : '1px solid transparent',
+                                border: activeSection === section.id ? '1px solid var(--color-primary, black)' : '1px solid transparent',
                                 borderRadius: '20px',
                                 padding: '5px 15px',
                                 cursor: 'pointer',
@@ -239,40 +275,42 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                 </div>
 
                 {/* Secondary Nav (Categories with counts) */}
-                {activeSection !== 'instagram' && (
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        gap: 40,
-                        padding: '12px 0',
-                        fontSize: '0.7rem',
-                        color: '#999',
-                        letterSpacing: '1px',
-                        textTransform: 'uppercase',
-                        overflowX: 'auto',
-                        whiteSpace: 'nowrap'
-                    }}>
-                        {categories.map(cat => {
-                            const count = categoryCounts[cat] || 0;
-                            if (count === 0) return null; // Hide empty categories
+                {
+                    activeSection !== 'instagram' && (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: 40,
+                            padding: '12px 0',
+                            fontSize: '0.7rem',
+                            color: '#999',
+                            letterSpacing: '1px',
+                            textTransform: 'uppercase',
+                            overflowX: 'auto',
+                            whiteSpace: 'nowrap'
+                        }}>
+                            {categories.map(cat => {
+                                const count = categoryCounts[cat] || 0;
+                                if (count === 0) return null; // Hide empty categories
 
-                            return (
-                                <span
-                                    key={cat}
-                                    onClick={() => setActiveCategory(cat === activeCategory ? 'all' : cat)}
-                                    style={{
-                                        color: activeCategory === cat ? 'black' : '#999',
-                                        fontWeight: activeCategory === cat ? 600 : 400,
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    {cat} {count}
-                                </span>
-                            );
-                        })}
-                    </div>
-                )}
-            </div>
+                                return (
+                                    <span
+                                        key={cat}
+                                        onClick={() => setActiveCategory(cat === activeCategory ? 'all' : cat)}
+                                        style={{
+                                            color: activeCategory === cat ? 'var(--color-primary, black)' : '#999',
+                                            fontWeight: activeCategory === cat ? 600 : 400,
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        {cat} {count}
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    )
+                }
+            </div >
 
             {/* Product Feed */}
             <div style={{ padding: '0 40px' }}>
@@ -314,7 +352,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                         </div>
                     )
                 )}
-            </div>
-        </main>
+            </div >
+        </main >
     );
 }

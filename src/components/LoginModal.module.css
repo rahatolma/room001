@@ -7,7 +7,16 @@
 .inputGroup {
     position: relative;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    /* Space between label and input */
+}
+
+.inputGroup label {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 500;
 }
 
 .input {

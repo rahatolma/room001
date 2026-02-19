@@ -11,6 +11,7 @@ interface Product {
         name: string;
         avatar: string;
     };
+    collectionItemId?: string;
 }
 
 interface ProductGridProps {

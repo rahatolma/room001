@@ -11,6 +11,13 @@ export const metadata: Metadata = {
   description: "Room001 ile favori influencer'larınızın ve içerik üreticilerinizin önerdiği ürünleri keşfedin ve satın alın.",
 };
 
+import { DM_Sans, Inter, Playfair_Display, Space_Grotesk } from 'next/font/google';
+
+const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
+const space = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
+
 export default function RootLayout({
   children,
 }: {
@@ -18,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <body>
+      <body className={`${dmSans.variable} ${inter.variable} ${playfair.variable} ${space.variable} ${dmSans.className}`}>
         <AuthProvider>
           <DataProvider>
             <ThemeProvider>

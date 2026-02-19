@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '@/types';
 import { useRouter } from 'next/navigation';
 
-import { loginAction, signupAction, logoutAction, getSessionAction, updateProfileAction } from '@/actions/auth';
+import { loginAction, signupAction, logoutAction, getSessionAction, updateProfileAction, updateThemeAction } from '@/actions/auth';
 
 interface AuthContextType {
     user: User | null;
@@ -13,6 +13,8 @@ interface AuthContextType {
     logout: () => Promise<void>;
     loading: boolean;
     updateProfile: (updates: Partial<User>) => Promise<void>;
+    updateTheme: (theme: any) => Promise<void>;
+    refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -97,8 +99,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await updateProfileAction(updates);
     };
 
+    const updateTheme = async (theme: any) => {
+        if (!user) return;
+
+        // Optimistic update
+        setUser({ ...user, themePreferences: theme });
+
+        // Server update
+        try {
+            await updateThemeAction(theme);
+            router.refresh(); // Refresh Server Components
+        } catch (error) {
+            console.error("Theme update failed", error);
+        }
+    };
+
+    const refreshUser = async () => {
+        try {
+            const sessionUser = await getSessionAction();
+            if (sessionUser) {
+                setUser(sessionUser);
+            }
+        } catch (error) {
+            console.error("Refresh session failed", error);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, signup, logout, loading, updateProfile }}>
+        <AuthContext.Provider value={{ user, login, signup, logout, loading, updateProfile, updateTheme, refreshUser }}>
             {children}
         </AuthContext.Provider>
     );

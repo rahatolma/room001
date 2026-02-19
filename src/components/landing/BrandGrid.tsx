@@ -6,13 +6,13 @@ export default function BrandGrid({ items }: { items?: any[] }) {
 
     return (
         <section style={{ width: '100%' }}>
-            <div style={{ padding: '0 40px', marginBottom: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div style={{ padding: '0 0', marginBottom: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
-                    <h2 style={{ fontFamily: 'Playfair Display, serif', fontStyle: 'italic', fontSize: '1.2rem', marginBottom: 0 }}>Shop by</h2>
-                    <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '5rem', fontWeight: 400, marginTop: -10, lineHeight: 1 }}>Brand</h1>
+                    <h2 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '1.2rem', fontWeight: 700, marginBottom: 0 }}>Keşfet</h2>
+                    <h1 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '3.5rem', fontWeight: 800, marginTop: 5, lineHeight: 1 }}>Markalar</h1>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: 20 }}>Explore top-tier products from brands you know and discover new brands you'll love.</p>
+                    <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: 20 }}>Bildiğin markaların en iyi ürünlerini keşfet ve seveceğin yeni markalarla tanış.</p>
                     <Link href="/brands">
                         <button style={{
                             background: 'black',
@@ -24,7 +24,7 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                             cursor: 'pointer',
                             textTransform: 'uppercase'
                         }}>
-                            SHOP ALL BRANDS
+                            TÜM MARKALARI GÖR
                         </button>
                     </Link>
                 </div>
@@ -36,12 +36,13 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                 gap: 0
             }}>
                 {items.map((brand, index) => (
-                    <div key={index} style={{
+                    <Link key={index} href={`/brands/${brand.slug || '#'}`} style={{
                         position: 'relative',
                         aspectRatio: '3/4',
                         overflow: 'hidden',
                         borderRight: '1px solid white',
-                        borderBottom: '1px solid white'
+                        borderBottom: '1px solid white',
+                        display: 'block'
                     }}>
                         <img
                             src={brand.image}
@@ -69,26 +70,16 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                             color: 'white',
                             pointerEvents: 'none'
                         }}>
-                            <span style={{
-                                fontFamily: 'Playfair Display, serif',
-                                fontStyle: 'italic',
-                                fontSize: '0.9rem',
-                                display: 'block',
-                                marginBottom: 5,
-                                opacity: 0.9
-                            }}>
-                                Brand
-                            </span>
                             <h3 style={{
-                                fontFamily: 'Playfair Display, serif',
-                                fontSize: '2rem',
-                                fontWeight: 400,
+                                fontFamily: 'var(--font-dm-sans)',
+                                fontSize: '1.8rem',
+                                fontWeight: 700,
                                 lineHeight: 1.1
                             }}>
                                 {brand.name}
                             </h3>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </section>

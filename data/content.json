@@ -1,84 +1,163 @@
 {
   "hero": {
-    "title": "Shop by",
-    "subtitle": "Curator",
-    "description": "Insider access to your favorite tastemakers' most loved and trusted products.",
-    "cta": "SHOP ALL CURATORS"
+    "title": "Keşfet",
+    "subtitle": "Insider'lar",
+    "description": "Favori içerik üreticilerinin en sevdiği ve güvendiği ürünlere içeriden erişim.",
+    "cta": "TÜM INSIDER'LARI GÖR"
   },
   "sections": {
     "curators": {
-      "title": "Shop by Curator",
+      "title": "Insider'a Göre Alışveriş",
       "featuredIds": [
-        "sofia-richie",
-        "marianna-hewitt",
-        "hailey-bieber"
+        "sofia-richie_1771013147950",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
       ]
     },
     "circles": {
-      "title": "Shop by Circle",
+      "title": "Topluluklara Göre Alışveriş",
       "items": [
         {
-          "name": "The ShopMy Team",
-          "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=500"
+          "name": "Room001 Ekibi",
+          "image": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600&q=80"
         },
         {
-          "name": "Interior Design Experts",
-          "image": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=500"
+          "name": "İç Mimarlık Uzmanları",
+          "image": "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?w=600&q=80"
         },
         {
-          "name": "Stylists",
-          "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=500"
+          "name": "Stilistler",
+          "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80"
         },
         {
-          "name": "Dermatologists",
-          "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=500"
+          "name": "Dermatologlar",
+          "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=80"
+        },
+        {
+          "name": "Makyaj Artistleri",
+          "image": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&q=80"
+        },
+        {
+          "name": "Moda Editörleri",
+          "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80"
+        },
+        {
+          "name": "Wellness Koçları",
+          "image": "https://images.unsplash.com/photo-1545205597-3d9d02c29597?w=600"
+        },
+        {
+          "name": "Gezginler",
+          "image": "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=80"
         }
+      ],
+      "featuredIds": [
+        "room001-ekibi",
+        "i-mimarlk-uzmanlar",
+        "stilistler",
+        "moda-editrleri",
+        "makyaj-artistleri",
+        "dermatologlar",
+        "gezginler",
+        "wellness-kolar"
       ]
     },
     "categories": {
-      "title": "Shop by Category",
+      "title": "Kategoriye Göre Alışveriş",
       "items": [
         {
-          "name": "Necklaces",
-          "image": "https://images.unsplash.com/photo-1599643478518-17488fbbcd75?q=80&w=500"
+          "name": "Kolyeler",
+          "image": "https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=600"
         },
         {
-          "name": "Jeans",
-          "image": "https://images.unsplash.com/photo-1582552938357-32b906df40cb?q=80&w=500"
+          "name": "Jeanler",
+          "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80"
         },
         {
-          "name": "Sandals",
-          "image": "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=500"
+          "name": "Sandaletler",
+          "image": "https://images.unsplash.com/photo-1562273138-f46be4ebdf33?w=600&q=80"
         },
         {
-          "name": "Dresses",
-          "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=500"
+          "name": "Elbiseler",
+          "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80"
+        },
+        {
+          "name": "Çantalar",
+          "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80"
+        },
+        {
+          "name": "Ceketler",
+          "image": "https://images.unsplash.com/photo-1559551409-dadc959f76b8?w=600"
+        },
+        {
+          "name": "Güneş Gözlükleri",
+          "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&q=80"
+        },
+        {
+          "name": "Ayakkabılar",
+          "image": "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&q=80"
         }
+      ],
+      "featuredIds": [
+        "kolyeler",
+        "jeanler",
+        "ceketler",
+        "sandaletler",
+        "antalar",
+        "ayakkablar",
+        "gne-gzlkleri",
+        "elbiseler"
       ]
     },
     "brands": {
-      "title": "Shop by Brand",
+      "title": "Markaya Göre Alışveriş",
       "items": [
         {
           "name": "Khaite",
-          "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=500"
+          "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=80"
         },
         {
           "name": "Prada",
-          "image": "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=500"
+          "image": "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=500&q=80"
         },
         {
           "name": "Toteme",
-          "image": "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=500"
+          "image": "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500&q=80"
         },
         {
           "name": "Crown Affair",
-          "image": "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=500"
+          "image": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&q=80"
         },
         {
-          "name": "Crown Affair",
-          "image": "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=500"
+          "name": "Yargıcı",
+          "image": "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80"
+        },
+        {
+          "name": "Vakko",
+          "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&q=80"
+        },
+        {
+          "name": "Beymen",
+          "image": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&q=80"
+        },
+        {
+          "name": "Mavi",
+          "image": "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=500&q=80"
         }
+      ],
+      "featuredIds": [
+        "khaite",
+        "prada",
+        "crown-affair",
+        "beymen",
+        "mavi",
+        "yargc",
+        "vakko",
+        "toteme"
       ]
     }
   }

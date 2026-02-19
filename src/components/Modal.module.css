@@ -16,15 +16,13 @@
     padding: 40px;
     border-radius: 8px;
     position: relative;
-    max-width: 500px;
+    max-width: 600px;
     width: 90%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     animation: fadeIn 0.2s ease-out;
 }
 
-.authModal {
-    /* Specific style for auth modals if needed */
-}
+
 
 .closeButton {
     position: absolute;
@@ -43,7 +41,7 @@
     /* Match the screenshot serif font */
     font-size: 2rem;
     margin-bottom: 20px;
-    text-align: center;
+    text-align: left;
     color: #1a1a1a;
 }
 
