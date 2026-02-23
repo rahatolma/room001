@@ -35,9 +35,9 @@ export default function MyShopPage() {
     };
 
     return (
-        <div style={{ maxWidth: 800, paddingBottom: 100, fontFamily: 'sans-serif' }}>
+        <div style={{ maxWidth: 800, paddingBottom: 100, }}>
             <div style={{ marginBottom: 30, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h1 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-dm-sans), sans-serif', fontWeight: 700, margin: 0 }}>Mağazam</h1>
+                <h1 style={{ fontSize: '2.5rem',  fontWeight: 700, margin: 0 }}>Mağazam</h1>
                 <a href={`/${user?.username}`} target="_blank" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.9rem', color: '#666', borderBottom: '1px solid #ddd' }}>
                     Mağazayı Görüntüle <ExternalLink size={14} />
                 </a>

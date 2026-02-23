@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { trackEvent } from '@/actions/analytics';
+import ImageFallback from './ImageFallback';
 
 interface ProductCardProps {
     id: string;
@@ -34,7 +35,7 @@ export default function ProductCard({ id, image, brand, title, price, curator, l
     const content = (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, cursor: 'pointer' }}>
             <div style={{ position: 'relative', aspectRatio: '4/5', width: '100%', overflow: 'hidden', backgroundColor: '#f5f5f5' }}>
-                <img
+                <ImageFallback
                     src={image}
                     alt={title}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
@@ -51,7 +52,7 @@ export default function ProductCard({ id, image, brand, title, price, curator, l
                             overflow: 'hidden',
                             backgroundColor: '#ccc'
                         }}>
-                            <img src={curator.avatar} alt={curator.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <ImageFallback src={curator.avatar} alt={curator.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <span style={{ fontSize: '0.7rem', color: '#666', fontWeight: 500 }}>{curator.name}</span>
                     </div>
@@ -59,7 +60,7 @@ export default function ProductCard({ id, image, brand, title, price, curator, l
 
                 <div>
                     <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-primary, #333)', marginBottom: 2 }}>{brand}</span>
-                    <h3 style={{ fontFamily: 'var(--font-primary, var(--font-dm-sans), sans-serif)', fontSize: '1rem', fontWeight: 600, margin: 0, lineHeight: 1.3, color: 'var(--text-primary, #000)' }}>{title}</h3>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0, lineHeight: 1.3, color: 'var(--text-primary, #000)' }}>{title}</h3>
                     <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-primary, #666)', marginTop: 4 }}>{price}</span>
                 </div>
             </div>

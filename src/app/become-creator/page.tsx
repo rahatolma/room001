@@ -92,9 +92,9 @@ export default function BecomeCreatorPage() {
     };
 
     return (
-        <div style={{ maxWidth: 500, margin: '80px auto', fontFamily: 'var(--font-dm-sans), sans-serif', padding: 20 }}>
+        <div style={{ maxWidth: 500, margin: '80px auto',  padding: 20 }}>
             <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <h1 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '2.5rem', fontWeight: 800, marginBottom: 15 }}>
+                <h1 style={{  fontSize: '2.5rem', fontWeight: 800, marginBottom: 15 }}>
                     İçerik Üreticisi Olun
                 </h1>
                 <p style={{ color: '#666', lineHeight: 1.5 }}>

@@ -1,25 +1,40 @@
 "use client";
 
 import React, { useState } from 'react';
-import { searchProducts } from '@/lib/mockData';
-import { Product } from '@/types';
+import { searchProducts } from '@/actions/product';
+import { Product } from '@prisma/client';
+import ImageFallback from './ImageFallback';
 import styles from './ProductSearch.module.css';
 
 interface ProductSearchProps {
-    onAddProduct: (product: Product) => void;
+    onAddProduct: (product: any) => void;
 }
 
-const ProductSearch: React.FC<ProductSearchProps> = ({ onAddProduct }) => {
+export default function ProductSearch({ onAddProduct }: ProductSearchProps) {
     const [activeTab, setActiveTab] = useState<'search' | 'manual'>('search');
     const [manualProduct, setManualProduct] = useState({ name: '', brand: '', link: '', imageUrl: '' });
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState<Product[]>([]);
+    const [results, setResults] = useState<any[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         setQuery(val);
         if (val.length > 1) {
-            setResults(searchProducts(val));
+            setIsSearching(true);
+            try {
+                const res = await searchProducts(val);
+                if (Array.isArray(res)) {
+                    setResults(res);
+                } else {
+                    setResults([]);
+                }
+            } catch (error) {
+                console.error("Search error:", error);
+                setResults([]);
+            } finally {
+                setIsSearching(false);
+            }
         } else {
             setResults([]);
         }
@@ -27,16 +42,15 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onAddProduct }) => {
 
     const handleManualSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const newProduct: Product = {
-            id: Date.now().toString(),
-            name: manualProduct.name,
-            brand: manualProduct.brand,
-            link: manualProduct.link,
-            imageUrl: manualProduct.imageUrl || 'https://via.placeholder.com/150',
-            clicks: 0,
-            earnings: 0
+        const mockProduct: any = {
+            id: 'mock-' + Date.now(),
+            title: manualProduct.name || 'Yeni Ürün (Linkten)',
+            brandId: manualProduct.brand || 'Bilinmeyen',
+            price: 0,
+            imageUrl: manualProduct.imageUrl || '',
+            url: manualProduct.link
         };
-        onAddProduct(newProduct);
+        onAddProduct(mockProduct);
         setManualProduct({ name: '', brand: '', link: '', imageUrl: '' });
         setActiveTab('search');
     };
@@ -79,13 +93,18 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onAddProduct }) => {
             {activeTab === 'search' ? (
                 <>
                     <div className={styles.inputWrapper}>
-                        <input
-                            type="text"
-                            value={query}
-                            onChange={handleSearch}
-                            placeholder="Search brand or product..."
-                            className={styles.searchInput}
-                        />
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type="text"
+                                value={query}
+                                onChange={handleSearch}
+                                placeholder="Search brand or product..."
+                                className={styles.searchInput}
+                            />
+                            {isSearching && (
+                                <div style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', fontSize: '0.8rem', color: '#999' }}>...</div>
+                            )}
+                        </div>
                     </div>
 
                     {results.length > 0 && (
@@ -93,11 +112,12 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onAddProduct }) => {
                             {results.map((product) => (
                                 <div key={product.id} className={styles.productItem}>
                                     <div style={{ width: 40, height: 40, background: '#eee', borderRadius: 4 }}>
-                                        {product.imageUrl && <img src={product.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }} />}
+                                        {product.imageUrl && <ImageFallback src={product.imageUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 4 }} />}
                                     </div>
                                     <div className={styles.productInfo}>
-                                        <span className={styles.productName}>{product.name}</span>
-                                        <span className={styles.productBrand}>{product.brand}</span>
+                                        <div className={styles.productName} title={product.title}>{product.title}</div>
+                                        <div className={styles.productBrand}>Brand ID: {product.brandId}</div>
+                                        <div className={styles.productPrice}></div>
                                     </div>
                                     <button
                                         className={styles.addButton}
@@ -114,7 +134,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onAddProduct }) => {
                             ))}
                         </div>
                     )}
-                    {query.length > 1 && results.length === 0 && (
+                    {query.length > 1 && !isSearching && results.length === 0 && (
                         <p style={{ color: '#666', fontSize: '0.9rem', marginTop: 10 }}>No results found.</p>
                     )}
                 </>
@@ -159,6 +179,4 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onAddProduct }) => {
             )}
         </div>
     );
-};
-
-export default ProductSearch;
+}

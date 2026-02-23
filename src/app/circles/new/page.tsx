@@ -15,7 +15,7 @@ export default function NewCirclePage() {
 
     return (
         <div style={{ maxWidth: 800, margin: '60px auto', padding: '0 20px', minHeight: '60vh' }}>
-            <h1 style={{ fontFamily: 'var(--font-playfair)', fontSize: '3rem', marginBottom: 20 }}>Topluluk Başvurusu</h1>
+            <h1 style={{  fontSize: '3rem', marginBottom: 20 }}>Topluluk Başvurusu</h1>
             <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: 40 }}>
                 Kendi topluluğunuzu yönetmek ve benzer zevklere sahip insanları bir araya getirmek için başvurun.
             </p>
@@ -64,7 +64,7 @@ export default function NewCirclePage() {
                                 border: '1px solid #ddd',
                                 borderRadius: 4,
                                 fontSize: '1rem',
-                                fontFamily: 'inherit'
+                                
                             }}
                         />
                     </div>

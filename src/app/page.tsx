@@ -20,31 +20,45 @@ export default async function Home() {
     <main style={{ background: '#fff' }}>
       <ManifestoSlider />
 
-      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '60px 20px' }}>
-        <CuratorGrid curators={curators} hero={content?.hero} />
+      {/* 1. Insiderler */}
+      <div style={{ background: '#fff', padding: '60px 0' }}>
+        <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
+          <CuratorGrid curators={curators} hero={content?.hero} />
+        </div>
       </div>
 
-      <MagazineSection />
-
+      {/* 2. Markalar */}
       <div style={{ background: '#fff', padding: '60px 0' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 20px' }}>
+        <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
+          <BrandGrid items={brands} />
+        </div>
+      </div>
+
+      {/* 3. Topluluklar */}
+      <div style={{ background: '#fff', padding: '60px 0' }}>
+        <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
           <CircleGrid items={circles} />
         </div>
       </div>
 
-      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '60px 20px' }}>
-        <ProductGrid items={products} />
+      {/* 4. Dergiler */}
+      <div style={{ background: '#fff', padding: '60px 0' }}>
+        <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
+          <MagazineSection />
+        </div>
       </div>
 
+      {/* 5. Kategoriler */}
       <div style={{ background: '#fff', padding: '60px 0' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 20px' }}>
+        <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
           <CategoryGrid items={categories} />
         </div>
       </div>
 
+      {/* 6. Ürünler */}
       <div style={{ background: '#fff', padding: '60px 0' }}>
-        <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 20px' }}>
-          <BrandGrid items={brands} />
+        <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
+          <ProductGrid items={products} />
         </div>
       </div>
     </main>

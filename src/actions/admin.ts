@@ -319,7 +319,17 @@ export async function getCircleBySlug(slug: string) {
         username: `user${i}`
     }));
 
-    return { ...circle, curators, isDbBacked: false };
+    // Simulate Products for this circle (Mock)
+    const products = Array(8).fill(null).map((_, i) => ({
+        id: `circle-prod-${i}`,
+        title: `${circle.name} Topluluk Ürünü ${i + 1}`,
+        brand: 'Çeşitli Markalar',
+        price: (Math.random() * 800 + 200).toFixed(2),
+        image: circle.image || 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=800&auto=format&fit=crop',
+        curator: { name: curators[i % curators.length].name, avatar: curators[i % curators.length].image }
+    }));
+
+    return { ...circle, curators, products, isDbBacked: false };
 }
 
 // --- Types (Legacy Support) ---
@@ -404,7 +414,8 @@ export async function getMyCollections(userId: string) {
             id: c.id,
             title: c.title,
             productCount: c._count.items,
-            displayOrder: c.displayOrder
+            displayOrder: c.displayOrder,
+            visibility: c.isPublic ? 'public' : 'private'
         }));
     } catch (error) {
         return [];

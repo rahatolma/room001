@@ -4,6 +4,7 @@ import CuratorShop from '@/components/CuratorShop'; // Import the client compone
 import { getCuratorData } from '@/actions/admin';
 import { notFound } from 'next/navigation';
 import { trackEvent } from '@/actions/analytics';
+import { getSessionAction } from '@/actions/auth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -18,6 +19,8 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
     }
 
     const { user, sections, products } = data as any;
+    const session = await getSessionAction();
+    const isOwner = session?.id === user.id;
 
     // Track View
     // Only track if user exists
@@ -59,7 +62,7 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
     const theme = user.themePreferences || {
         primaryColor: 'black',
         backgroundColor: 'white',
-        fontFamily: 'dm-sans',
+        
         buttonStyle: 'sharp'
     };
 
@@ -71,6 +74,7 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
             instagramPosts={data.instagramPosts}
             tiktokPosts={data.tiktokPosts}
             theme={theme}
+            isOwner={isOwner}
         />
     );
 }

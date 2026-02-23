@@ -1,18 +1,31 @@
 import React from 'react';
 import styles from './ProfileHeader.module.css';
+import ImageFallback from '@/components/ImageFallback';
 
 interface ProfileHeaderProps {
     name: string;
-    bio: string;
+    bio?: string;
     avatarInitials: string;
+    avatarImage?: string | null;
     socialLinks?: { platform: string; url: string }[];
+    roleLabel?: string;
+    hideFollowButton?: boolean;
+    statsText?: React.ReactNode;
+    isOwner?: boolean;
+    onEditClick?: () => void;
 }
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({
     name,
     bio,
     avatarInitials,
-    socialLinks = []
+    avatarImage,
+    socialLinks = [],
+    roleLabel = 'INSIDER',
+    hideFollowButton = false,
+    statsText,
+    isOwner = false,
+    onEditClick
 }) => {
     return (
         <header className={styles.header} style={{
@@ -21,7 +34,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             alignItems: 'center',
             textAlign: 'center',
             padding: '40px 20px 60px',
-            fontFamily: 'var(--font-primary, var(--font-dm-sans), sans-serif)',
+
             color: 'var(--text-primary, #000)'
         }}>
             <div className={styles.avatarContainer} style={{ marginBottom: 20 }}>
@@ -38,26 +51,31 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     border: '1px solid #ddd',
                     overflow: 'hidden'
                 }}>
-                    <img src="https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=200&auto=format&fit=crop" alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    {avatarImage ? (
+                        <ImageFallback src={avatarImage} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                        avatarInitials
+                    )}
                 </div>
             </div>
 
             <div className={styles.content} style={{ maxWidth: 600 }}>
-                <span style={{
-                    fontFamily: 'var(--font-primary, var(--font-dm-sans), sans-serif)',
-                    fontStyle: 'normal',
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    textTransform: 'uppercase',
-                    letterSpacing: 2,
-                    color: 'var(--text-primary, #666)',
-                    marginBottom: 10,
-                    display: 'block'
-                }}>
-                    INSIDER
-                </span>
+                {roleLabel && (
+                    <span style={{
+                        fontStyle: 'normal',
+                        fontSize: '0.9rem',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: 2,
+                        color: 'var(--text-primary, #666)',
+                        marginBottom: 10,
+                        display: 'block'
+                    }}>
+                        {roleLabel}
+                    </span>
+                )}
+
                 <h1 className={styles.name} style={{
-                    fontFamily: 'var(--font-primary, var(--font-dm-sans), sans-serif)',
                     fontSize: '3.5rem',
                     fontWeight: 800,
                     margin: '0 0 10px 0',
@@ -65,31 +83,64 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                     color: 'var(--text-primary, #000)'
                 }}>{name}</h1>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '0.9rem', color: 'var(--text-primary, #666)', marginBottom: 25 }}>
-                    <span>{name.split(' ').map(n => n[0]).join('')}</span>
-                    <span style={{ color: 'var(--color-primary, #2962ff)' }}>●</span>
-                    <span>{bio}</span>
-                </div>
+                {statsText ? (
+                    <div style={{ color: '#666', fontSize: '0.9rem', marginBottom: 25 }}>
+                        {statsText}
+                    </div>
+                ) : (
+                    bio && (
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '0.9rem', color: 'var(--text-primary, #666)', marginBottom: 25 }}>
+                            <span>{avatarInitials}</span>
+                            <span style={{ color: 'var(--color-primary, #2962ff)' }}>●</span>
+                            <span>{bio}</span>
+                        </div>
+                    )
+                )}
 
-                <button style={{
-                    background: 'var(--color-primary, black)',
-                    color: 'white',
-                    fontFamily: 'var(--font-dm-sans), sans-serif',
-                    border: 'none',
-                    borderRadius: 'var(--btn-radius, 0px)',
-                    padding: '14px 28px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    letterSpacing: '1px',
-                    cursor: 'pointer',
-                    marginBottom: 30,
-                    textTransform: 'uppercase'
-                }}>
-                    TAKİP ET
-                </button>
+                {isOwner ? (
+                    <button
+                        onClick={onEditClick}
+                        style={{
+                            border: '1px solid #e0e0e0',
+                            borderRadius: '20px',
+                            padding: '8px 16px',
+                            background: '#fff',
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: '0 auto 30px auto',
+                            gap: 8
+                        }}
+                    >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                        Vitrinini Düzenle
+                    </button>
+                ) : (
+                    !hideFollowButton && (
+                        <button style={{
+                            background: 'var(--color-primary, black)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: 'var(--btn-radius, 0px)',
+                            padding: '14px 28px',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            letterSpacing: '1px',
+                            cursor: 'pointer',
+                            marginBottom: 30,
+                            textTransform: 'uppercase'
+                        }}>
+                            { /* Fallback to TAKİP ET if no external text is provided */}
+                            TAKİP ET
+                        </button>
+                    )
+                )}
 
                 {/* <p style={{
-                    fontFamily: 'Playfair Display, serif',
+                    
                     fontStyle: 'italic',
                     fontSize: '0.9rem',
                     color: '#666'

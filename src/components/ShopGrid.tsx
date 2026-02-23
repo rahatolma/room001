@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import styles from './ShopGrid.module.css';
 import { useData } from '@/context/DataContext';
+import ImageFallback from '@/components/ImageFallback';
 
 interface ShopItem {
     id: string;
@@ -43,7 +44,7 @@ const ShopGrid: React.FC<ShopGridProps> = ({ title, items, isPublic = false }) =
                     >
                         <div className={styles.imagePlaceholder}>
                             {item.imageUrl ? (
-                                <img
+                                <ImageFallback
                                     src={item.imageUrl}
                                     alt={item.imageAlt}
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}

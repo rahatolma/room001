@@ -177,7 +177,7 @@ export default function AdminCMSPage() {
         <div style={{ maxWidth: 800 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30 }}>
                 <div>
-                    <h1 style={{ fontSize: '2rem', marginBottom: 10, fontFamily: 'Playfair Display, serif' }}>Site İçerik Yönetimi (CMS)</h1>
+                    <h1 style={{ fontSize: '2rem', marginBottom: 10, }}>Site İçerik Yönetimi (CMS)</h1>
                     <p style={{ color: '#666' }}>Ana sayfa ve diğer alanlardaki metinleri buradan düzenleyebilirsiniz.</p>
                 </div>
                 <div style={{ display: 'flex', gap: 10 }}>
@@ -230,7 +230,7 @@ export default function AdminCMSPage() {
                             value={content.hero.description}
                             onChange={(e) => handleHeroChange('description', e.target.value)}
                             rows={3}
-                            style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ddd', fontFamily: 'inherit' }}
+                            style={{ width: '100%', padding: 12, borderRadius: 8, border: '1px solid #ddd', }}
                         />
                     </div>
                     <div>

@@ -1,6 +1,6 @@
 export default function PrivacyPage() {
     return (
-        <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+        <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', }}>
             <h1>Gizlilik Politikası</h1>
             <p>Verilerinizin güvenliği bizim için önemlidir.</p>
             <p>Bu politika, verilerinizi nasıl topladığımızı ve kullandığımızı açıklar:</p>

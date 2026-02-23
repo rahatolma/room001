@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import ImageFallback from './ImageFallback';
 import Link from 'next/link';
 import { GridItem } from '@/types/shop';
 
@@ -53,7 +53,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
 
     return (
         <div style={{ paddingBottom: 80, backgroundColor: '#fff' }}>
-            <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 20px' }}>
+            <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
                 {/* Hero Section */}
                 <div style={{ display: 'flex', minHeight: '600px', flexDirection: 'row', marginBottom: 60 }}>
                     {/* Left Content */}
@@ -70,7 +70,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                             letterSpacing: '1px',
                             fontSize: '0.9rem',
                             marginBottom: 20,
-                            fontFamily: 'var(--font-dm-sans), sans-serif',
+
                             fontWeight: 700,
 
                         }}>
@@ -82,7 +82,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                             marginBottom: 30,
                             fontWeight: 800,
                             color: 'rgba(0,0,0,0.05)',
-                            fontFamily: 'var(--font-dm-sans), sans-serif',
+
                             textTransform: 'uppercase'
                         }}>
                             {title}
@@ -95,7 +95,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                             marginTop: -60,
                             position: 'relative',
                             zIndex: 2,
-                            fontFamily: 'var(--font-dm-sans), sans-serif',
+
                         }}>
                             {heroTitle}
                         </h2>
@@ -136,7 +136,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                     {/* Right Image */}
                     <div style={{ flex: '0 0 50%', position: 'relative' }}>
                         <div style={{ position: 'absolute', inset: 0, background: '#f5f5f5' }}>
-                            <img
+                            <ImageFallback
                                 src={heroImage}
                                 alt={heroTitle}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -148,7 +148,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                 {/* Grid Section */}
                 <div style={{ padding: '0' }}>
                     <h3 style={{
-                        fontFamily: 'var(--font-dm-sans), sans-serif',
+
                         fontWeight: 700,
                         fontSize: '1.5rem',
                         marginBottom: 40,
@@ -166,10 +166,10 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                         {items.map(item => (
                             <Link key={item.id} href={getItemLink(item)} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <div style={{ position: 'relative', aspectRatio: '3/4', marginBottom: 20, overflow: 'hidden' }}>
-                                    <img
+                                    <ImageFallback
                                         src={item.imageUrl}
                                         alt={item.title}
-                                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'Transform 0.5s' }}
                                     />
 
                                     <div style={{
@@ -177,7 +177,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                                         color: 'white',
                                         fontSize: '1.2rem',
                                         fontWeight: 700,
-                                        fontFamily: 'var(--font-dm-sans), sans-serif',
+
                                         lineHeight: 1.1
                                     }}>
                                         {item.title}

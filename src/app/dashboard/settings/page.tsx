@@ -16,9 +16,9 @@ export default function SettingsPage() {
     const [amazonCode, setAmazonCode] = useState('');
 
     return (
-        <div style={{ paddingBottom: 100, fontFamily: 'sans-serif' }}>
+        <div style={{ paddingBottom: 100 }}>
 
-            <h1 style={{ fontSize: '2.5rem', fontFamily: 'serif', fontWeight: 500, marginBottom: 50 }}>Hesap Ayarları</h1>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 500, marginBottom: 50 }}>Hesap Ayarları</h1>
 
             {/* Profile Photo Change Section */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 50 }}>
@@ -83,7 +83,7 @@ export default function SettingsPage() {
                         placeholder="Hediye Adresi"
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        style={{ width: '100%', padding: '12px 15px', borderRadius: 8, border: '1px solid #ccc', background: 'white', fontSize: '0.95rem', fontFamily: 'inherit' }}
+                        style={{ width: '100%', padding: '12px 15px', borderRadius: 8, border: '1px solid #ccc', background: 'white', fontSize: '0.95rem', }}
                     />
                 </div>
 

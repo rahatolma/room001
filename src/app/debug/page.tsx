@@ -9,7 +9,7 @@ export default async function DebugPage() {
     const users = await getAllUsers();
 
     return (
-        <div style={{ padding: 40, fontFamily: 'monospace' }}>
+        <div style={{ padding: 40, }}>
             <h1>Debug Info</h1>
 
             <h2>Featured Curators ({curators.length})</h2>

@@ -6,19 +6,34 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSo
 import { SortableCollectionList } from '@/components/SortableCollectionList';
 import { Plus, Search } from 'lucide-react';
 import Button from '@/components/Button';
+import { useAuth } from '@/context/AuthContext';
+import { useEffect } from 'react';
+import { getMyCollections, updateCollectionOrder } from '@/actions/admin';
 
-// --- MOCK DATA ---
-const INITIAL_COLLECTIONS = [
-    { id: '1', title: 'Yaz Favorileri', productCount: 12, visibility: 'public' },
-    { id: '2', title: 'Ofis Şıklığı', productCount: 8, visibility: 'private' },
-    { id: '3', title: 'Cilt Bakım Rutinim', productCount: 5, visibility: 'public' },
-    { id: '4', title: 'Spor & Aktivite', productCount: 20, visibility: 'public' },
-    { id: '5', title: 'Ev Dekorasyonu', productCount: 3, visibility: 'private' },
-];
+
 
 export default function CollectionsPage() {
-    const [collections, setCollections] = useState(INITIAL_COLLECTIONS);
+    const { user } = useAuth();
+    const [collections, setCollections] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        if (user?.id) {
+            loadCollections();
+        }
+    }, [user?.id]);
+
+    const loadCollections = async () => {
+        try {
+            const data = await getMyCollections(user!.id);
+            setCollections(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -27,14 +42,23 @@ export default function CollectionsPage() {
         })
     );
 
-    const handleDragEnd = (event: any) => {
+    const handleDragEnd = async (event: any) => {
         const { active, over } = event;
 
         if (active.id !== over.id) {
             setCollections((items) => {
                 const oldIndex = items.findIndex((item) => item.id === active.id);
                 const newIndex = items.findIndex((item) => item.id === over.id);
-                return arrayMove(items, oldIndex, newIndex);
+                const newItems = arrayMove(items, oldIndex, newIndex);
+
+                // Persist order
+                const updates = newItems.map((item, index) => ({
+                    id: item.id,
+                    displayOrder: index
+                }));
+                updateCollectionOrder(updates); // Optimistic update
+
+                return newItems;
             });
         }
     };
@@ -43,16 +67,18 @@ export default function CollectionsPage() {
         c.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    if (loading) return <div>Yükleniyor...</div>;
+
     return (
         <div style={{ maxWidth: 1000, paddingBottom: 100, fontFamily: 'sans-serif' }}>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30 }}>
                 <div>
-                    <h1 style={{ fontSize: '2.5rem', fontFamily: 'serif', margin: 0, marginBottom: 10 }}>Koleksiyonlar</h1>
-                    <p style={{ color: '#666' }}>Mağazanızdaki ürünleri organize edin ve paylaşın.</p>
+                    <h1 style={{ fontSize: '2.5rem', fontFamily: 'serif', margin: 0, marginBottom: 10 }}>Koleksiyonlar (Menü Başlıkları)</h1>
+                    <p style={{ color: '#666' }}>Mağazanızdaki bölümleri ve ürünleri organize edin.</p>
                 </div>
-                <Button style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'black', color: 'white' }}>
-                    <Plus size={18} /> YENİ KOLEKSİYON
+                <Button onClick={() => window.open(`/${user?.username}`, '_blank')} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'black', color: 'white' }}>
+                    <Plus size={18} /> YENİ KOLEKSİYON (Profilde Düzenle)
                 </Button>
             </div>
 
@@ -68,11 +94,6 @@ export default function CollectionsPage() {
                         style={{ width: '100%', padding: '10px 10px 10px 40px', borderRadius: 6, border: '1px solid #ddd', fontSize: '0.9rem' }}
                     />
                 </div>
-                <select style={{ padding: '0 15px', borderRadius: 6, border: '1px solid #ddd', background: 'white', fontSize: '0.9rem', color: '#666' }}>
-                    <option>Tümü</option>
-                    <option>Yayında olanlar</option>
-                    <option>Gizli olanlar</option>
-                </select>
             </div>
 
             {/* Drag & Drop Context */}
@@ -95,7 +116,7 @@ export default function CollectionsPage() {
 
             {filteredCollections.length === 0 && (
                 <div style={{ textAlign: 'center', padding: 50, color: '#999' }}>
-                    Koleksiyon bulunamadı.
+                    Henüz hiç koleksiyonunuz yok. Profil sayfanıza giderek ekleyebilirsiniz.
                 </div>
             )}
 

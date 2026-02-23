@@ -40,8 +40,23 @@ model User {
   applicationStatus String   @default("approved")
   rejectionReason   String?
 
+  // Talent Card / Demographics
+  dateOfBirth       DateTime?
+  gender            String?  // Female, Male, Non-binary, Prefer not to say
+  ethnicity         String?
+  
+  // Talent Card / Preferences & Identity
+  giftPreferences   String?  // JSON string or CSV: ["Beauty", "Fashion"]
+  identity          String?  // "Lifestyle Influencer", "Mom Blogger"
+  openToPromote     String?  // JSON/CSV: Categories they are open to
+  familyStatus      String?  // "Married with kids", "Single", etc.
+  lifeEvents        String?  // "Getting married", "Moving", etc.
+
   // Metrics & Qualification
   instagramFollowerCount Int @default(0)
+  
+  // Custom Audience Data (Manual Entry for Media Kit)
+  audienceData      String? // JSON: { gender: { female: 80, male: 20 }, age: { "18-24": 30, ... }, location: ... }
   
   themeConfig       String? // JSON string for customization (colors, fonts)
 
@@ -58,7 +73,9 @@ model User {
   createdCircles    Circle[]    @relation("CircleCreator")
   favorites         Favorite[]
   payments          Payment[]
-  payoutRequests    PayoutRequest[]
+  payouts           Payout[]
+  transactions      Transaction[]
+  taxInfo           TaxInfo?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -177,6 +194,9 @@ model CollectionItem {
   product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   curatorComment String?
+  customTitle    String?    // Overrides product title for this collection
+  customImageUrl String?    // Overrides product image for this collection
+  
   displayOrder   Int      @default(0)
   clickCount     Int      @default(0)
   isVisible      Boolean  @default(true) // Per-collection item visibility
@@ -272,19 +292,59 @@ model Payment {
   @@map("payments")
 }
 
-model PayoutRequest {
-  id            String   @id @default(uuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id])
-  
-  amount        Decimal
-  status        String   @default("pending") // pending, paid, rejected
-  
-  iban          String?
-  note          String?
-  
-  processedAt   DateTime?
-  createdAt     DateTime @default(now())
+model Transaction {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
 
-  @@map("payout_requests")
+  type        String   // COMMISSION, REFERRAL, BONUS, PAYOUT
+  amount      Decimal  // (+) Earnings, (-) Payouts
+  currency    String   @default("TRY")
+  
+  status      String   @default("PENDING") // PENDING, APPROVED, PAID, CANCELLED
+  
+  // Source Details
+  sourceType  String?  // PRODUCT, CAMPAIGN, USER_REFERRAL
+  sourceId    String?  // Product ID, Brand ID, etc.
+  
+  description String?  // e.g. "Trendyol - Kazak Satışı Komisyonu"
+  
+  toBePaidAt  DateTime? // Valör tarihi
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, status])
+  @@map("transactions")
+}
+
+model Payout {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  amount      Decimal
+  status      String   @default("PROCESSING") // PROCESSING, PAID, FAILED
+  
+  iban        String
+  receiptUrl  String?
+  
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  @@map("payouts")
+}
+
+model TaxInfo {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+
+  fullName    String
+  idNumber    String   // TC Kimlik / Vergi No
+  address     String
+  isCompany   Boolean  @default(false)
+
+  updatedAt   DateTime @updatedAt
+  
+  @@map("tax_info")
 }

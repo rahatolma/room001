@@ -118,10 +118,10 @@ export default function Header() {
                 height: 80,
                 // We handle this in the layout or page wrapper usually, but header itself is fine.
             }}>
-                <div style={{ maxWidth: pathname.startsWith('/dashboard') ? '100%' : 1400, margin: '0 auto', padding: pathname.startsWith('/dashboard') ? '0 40px' : '0 20px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ maxWidth: pathname?.startsWith('/dashboard') ? '100%' : 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
                     {/* LOGO */}
-                    <Link href="/" style={{ fontSize: '2rem', fontFamily: 'var(--font-dm-sans), sans-serif', fontWeight: 700, letterSpacing: -1, textDecoration: 'none', color: 'inherit' }}>
+                    <Link href="/" style={{ fontSize: '2rem', fontWeight: 700, letterSpacing: -1, textDecoration: 'none', color: 'inherit' }}>
                         room001
                     </Link>
 
@@ -134,7 +134,7 @@ export default function Header() {
                                 onMouseLeave={handleMouseLeave}
                                 style={{ height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer', position: 'relative' }}
                             >
-                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.95rem', fontWeight: 500, fontFamily: 'var(--font-dm-sans), sans-serif' }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.95rem', fontWeight: 500, }}>
                                     {section.label} <ChevronDown size={14} />
                                 </span>
                             </div>
@@ -180,7 +180,7 @@ export default function Header() {
                         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, padding: '0 40px' }}>
                             {MENU_ITEMS[activeDropdown as keyof typeof MENU_ITEMS].items.map((item: any, idx) => (
                                 <Link key={idx} href={item.href} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-                                    <h3 style={{ fontSize: '1.2rem', fontFamily: 'var(--font-dm-sans), sans-serif', marginBottom: 8, fontWeight: 700 }}>{item.title}</h3>
+                                    <h3 style={{ fontSize: '1.2rem', marginBottom: 8, fontWeight: 700 }}>{item.title}</h3>
                                     <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.5, margin: 0 }}>{item.description}</p>
                                 </Link>
                             ))}

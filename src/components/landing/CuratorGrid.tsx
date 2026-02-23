@@ -1,24 +1,25 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import ImageFallback from '@/components/ImageFallback';
 
 export default function CuratorGrid({ hero, curators }: { hero?: any, curators?: any[] }) {
     // Fallback to empty array if no curators found
     const displayCurators = curators || [];
 
     return (
-        <section style={{ width: '100%', position: 'relative' }}>
+        <div style={{ width: '100%', position: 'relative' }}>
             {/* Header Section - Only Show if Hero exists */}
             {hero && (
                 <div style={{
-                    padding: '40px 0',
+                    padding: '0 0',
+                    margin: '0 0 40px 0',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'baseline'
                 }}>
                     <div>
                         <h2 style={{
-                            fontFamily: 'var(--font-dm-sans)',
+
                             fontSize: '1.2rem',
                             fontWeight: 700,
                             marginBottom: 0
@@ -26,13 +27,13 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
                             {hero.title}
                         </h2>
                         <h1 style={{
-                            fontFamily: 'var(--font-dm-sans)',
+
                             fontSize: '3.5rem', // Slightly smaller for DM Sans
                             fontWeight: 800,
                             lineHeight: 1,
                             marginTop: 5
                         }}>
-                            {hero.subtitle}
+                            Insiderler
                         </h1>
                     </div>
 
@@ -65,15 +66,19 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
                 gap: 0 // No gap for full bleed
             }}>
                 {displayCurators.map((curator, index) => (
-                    <Link key={curator.id} href={curator.slug ? `/${curator.slug}` : '#'} style={{
-                        position: 'relative',
-                        aspectRatio: '3/4',
-                        overflow: 'hidden', // Changed from hidden to auto if needed, but hidden is safer for card
-                        borderRight: '1px solid white',
-                        borderBottom: '1px solid white',
-                        display: 'block'
-                    }}>
-                        <img
+                    <Link
+                        key={index}
+                        href={`/${curator.handle || curator.slug || '#'}`}
+                        style={{
+                            position: 'relative',
+                            aspectRatio: '3/4',
+                            overflow: 'hidden',
+                            borderRight: '1px solid white',
+                            borderBottom: '1px solid white',
+                            display: 'block'
+                        }}
+                    >
+                        <ImageFallback
                             src={curator.image}
                             alt={curator.name}
                             style={{
@@ -104,7 +109,6 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
                             pointerEvents: 'none'
                         }}>
                             <h3 style={{
-                                fontFamily: 'var(--font-dm-sans)',
                                 fontSize: '1.8rem',
                                 fontWeight: 700,
                                 lineHeight: 1.1
@@ -115,6 +119,6 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
                     </Link>
                 ))}
             </div>
-        </section >
+        </div>
     );
 }

@@ -1,6 +1,6 @@
 export default function TermsPage() {
     return (
-        <div style={{ maxWidth: 800, margin: '40px auto', padding: '0 20px', fontFamily: 'Inter, sans-serif' }}>
+        <div style={{ maxWidth: 800, margin: '40px auto', padding: '0 20px', }}>
             <h1 style={{ fontSize: '2.5rem', marginBottom: 20 }}>Kullanım Şartları</h1>
             <p style={{ color: '#666', marginBottom: 40 }}>Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
 

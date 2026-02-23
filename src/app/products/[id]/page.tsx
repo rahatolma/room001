@@ -82,14 +82,14 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     return (
         <main style={{ background: '#fff', minHeight: '100vh', paddingBottom: 80 }}>
             {/* Breadcrumb / Back */}
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px 20px 0' }}>
+            <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '20px var(--page-padding-x) 0' }}>
                 <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', color: '#666', textDecoration: 'none', fontSize: '0.9rem' }}>
                     <ArrowLeft size={16} style={{ marginRight: 5 }} />
                     Ana Sayfaya Dön
                 </Link>
             </div>
 
-            <div style={{ maxWidth: 1200, margin: '40px auto', padding: '0 20px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 60 }}>
+            <div style={{ maxWidth: 'var(--max-width)', margin: '40px auto', padding: '0 var(--page-padding-x)', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 60 }}>
 
                 {/* Image Section */}
                 <div style={{ position: 'relative', aspectRatio: '0.8', background: '#f9f9f9', borderRadius: 16, overflow: 'hidden' }}>
@@ -113,11 +113,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                         </div>
                     )}
 
-                    <h1 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-playfair), serif', marginBottom: 20, lineHeight: 1.2 }}>
+                    <h1 style={{ fontSize: '3.2rem', fontWeight: 800, marginBottom: 20, lineHeight: 1.1, letterSpacing: '-0.5px' }}>
                         {product.title}
                     </h1>
 
-                    <div style={{ fontSize: '1.8rem', fontWeight: 500, marginBottom: 30, color: '#000' }}>
+                    <div style={{ fontSize: '2rem', fontWeight: 700, marginBottom: 30, color: '#000' }}>
                         {formatCurrency(Number(product.price), product.currency)}
                     </div>
 
@@ -164,9 +164,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
             {/* Related Products Section */}
             {relatedProducts.length > 0 && (
-                <div style={{ maxWidth: 1200, margin: '80px auto 0', padding: '0 20px', borderTop: '1px solid #eee', paddingTop: 60 }}>
+                <div style={{ maxWidth: 'var(--max-width)', margin: '80px auto 0', padding: '0 var(--page-padding-x)', borderTop: '1px solid #eee', paddingTop: 60 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30 }}>
-                        <h2 style={{ fontSize: '1.8rem', fontFamily: 'var(--font-playfair), serif', textTransform: 'capitalize' }}>
+                        <h2 style={{ fontSize: '1.8rem', textTransform: 'capitalize' }}>
                             {curator ? `${(curator.fullName || curator.username || 'Küratör').replace(/-/g, ' ')} Tarafından Diğer Seçimler` : 'Benzer Ürünler'}
                         </h2>
                     </div>

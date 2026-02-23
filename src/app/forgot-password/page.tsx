@@ -22,7 +22,7 @@ export default function ForgotPasswordPage() {
     };
 
     return (
-        <div style={{ padding: '40px', maxWidth: '600px', margin: '50px auto', textAlign: 'center', fontFamily: 'var(--font-geist-sans)' }}>
+        <div style={{ padding: '40px', maxWidth: '600px', margin: '50px auto', textAlign: 'center', }}>
             <h1 style={{ fontSize: '2rem', marginBottom: '20px' }}>Şifrenizi mi Unuttunuz?</h1>
             {!submitted ? (
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>

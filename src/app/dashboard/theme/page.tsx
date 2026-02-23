@@ -6,7 +6,7 @@ import { Palette, Type } from 'lucide-react';
 export default function ThemePage() {
     return (
         <div style={{ maxWidth: 800, paddingBottom: 100 }}>
-            <h1 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-dm-sans), sans-serif', fontWeight: 700, marginBottom: 30 }}>Tasarım & Tema</h1>
+            <h1 style={{ fontSize: '2.5rem',  fontWeight: 700, marginBottom: 30 }}>Tasarım & Tema</h1>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
                 {/* Color Theme */}

@@ -45,7 +45,7 @@ export default function PublicMediaKitPage() {
     const totalProducts = collections.reduce((acc, col) => acc + col.products.length, 0);
 
     return (
-        <div style={{ maxWidth: 800, margin: '40px auto', padding: 20, fontFamily: 'sans-serif' }}>
+        <div style={{ maxWidth: 800, margin: '40px auto', padding: 20, }}>
             <header style={{ textAlign: 'center', marginBottom: 40 }}>
                 <div style={{ width: 100, height: 100, background: '#000', color: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', margin: '0 auto 20px' }}>
                     {profile.avatarInitials}

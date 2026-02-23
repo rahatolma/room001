@@ -7,7 +7,7 @@ export default function ShopperDashboard({ user }: { user: any }) {
     const [activeTab, setActiveTab] = useState('all');
 
     return (
-        <div style={{ display: 'flex', minHeight: '80vh', fontFamily: 'var(--font-inter)' }}>
+        <div style={{ display: 'flex', minHeight: '80vh', }}>
             {/* Sidebar */}
             <div style={{ width: 250, paddingRight: 40, borderRight: '1px solid #eaeaea' }}>
                 <div style={{ marginBottom: 40, display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -46,7 +46,7 @@ export default function ShopperDashboard({ user }: { user: any }) {
                     </div>
                 </div>
 
-                <h1 style={{ fontFamily: 'var(--font-playfair)', fontSize: '2.5rem', marginBottom: 15 }}>Upgrade to a creator account.</h1>
+                <h1 style={{  fontSize: '2.5rem', marginBottom: 15 }}>Upgrade to a creator account.</h1>
                 <p style={{ color: '#666', lineHeight: 1.6, maxWidth: 600, marginBottom: 30 }}>
                     Your account is currently a shopper account, in order to access earning opportunities you must apply to upgrade it to a creator account.
                 </p>

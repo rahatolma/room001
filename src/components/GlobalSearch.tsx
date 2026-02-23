@@ -77,7 +77,7 @@ export default function GlobalSearch() {
                         fontSize: '0.9rem',
                         outline: 'none',
                         backgroundColor: '#f9f9f9',
-                        fontFamily: 'inherit'
+                        
                     }}
                 />
             </div>

@@ -10,7 +10,7 @@ export default function MyCirclesPage() {
 
     return (
         <div style={{ padding: '40px 20px', minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '3rem', marginBottom: 20 }}>Çemberlerim</h1>
+            <h1 style={{  fontSize: '3rem', marginBottom: 20 }}>Çemberlerim</h1>
             <p style={{ color: '#666', marginBottom: 40 }}>Kendi kişisel mağazaların, favori insanların tarafından kürate edildi.</p>
 
             <div style={{ display: 'flex', gap: 10, marginBottom: 40 }}>
@@ -49,7 +49,7 @@ export default function MyCirclesPage() {
                 <div style={{ fontSize: '2rem', marginBottom: 20, color: '#ccc' }}>
                     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </div>
-                <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '2rem', marginBottom: 15 }}>Henüz hiç çemberin yok</h2>
+                <h2 style={{  fontSize: '2rem', marginBottom: 15 }}>Henüz hiç çemberin yok</h2>
                 <p style={{ color: '#999', lineHeight: 1.6, marginBottom: 30 }}>
                     Çemberler, alışveriş deneyimini kimin kürate edeceğini seçmeni sağlar. Kendi çemberini oluştur veya diğerlerini keşfet ve beğen.
                 </p>

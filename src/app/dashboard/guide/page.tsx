@@ -117,7 +117,7 @@ const SUGGESTED_ARTICLES = [
 
 export default function GuidePage() {
     return (
-        <div style={{ fontFamily: 'sans-serif', paddingBottom: 100 }}>
+        <div style={{  paddingBottom: 100 }}>
 
             {/* Hero Search Section */}
             <div style={{
@@ -128,7 +128,7 @@ export default function GuidePage() {
                 textAlign: 'center',
                 marginBottom: 50
             }}>
-                <h1 style={{ fontFamily: 'serif', fontSize: '2.5rem', marginBottom: 30, fontWeight: 500 }}>Nasıl yardımcı olabiliriz?</h1>
+                <h1 style={{  fontSize: '2.5rem', marginBottom: 30, fontWeight: 500 }}>Nasıl yardımcı olabiliriz?</h1>
                 <div style={{ position: 'relative', maxWidth: 600, margin: '0 auto' }}>
                     <Search size={20} style={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
                     <input
@@ -165,7 +165,7 @@ export default function GuidePage() {
                         onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.02)'; }}
                     >
                         <div style={{ color: '#333', marginBottom: 20 }}>{cat.icon}</div>
-                        <h3 style={{ fontSize: '1.2rem', fontFamily: 'serif', marginBottom: 10, fontWeight: 600 }}>{cat.title}</h3>
+                        <h3 style={{ fontSize: '1.2rem',  marginBottom: 10, fontWeight: 600 }}>{cat.title}</h3>
                         <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.5, marginBottom: 15 }}>{cat.description}</p>
                         <div style={{ fontSize: '0.8rem', color: '#999', fontWeight: 500 }}>{cat.articles} Makale</div>
                     </div>

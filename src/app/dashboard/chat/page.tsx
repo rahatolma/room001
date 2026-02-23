@@ -224,7 +224,7 @@ export default function ChatPage() {
                             <Image src={activeBrand.logo} alt={activeBrand.name} fill style={{ objectFit: 'cover' }} />
                         </div>
                         <div>
-                            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0, fontFamily: 'serif' }}>{activeBrand.name}</h2>
+                            <h2 style={{ fontSize: '1.1rem', fontWeight: 600, margin: 0, }}>{activeBrand.name}</h2>
                             <button style={{ color: '#666', fontSize: '0.8rem', background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
                                 Marka Profilini Görüntüle <ArrowUpDown size={12} style={{ transform: 'rotate(-90deg)' }} />
                             </button>

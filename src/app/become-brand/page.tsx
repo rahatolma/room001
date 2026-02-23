@@ -80,7 +80,7 @@ export default function BecomeBrandPage() {
     };
 
     return (
-        <div style={{ maxWidth: 600, margin: '80px auto', fontFamily: 'var(--font-dm-sans), sans-serif' }}>
+        <div style={{ maxWidth: 600, margin: '80px auto', }}>
             {/* Steps Indicator */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: 20, marginBottom: 40 }}>
                 {[1, 2].map(s => (
@@ -99,7 +99,7 @@ export default function BecomeBrandPage() {
 
             {/* Content per Step */}
             <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <h1 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '2.5rem', fontWeight: 800, marginBottom: 10 }}>
+                <h1 style={{  fontSize: '2.5rem', fontWeight: 800, marginBottom: 10 }}>
                     {step === 1 && 'Marka Olarak Room001 ile Ortak Olun'}
                     {step === 2 && 'Şirketiniz Hakkında'}
                 </h1>

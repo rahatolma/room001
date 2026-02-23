@@ -5,7 +5,7 @@ import React from 'react';
 export default function NotificationsPage() {
     return (
         <div style={{ maxWidth: 800 }}>
-            <h1 style={{ fontSize: '2rem', fontFamily: 'Playfair Display, serif', marginBottom: 20 }}>Bildirimler</h1>
+            <h1 style={{ fontSize: '2rem',  marginBottom: 20 }}>Bildirimler</h1>
 
             <div style={{ marginBottom: 40 }}>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: 10 }}>Bildirim Ayarları</h3>

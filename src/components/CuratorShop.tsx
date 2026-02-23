@@ -1,8 +1,18 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import ProfileHeader from '@/components/ProfileHeader';
 import ProductGrid from '@/components/ProductGrid';
+import ShopSectionEditorModal from '@/components/ShopSectionEditorModal';
+import { Pencil, Plus, Grip, Search, Link as LinkIcon, Edit2, ShoppingBag, Eye, Copy, Share2, Grid, Layers, List, BookmarkPlus, ChevronRight } from 'lucide-react';
+import ImageFallback from './ImageFallback';
+import { createSection, updateSection, deleteSection } from '@/actions/sections';
+import { updateCollectionOrder } from '@/actions/admin';
+import { toast } from 'sonner';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableNavItem } from './SortableNavItem';
+
 
 interface Product {
     id: string;
@@ -35,6 +45,7 @@ interface CuratorShopProps {
         fontFamily: string;
         buttonStyle: string;
     };
+    isOwner?: boolean;
 }
 
 const THEME_COLORS: Record<string, string> = {
@@ -46,10 +57,49 @@ const THEME_COLORS: Record<string, string> = {
     orange: '#ea580c',
 };
 
-export default function CuratorShop({ profile, sections, products, instagramPosts = [], tiktokPosts = [], theme }: CuratorShopProps) {
+export default function CuratorShop({ profile, sections, products, instagramPosts = [], tiktokPosts = [], theme, isOwner = false }: CuratorShopProps) {
     const [activeSection, setActiveSection] = useState<string>('all');
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [activePost, setActivePost] = useState<any>(null);
+
+    // Editor State
+    const [isEditMode, setIsEditMode] = useState(false); // New: Toggle for edit mode
+    const [isEditorOpen, setIsEditorOpen] = useState(false);
+    const [editingSection, setEditingSection] = useState<any>(null);
+    const [localSections, setLocalSections] = useState<Section[]>(sections);
+
+    useEffect(() => {
+        setLocalSections(sections);
+    }, [sections]);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    const handleDragEnd = async (event: any) => {
+        const { active, over } = event;
+
+        if (active.id !== over.id) {
+            setLocalSections((items) => {
+                const oldIndex = items.findIndex((item) => item.id === active.id);
+                const newIndex = items.findIndex((item) => item.id === over.id);
+                const newItems = arrayMove(items, oldIndex, newIndex);
+
+                // Optimistic update of backend
+                const updates = newItems.map((item, index) => ({
+                    id: item.id,
+                    displayOrder: index
+                }));
+                updateCollectionOrder(updates);
+
+                return newItems;
+            });
+        }
+    };
+
 
     React.useEffect(() => {
         const handleSwitchIG = () => {
@@ -114,6 +164,73 @@ export default function CuratorShop({ profile, sections, products, instagramPost
         }));
     };
 
+    const handleEditSection = (section: any, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setEditingSection(section);
+        setIsEditorOpen(true);
+    };
+
+    const handleAddSection = () => {
+        setEditingSection(null);
+        setIsEditorOpen(true);
+    };
+
+    const handleSaveSection = async (data: any) => {
+        try {
+            if (data.id) {
+                // Update existing
+                const result = await updateSection(data.id, data);
+                if (result.success) {
+                    toast.success('Bölüm güncellendi!');
+                } else {
+                    toast.error('Güncelleme başarısız oldu.');
+                }
+            } else {
+                // Create new
+                const result = await createSection(data);
+                if (result.success && result.section) {
+                    toast.success('Yeni bölüm oluşturuldu!');
+
+                    // If there are pending products, add them now
+                    if (data.pendingProducts && data.pendingProducts.length > 0) {
+                        const { addProductToCollection } = await import('@/actions/catalog');
+                        // Add sequentially for now
+                        for (const product of data.pendingProducts) {
+                            await addProductToCollection(result.section.id, product.id, product.customDetails);
+                        }
+                        toast.success(`${data.pendingProducts.length} ürün eklendi.`);
+                    }
+                } else {
+                    toast.error('Oluşturma başarısız oldu.');
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Bir hata oluştu.');
+        } finally {
+            setIsEditorOpen(false);
+        }
+    };
+
+    const handleDeleteSection = async (id: string) => {
+        try {
+            const result = await deleteSection(id);
+            if (result.success) {
+                toast.success('Bölüm silindi.');
+                setIsEditorOpen(false);
+                setEditingSection(null);
+                if (activeSection === id) {
+                    setActiveSection('all');
+                }
+            } else {
+                toast.error('Silme başarısız oldu.');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Bir hata oluştu.');
+        }
+    };
+
     if (activePost) {
         const postProducts = getPostProducts(activePost);
         return (
@@ -131,9 +248,9 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     </button>
 
                     <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                        <h1 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '2.5rem', fontWeight: 700, margin: '0 0 10px 0' }}>{activePost.caption}</h1>
+                        <h1 style={{ fontSize: '2.5rem', fontWeight: 700, margin: '0 0 10px 0' }}>{activePost.caption}</h1>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, fontSize: '0.8rem', color: '#666', textTransform: 'uppercase' }}>
-                            <img src={profile.initials ? `https://ui-avatars.com/api/?name=${profile.initials}&background=random` : "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=100"} alt="Avatar" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+                            <ImageFallback src={profile.initials ? `https://ui-avatars.com/api/?name=${profile.initials}&background=random` : "https://images.unsplash.com/photo-1549439602-43ebca2327af?q=80&w=100"} alt="Avatar" style={{ width: 24, height: 24, borderRadius: '50%' }} />
                             <span>{profile.name}</span>
                             <span>|</span>
                             <span>{postProducts.length} Products</span>
@@ -144,7 +261,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
 
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 60 }}>
                         <div style={{ maxWidth: 500, width: '100%' }}>
-                            <img src={activePost.imageUrl} alt="Post" style={{ width: '100%', borderRadius: 4 }} />
+                            <ImageFallback src={activePost.imageUrl} alt="Post" style={{ width: '100%', borderRadius: 4 }} />
                         </div>
                     </div>
 
@@ -187,92 +304,96 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                 socialLinks={profile.socials}
             />
 
+            {/* Edit Mode Toggle (Owner Only) */}
+            {isOwner && (
+                <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px', display: 'flex', justifyContent: 'center', marginTop: 5, marginBottom: 30, position: 'relative', zIndex: 10 }}>
+                    <button
+                        onClick={() => setIsEditMode(!isEditMode)}
+                        style={{
+                            display: 'flex', alignItems: 'center', gap: 8,
+                            padding: '8px 16px',
+                            backgroundColor: isEditMode ? 'black' : 'white',
+                            color: isEditMode ? 'white' : 'black',
+                            border: '1px solid #ddd',
+                            borderRadius: 20,
+                            fontSize: '0.85rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+                        }}
+                    >
+                        <Pencil size={14} />
+                        {isEditMode ? 'Düzenlemeyi Bitir' : 'Vitrinini Düzenle'}
+                    </button>
+                </div>
+            )}
+
             {/* Sticky Navigation Bars */}
             <div style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: theme?.backgroundColor === 'white' ? 'white' : 'black', borderBottom: '1px solid #eee' }}>
+
                 {/* Primary Nav (Sections) */}
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: 30,
-                    padding: '15px 0',
-                    borderBottom: '1px solid #f0f0f0',
-                    fontSize: '0.85rem',
-                    color: '#333',
-                    fontWeight: 500,
-                    overflowX: 'auto',
-                    whiteSpace: 'nowrap'
-                }}>
-                    <span
-                        onClick={() => { setActiveSection('all'); setActiveCategory('all'); }}
-                        style={{
-                            border: activeSection === 'all' ? '1px solid var(--color-primary, black)' : '1px solid transparent',
-                            borderRadius: '20px',
-                            padding: '5px 15px',
-                            cursor: 'pointer',
-                            opacity: activeSection === 'all' ? 1 : 0.6
-                        }}
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    <SortableContext
+                        items={localSections}
+                        strategy={horizontalListSortingStrategy}
                     >
-                        Tümü
-                    </span>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: 15,
+                            padding: '15px 0',
+                            borderBottom: '1px solid #f0f0f0',
+                            fontSize: '0.85rem',
+                            color: '#333',
+                            fontWeight: 500,
+                            overflowX: 'auto',
+                            whiteSpace: 'nowrap'
+                        }}>
+                            <span
+                                onClick={() => { setActiveSection('all'); setActiveCategory('all'); }}
+                                style={{
+                                    border: activeSection === 'all' ? '1px solid var(--color-primary, black)' : '1px solid transparent',
+                                    borderRadius: '20px',
+                                    padding: '5px 15px',
+                                    cursor: 'pointer',
+                                    opacity: activeSection === 'all' ? 1 : 0.6
+                                }}
+                            >
+                                Tümü
+                            </span>
 
-                    {sections.filter((s: any) => ['latest-finds', 'most-popular', 'fashion', 'beauty', 'baby', 'x-sofia'].includes(s.id)).map((section: any) => (
-                        <span
-                            key={section.id}
-                            onClick={() => { setActiveSection(section.id); setActiveCategory('all'); }}
-                            style={{
-                                border: activeSection === section.id ? '1px solid var(--color-primary, black)' : '1px solid transparent',
-                                borderRadius: '20px',
-                                padding: '5px 15px',
-                                cursor: 'pointer',
-                                opacity: activeSection === section.id ? 1 : 0.6
-                            }}
-                        >
-                            {section.title}
-                        </span>
-                    ))}
+                            {localSections.map((section: any) => (
+                                <SortableNavItem
+                                    key={section.id}
+                                    section={section}
+                                    isActive={activeSection === section.id}
+                                    onClick={() => { setActiveSection(section.id); setActiveCategory('all'); }}
+                                    isOwner={isOwner && isEditMode}
+                                    onEdit={(e) => handleEditSection(section, e)}
+                                />
+                            ))}
 
-                    <span
-                        onClick={() => { setActiveSection('instagram'); setActiveCategory('all'); }}
-                        style={{
-                            border: activeSection === 'instagram' ? '1px solid var(--color-primary, black)' : '1px solid transparent',
-                            borderRadius: '20px',
-                            padding: '5px 15px',
-                            cursor: 'pointer',
-                            opacity: activeSection === 'instagram' ? 1 : 0.6
-                        }}
-                    >
-                        Instagram
-                    </span>
+                            {/* Add Section Button (Owner Only) */}
+                            {isOwner && isEditMode && (
+                                <button
+                                    onClick={handleAddSection}
+                                    style={{
+                                        width: 32, height: 32, borderRadius: '50%', border: '1px dashed #ccc', background: 'transparent',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: 10, flexShrink: 0
+                                    }}
+                                >
+                                    <Plus size={16} color="#666" />
+                                </button>
+                            )}
 
-                    <span
-                        onClick={() => { setActiveSection('tiktok'); setActiveCategory('all'); }}
-                        style={{
-                            border: activeSection === 'tiktok' ? '1px solid var(--color-primary, black)' : '1px solid transparent',
-                            borderRadius: '20px',
-                            padding: '5px 15px',
-                            cursor: 'pointer',
-                            opacity: activeSection === 'tiktok' ? 1 : 0.6
-                        }}
-                    >
-                        Tiktok
-                    </span>
-
-                    {sections.filter((s: any) => !['latest-finds', 'most-popular', 'fashion', 'beauty', 'baby', 'x-sofia'].includes(s.id)).map((section: any) => (
-                        <span
-                            key={section.id}
-                            onClick={() => { setActiveSection(section.id); setActiveCategory('all'); }}
-                            style={{
-                                border: activeSection === section.id ? '1px solid var(--color-primary, black)' : '1px solid transparent',
-                                borderRadius: '20px',
-                                padding: '5px 15px',
-                                cursor: 'pointer',
-                                opacity: activeSection === section.id ? 1 : 0.6
-                            }}
-                        >
-                            {section.title}
-                        </span>
-                    ))}
-                </div>
+                        </div>
+                    </SortableContext>
+                </DndContext>
 
                 {/* Secondary Nav (Categories with counts) */}
                 {
@@ -313,7 +434,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
             </div >
 
             {/* Product Feed */}
-            <div style={{ padding: '0 40px' }}>
+            <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
                 {activeSection === 'instagram' ? (
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
                         {instagramPosts?.map((post) => (
@@ -328,12 +449,11 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                                     overflow: 'hidden'
                                 }}
                             >
-                                <img
+                                <ImageFallback
                                     src={post.imageUrl}
-                                    alt={post.caption}
                                     style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
-                                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                    onMouseOver={(e: any) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                    onMouseOut={(e: any) => e.currentTarget.style.transform = 'scale(1)'}
                                 />
                             </div>
                         ))}
@@ -353,6 +473,17 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     )
                 )}
             </div >
+
+            <ShopSectionEditorModal
+                isOpen={isEditorOpen}
+                onClose={() => setIsEditorOpen(false)}
+                section={editingSection}
+                onSave={async (data) => {
+                    await handleSaveSection(data);
+                }}
+                onDelete={handleDeleteSection}
+            />
+
         </main >
     );
 }

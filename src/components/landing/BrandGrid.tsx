@@ -1,15 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
+import ImageFallback from '@/components/ImageFallback';
 
 export default function BrandGrid({ items }: { items?: any[] }) {
     if (!items) return null;
 
     return (
-        <section style={{ width: '100%' }}>
-            <div style={{ padding: '0 0', marginBottom: 40, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div style={{ width: '100%' }}>
+            <div style={{ padding: '0 0', margin: '0 0 40px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
-                    <h2 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '1.2rem', fontWeight: 700, marginBottom: 0 }}>Keşfet</h2>
-                    <h1 style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '3.5rem', fontWeight: 800, marginTop: 5, lineHeight: 1 }}>Markalar</h1>
+                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 0 }}>Keşfet</h2>
+                    <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginTop: 5, lineHeight: 1 }}>Markalar</h1>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                     <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: 20 }}>Bildiğin markaların en iyi ürünlerini keşfet ve seveceğin yeni markalarla tanış.</p>
@@ -44,7 +45,7 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                         borderBottom: '1px solid white',
                         display: 'block'
                     }}>
-                        <img
+                        <ImageFallback
                             src={brand.image}
                             alt={brand.name}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -71,7 +72,7 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                             pointerEvents: 'none'
                         }}>
                             <h3 style={{
-                                fontFamily: 'var(--font-dm-sans)',
+
                                 fontSize: '1.8rem',
                                 fontWeight: 700,
                                 lineHeight: 1.1
@@ -82,6 +83,6 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                     </Link>
                 ))}
             </div>
-        </section>
+        </div>
     );
 }

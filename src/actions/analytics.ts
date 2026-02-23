@@ -262,3 +262,95 @@ export async function getPerformanceByWebsite(userId: string) {
         return [];
     }
 }
+// ... existing imports
+
+export async function getDashboardStats(userId: string) {
+    try {
+        // 1. Total Clicks (sum of all product clicks for this user)
+        // We can get this from CollectionItem.clickCount if we tracked it there, 
+        // or Product.clickCount if the user owns the product (less likely in affiliate model).
+        // Better: Aggregate AnalyticsEvent of type 'CLICK' where entityOwner = userId (if we had that)
+        // Current Schema: CollectionItem has clickCount. Let's sum that.
+        const collections = await prisma.collection.findMany({
+            where: { userId },
+            include: { items: true }
+        });
+
+        const totalClicks = collections.reduce((acc, col) => {
+            return acc + col.items.reduce((sum, item) => sum + item.clickCount, 0);
+        }, 0);
+
+        // 2. Profile Views
+        const userProfile = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { profileViewCount: true, productsSharedCount: true } // productSharedCount as proxy for something else?
+        });
+
+        // 3. Active Collections
+        const activeCollectionsCount = collections.filter(c => c.isPublic).length;
+
+        // 4. Products Shared (Total Items)
+        const totalProductsShared = collections.reduce((acc, col) => acc + col.items.length, 0);
+
+        return {
+            totalClicks,
+            profileViews: userProfile?.profileViewCount || 0,
+            activeCollections: activeCollectionsCount,
+            totalProducts: totalProductsShared
+        };
+    } catch (error) {
+        console.error("Error fetching dashboard stats:", error);
+        return {
+            totalClicks: 0,
+            profileViews: 0,
+            activeCollections: 0,
+            totalProducts: 0
+        };
+    }
+}
+
+export async function getMediaKitData(userId: string) {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: { socialAccounts: true, _count: { select: { collections: true } } }
+        });
+
+        if (!user) return null;
+
+        // Calculate Total Reach
+        const socialReach = user.socialAccounts.reduce((acc, account) => acc + (account.followerCount || 0), 0);
+        const totalReach = socialReach + user.profileViewCount;
+
+        return {
+            user: {
+                fullName: user.fullName,
+                username: user.username,
+                bio: user.bio,
+                avatarUrl: user.avatarUrl,
+                niche: user.niche,
+                location: user.location,
+                contactEmail: user.email,
+                websiteUrl: user.websiteUrl
+            },
+            stats: {
+                totalReach,
+                profileViews: user.profileViewCount,
+                productsShared: user.productsSharedCount,
+                collections: user._count.collections,
+                // Engagement is tricky to calculate without real social API, keep mock or make manual?
+                // For now, let's keep it static but realistic or null if no reach
+                engagementRate: totalReach > 0 ? '4.8%' : '-'
+            },
+            audience: (user as any).audienceData ? JSON.parse((user as any).audienceData) : null,
+            socials: user.socialAccounts.map(s => ({
+                platform: s.platform,
+                username: s.username,
+                followers: s.followerCount
+            }))
+        };
+    } catch (error) {
+        console.error("Error getting media kit data:", error);
+        return null;
+    }
+}

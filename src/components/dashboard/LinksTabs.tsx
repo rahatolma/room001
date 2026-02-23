@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Button from '@/components/Button';
+import CreateLinkModal from './CreateLinkModal';
 
 // Types
 type TabType = 'LINKS' | 'PERFORMANCE' | 'ORDERS';
@@ -57,6 +58,7 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
     const [activeTab, setActiveTab] = useState<TabType>('LINKS');
     const [searchTerm, setSearchTerm] = useState('');
     const [copiedId, setCopiedId] = useState<string | null>(null);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     const handleCopy = (text: string, id: string) => {
         navigator.clipboard.writeText(text);
@@ -159,7 +161,7 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
                             <Download size={16} />
                             İNDİR
                         </Button>
-                        <Button style={{ display: 'flex', alignItems: 'center', gap: 8, height: 42, background: '#1a1a1a' }}>
+                        <Button onClick={() => setIsCreateModalOpen(true)} style={{ display: 'flex', alignItems: 'center', gap: 8, height: 42, background: '#1a1a1a' }}>
                             YENİ LİNK OLUŞTUR
                         </Button>
                     </div>
@@ -168,9 +170,9 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
 
             {/* TAB CONTENT: MY LINKS */}
             {activeTab === 'LINKS' && (
-                <div style={{ border: '1px solid #eaeaea', borderRadius: 8, overflow: 'hidden' }}>
+                <div style={{ border: '1px solid #eaeaea', borderRadius: 8, overflow: 'hidden', overflowX: 'auto' }}>
                     {/* Header */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '50px 100px 3fr 2fr 80px 80px 80px 3fr', background: '#1a1a1a', color: 'white', padding: '15px 20px', fontSize: '0.8rem', fontWeight: 600 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(50px, 0.5fr) minmax(100px, 1fr) minmax(250px, 3fr) minmax(200px, 2fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(250px, 3fr)', background: '#1a1a1a', color: 'white', padding: '15px 20px', fontSize: '0.8rem', fontWeight: 600, minWidth: '1000px' }}>
                         <div></div>{/* Checkbox */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>Oluşturuldu <ArrowDown size={14} /></div>
                         <div>Ürün</div>
@@ -187,9 +189,9 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
                     ) : (
                         filteredLinks.map((link) => (
                             <div key={link.id} style={{
-                                display: 'grid', gridTemplateColumns: '50px 100px 3fr 2fr 80px 80px 80px 3fr',
+                                display: 'grid', gridTemplateColumns: 'minmax(50px, 0.5fr) minmax(100px, 1fr) minmax(250px, 3fr) minmax(200px, 2fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(250px, 3fr)',
                                 padding: '20px', borderBottom: '1px solid #f5f5f5', alignItems: 'center', background: 'white',
-                                fontSize: '0.9rem'
+                                fontSize: '0.9rem', minWidth: '1000px'
                             }}>
                                 <div>
                                     <input type="checkbox" style={{ width: 16, height: 16, cursor: 'pointer' }} />
@@ -204,7 +206,7 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
                                         )}
                                     </div>
                                     <div style={{ maxWidth: 200 }}>
-                                        <div style={{ fontWeight: 600, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={link.product.name}>
+                                        <div style={{ fontWeight: 600, marginBottom: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: '1.2' }} title={link.product.name}>
                                             {link.product.name}
                                         </div>
                                         <div style={{ fontSize: '0.8rem', color: '#666' }}>{link.product.brand}</div>
@@ -283,9 +285,19 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
                     </div>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 400, marginBottom: 10, color: '#333' }}>Komisyonlu linkler oluştur ve paylaş</h2>
                     <p style={{ marginBottom: 30 }}>gelen siparişleri buradan takip et</p>
-                    <Button variant="outline">YENİ LİNK OLUŞTUR</Button>
+                    <Button variant="outline" onClick={() => setIsCreateModalOpen(true)}>YENİ LİNK OLUŞTUR</Button>
                 </div>
             )}
+
+            {/* MODALS */}
+            <CreateLinkModal
+                isOpen={isCreateModalOpen}
+                onClose={() => {
+                    setIsCreateModalOpen(false);
+                    // Refresh data
+                    window.location.reload();
+                }}
+            />
         </div>
     );
 }

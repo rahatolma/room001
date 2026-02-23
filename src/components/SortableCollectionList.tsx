@@ -10,9 +10,11 @@ interface SortableCollectionListProps {
     title: string;
     count: number;
     visibility: string;
+    onEdit: (id: string) => void;
+    onToggleVisibility?: (id: string) => void; // Optional for now
 }
 
-export function SortableCollectionList({ id, title, count, visibility }: SortableCollectionListProps) {
+export function SortableCollectionList({ id, title, count, visibility, onEdit, onToggleVisibility }: SortableCollectionListProps) {
     const {
         attributes,
         listeners,
@@ -57,7 +59,7 @@ export function SortableCollectionList({ id, title, count, visibility }: Sortabl
                     <button style={{ padding: 8, borderRadius: 6, border: 'none', background: 'transparent', cursor: 'pointer', color: '#666' }}>
                         <MoreVertical size={18} />
                     </button>
-                    <button style={{
+                    <button onClick={() => onEdit(id)} style={{
                         padding: '8px 16px', borderRadius: 6, border: '1px solid #eee', background: 'white',
                         cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600
                     }}>

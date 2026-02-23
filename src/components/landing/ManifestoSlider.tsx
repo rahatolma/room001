@@ -98,7 +98,7 @@ export default function ManifestoSlider() {
                         }}
                     >
                         <h2 style={{
-                            fontFamily: 'var(--font-dm-sans), sans-serif',
+                            
                             fontSize: '1.5rem',
                             fontWeight: 700,
                             marginBottom: '10px',
@@ -109,7 +109,7 @@ export default function ManifestoSlider() {
                             {slide.title}
                         </h2>
                         <h1 style={{
-                            fontFamily: 'var(--font-dm-sans), sans-serif',
+                            
                             fontSize: '4.5rem',
                             fontWeight: 800,
                             lineHeight: 1.1,
