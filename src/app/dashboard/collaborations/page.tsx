@@ -4,8 +4,9 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Button from '@/components/Button';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Package, Clock, Gift, Copy, Tag, Sparkles, Building2, ChevronRight } from 'lucide-react';
+import { Package, Clock, Gift, Copy, Tag, Sparkles, Building2, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import Modal from '@/components/Modal';
 
 // --- TYPES ---
 type TabType = 'GIFTING' | 'CODES' | 'OPPORTUNITIES';
@@ -24,6 +25,13 @@ function CollaborationsContent() {
 
     const [activeTab, setActiveTabState] = useState<TabType>(getTabFromUrl());
 
+    // Application Flow State
+    const [isAppModalOpen, setAppModalOpen] = useState(false);
+    const [selectedOpp, setSelectedOpp] = useState<any>(null);
+    const [appliedCampaigns, setAppliedCampaigns] = useState<string[]>([]);
+    const [appForm, setAppForm] = useState({ pitch: '', budget: '', includeStats: true });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Sync state with URL changes
     useEffect(() => {
         setActiveTabState(getTabFromUrl());
@@ -39,6 +47,36 @@ function CollaborationsContent() {
         navigator.clipboard.writeText(code);
         toast.success(`${code} kopyalandı!`);
     };
+
+    const handleApplyClick = (opp: any) => {
+        if (appliedCampaigns.includes(opp.id)) return;
+        setSelectedOpp(opp);
+        setAppModalOpen(true);
+        setAppForm({ pitch: '', budget: '', includeStats: true }); // Reset form
+    };
+
+    const submitApplication = () => {
+        setIsSubmitting(true);
+        // Simulate API call
+        setTimeout(() => {
+            setAppliedCampaigns(prev => [...prev, selectedOpp.id]);
+            setIsSubmitting(false);
+            setAppModalOpen(false);
+            toast.success('Başvurunuz başarıyla markaya iletildi!');
+        }, 1200);
+    };
+
+    // Mock Opportunities Data
+    const opportunities = [
+        {
+            id: 'opp-1', name: "L'Oréal Paris Cilt Bakım Serisi", type: 'PAYMENT', tag: 'Yeni Kampanya', budget: '₺15.000', expected: 'Instagram Reels + 2 Story',
+            desc: "Yeni Revitalift serisi için cilt bakımı odaklı creatorlar arıyoruz.", color: '#dc2626', bg: '#fef2f2', icon: <Sparkles size={14} />
+        },
+        {
+            id: 'opp-2', name: 'Nike Koşu Koleksiyonu', type: 'AFFILIATE', tag: 'Affiliate Odaklı', budget: '%15 Komisyon', expected: 'Açık Program',
+            desc: "Nike'ın yeni koşu koleksiyonunu takipçilerinle paylaşarak komisyon kazan.", color: '#475569', bg: '#f8fafc', icon: <Tag size={14} />
+        }
+    ];
 
     return (
         <div style={{ maxWidth: 1200, paddingBottom: 100, }}>
@@ -176,45 +214,100 @@ function CollaborationsContent() {
             {/* --- TAB CONTENT: OPPORTUNITIES --- */}
             {activeTab === 'OPPORTUNITIES' && (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: 25 }}>
-                    {/* Mock Opportunity 1 */}
-                    <div style={{ border: '1px solid #eaeaea', borderRadius: 12, padding: 25, background: 'white', transition: 'box-shadow 0.2s', cursor: 'pointer' }} className="hover:shadow-lg">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 15 }}>
-                            <span style={{ background: '#fef2f2', color: '#dc2626', padding: '4px 8px', borderRadius: 4, fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                                <Sparkles size={14} /> Yeni Kampanya
-                            </span>
-                            <span style={{ fontSize: '0.8rem', color: '#888', fontWeight: 500 }}>₺15.000 Bütçe</span>
-                        </div>
-                        <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', fontWeight: 700 }}>L'Oréal Paris Cilt Bakım Serisi</h3>
-                        <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.5, marginBottom: 20 }}>
-                            Yeni Revitalift serisi için Instagram Reels ve 2 Story içeriği üretecek, cilt bakımı odaklı creatorlar arıyoruz.
-                        </p>
-                        <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '0 0 20px 0' }} />
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: '0.85rem', color: '#888' }}>Son Başvuru: 5 Gün Sonra</span>
-                            <Button style={{ fontSize: '0.8rem', background: '#111', color: 'white', padding: '8px 16px' }}>BAŞVUR</Button>
-                        </div>
-                    </div>
-
-                    {/* Mock Opportunity 2 */}
-                    <div style={{ border: '1px solid #eaeaea', borderRadius: 12, padding: 25, background: 'white', transition: 'box-shadow 0.2s', cursor: 'pointer' }} className="hover:shadow-lg">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 15 }}>
-                            <span style={{ background: '#f8fafc', color: '#475569', padding: '4px 8px', borderRadius: 4, fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
-                                <Tag size={14} /> Affiliate Odaklı
-                            </span>
-                            <span style={{ fontSize: '0.8rem', color: '#888', fontWeight: 500 }}>%15 Komisyon</span>
-                        </div>
-                        <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', fontWeight: 700 }}>Nike Koşu Koleksiyonu</h3>
-                        <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.5, marginBottom: 20 }}>
-                            Nike'ın yeni koşu koleksiyonunu takipçilerinle paylaş, özel indirim kodu oluşturarak %15'e varan komisyon kazan.
-                        </p>
-                        <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '0 0 20px 0' }} />
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: '0.85rem', color: '#888' }}>Açık Program</span>
-                            <Button variant="outline" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.8rem', padding: '8px 16px' }}>DETAYLAR <ChevronRight size={14} /></Button>
-                        </div>
-                    </div>
+                    {opportunities.map(opp => {
+                        const isApplied = appliedCampaigns.includes(opp.id);
+                        return (
+                            <div key={opp.id} style={{ border: isApplied ? '1px solid #059669' : '1px solid #eaeaea', borderRadius: 12, padding: 25, background: isApplied ? '#fcfdfd' : 'white', transition: 'box-shadow 0.2s', cursor: isApplied ? 'default' : 'pointer' }} className={!isApplied ? "hover:shadow-lg" : ""}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 15 }}>
+                                    <span style={{ background: opp.bg, color: opp.color, padding: '4px 8px', borderRadius: 4, fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                                        {opp.icon} {opp.tag}
+                                    </span>
+                                    <span style={{ fontSize: '0.8rem', color: '#888', fontWeight: 500 }}>{opp.budget}</span>
+                                </div>
+                                <h3 style={{ margin: '0 0 10px 0', fontSize: '1.2rem', fontWeight: 700 }}>{opp.name}</h3>
+                                <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.5, marginBottom: 20 }}>{opp.desc}</p>
+                                <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '0 0 20px 0' }} />
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span style={{ fontSize: '0.85rem', color: '#888' }}>{opp.expected}</span>
+                                    {isApplied ? (
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#059669', fontSize: '0.85rem', fontWeight: 700 }}>
+                                            <CheckCircle2 size={16} /> BAŞVURULDU
+                                        </span>
+                                    ) : (
+                                        <Button variant={opp.type === 'AFFILIATE' ? 'outline' : 'primary'} onClick={() => handleApplyClick(opp)} style={{ fontSize: '0.8rem', padding: '8px 16px', background: opp.type === 'AFFILIATE' ? 'transparent' : '#111', color: opp.type === 'AFFILIATE' ? 'black' : 'white' }}>
+                                            BAŞVUR <ChevronRight size={14} style={{ display: opp.type === 'AFFILIATE' ? 'inline' : 'none', verticalAlign: 'middle', marginLeft: 4 }} />
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             )}
+
+            {/* --- APPLICATION MODAL --- */}
+            <Modal isOpen={isAppModalOpen} onClose={() => !isSubmitting && setAppModalOpen(false)}>
+                {selectedOpp && (
+                    <div style={{ width: '100%', maxWidth: 500 }}>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 5px 0' }}>Kampanya Başvurusu</h2>
+                        <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: 25 }}><strong>{selectedOpp.name}</strong> kampanyası için markaya teklifini ilet.</p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                            {/* Pitch Area */}
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: 8 }}>Neden Sen? (Kapak Yazısı) *</label>
+                                <textarea
+                                    value={appForm.pitch}
+                                    onChange={(e) => setAppForm({ ...appForm, pitch: e.target.value })}
+                                    placeholder="Markaya tarzından, kitle demografiklerinden ve kampanyaya nasıl değer katacağından bahset..."
+                                    style={{ width: '100%', minHeight: 120, padding: 12, borderRadius: 8, border: '1px solid #ddd', fontSize: '0.9rem', outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
+                                />
+                            </div>
+
+                            {/* Budget (Only show if payment type) */}
+                            {selectedOpp.type === 'PAYMENT' && (
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: 8 }}>Teklif Ettiğin Bütçe (₺)</label>
+                                    <input
+                                        type="number"
+                                        value={appForm.budget}
+                                        onChange={(e) => setAppForm({ ...appForm, budget: e.target.value })}
+                                        placeholder="Örn: 12000"
+                                        style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #ddd', fontSize: '0.9rem', outline: 'none' }}
+                                    />
+                                    <span style={{ fontSize: '0.75rem', color: '#888', marginTop: 4, display: 'block' }}>Markanın belirttiği bütçe: {selectedOpp.budget}</span>
+                                </div>
+                            )}
+
+                            {/* Include Media Kit */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: '#f8fafc', padding: 15, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                                <input
+                                    type="checkbox"
+                                    id="includeStats"
+                                    checked={appForm.includeStats}
+                                    onChange={(e) => setAppForm({ ...appForm, includeStats: e.target.checked })}
+                                    style={{ marginTop: 3 }}
+                                />
+                                <label htmlFor="includeStats" style={{ fontSize: '0.85rem', color: '#333', cursor: 'pointer', lineHeight: 1.4 }}>
+                                    <strong style={{ display: 'block', color: 'black' }}>Medya Kitimi Başvuruya Ekle</strong>
+                                    Marka son 30 günlük erişim verilerimi ve takipçi demografiklerimi görebilsin. (Başvuru oranını %80 artırır)
+                                </label>
+                            </div>
+
+                            {/* Actions */}
+                            <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
+                                <Button
+                                    onClick={submitApplication}
+                                    disabled={!appForm.pitch.trim() || isSubmitting}
+                                    style={{ flex: 1, background: '#111', color: 'white', display: 'flex', justifyContent: 'center' }}
+                                >
+                                    {isSubmitting ? 'GÖNDERİLİYOR...' : 'BAŞVURUYU GÖNDER'}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </Modal>
 
         </div>
     );

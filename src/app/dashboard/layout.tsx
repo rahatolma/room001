@@ -38,7 +38,8 @@ import {
     BookOpen,       // Guide
     Sparkles,       // Vision
     Briefcase,
-    Users
+    Users,
+    TrendingUp     // Analytics
 } from 'lucide-react';
 
 // --- NAVIGATION DATA (FLAT LISTS) ---
@@ -82,6 +83,7 @@ const CreatorNavigation = [
     { name: 'Öne Çıkar', href: '/dashboard/promote', icon: <Megaphone size={18} /> },
     { name: 'Medya Kiti', href: '/dashboard/media-kit', icon: <FileText size={18} /> },
     { name: 'Kazançlar', href: '/dashboard/earnings', icon: <DollarSign size={18} /> },
+    { name: 'Analizler', href: '/dashboard/analytics', icon: <TrendingUp size={18} /> },
     { name: 'Insider Seviyesi', href: '/dashboard/tier', icon: <Award size={18} /> },
     // 10-13: Marka İşbirlikleri
     { name: 'Mesajlar', href: '/dashboard/chat', icon: <MessageCircle size={18} /> },
@@ -129,14 +131,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             ))}
 
                             <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginTop: 20, marginBottom: 10, paddingLeft: 10, letterSpacing: 0.5 }}>AFFILIATES & KAZANÇLAR</div>
-                            {CreatorNavigation.slice(2, 10).map((item) => (
+                            {CreatorNavigation.slice(2, 11).map((item) => (
                                 <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === item.href || pathname?.startsWith(item.href) ? 'black' : '#666', background: pathname === item.href ? '#f5f5f5' : 'transparent', fontWeight: pathname === item.href ? 600 : 400 }}>
                                     {item.icon} {item.name}
                                 </Link>
                             ))}
 
                             <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginTop: 20, marginBottom: 10, paddingLeft: 10, letterSpacing: 0.5 }}>MARKA İŞBİRLİKLERİ</div>
-                            {CreatorNavigation.slice(10, 14).map((item) => {
+                            {CreatorNavigation.slice(11, 15).map((item) => {
                                 const isActive = pathname === item.href || (item.href.includes('?') && pathname.startsWith(item.href.split('?')[0]) && pathname.includes(item.href.split('?')[1]));
                                 return (
                                     <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: isActive ? 'black' : '#666', background: isActive ? '#f5f5f5' : 'transparent', fontWeight: isActive ? 600 : 400 }}>
@@ -148,7 +150,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             })}
 
                             <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginTop: 20, marginBottom: 10, paddingLeft: 10, letterSpacing: 0.5 }}>ALIŞVERİŞ</div>
-                            {CreatorNavigation.slice(14, 16).map((item) => (
+                            {CreatorNavigation.slice(15, 17).map((item) => (
                                 <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === item.href ? 'black' : '#666', background: pathname === item.href ? '#f5f5f5' : 'transparent', fontWeight: pathname === item.href ? 600 : 400 }}>
                                     {item.icon} {item.name}
                                 </Link>
