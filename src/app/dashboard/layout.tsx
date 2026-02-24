@@ -136,7 +136,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     else if (isCreator) navigationItems = CreatorNavigation; // Default fallback to Creator if no role or 'creator' role
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#fafafa' }}>
+        <div className="desktop-only-wrapper">
+
+            <div className="mobile-blocker">
+                <h1>ROOM001</h1>
+                <p>ROOM001 profesyonel bir yönetim aracıdır. En iyi deneyim ve tam kontrol için lütfen bu panele bilgisayarınızdan (masaüstü) giriş yapın.</p>
+            </div>
 
             {/* SIDEBAR */}
             <aside className="dashboard-sidebar">
