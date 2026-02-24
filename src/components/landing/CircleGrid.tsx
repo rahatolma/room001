@@ -27,7 +27,7 @@ export default function CircleGrid({ items }: { items?: any[] }) {
                 </div>
             </div>
 
-            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
+            <div className="responsive-grid-4" style={{ minWidth: 0, gap: 0 }}>
                 {items.map((circle, index) => (
                     <Link key={index} href={`/circles/${circle.slug || '#'}`} style={{
                         position: 'relative',

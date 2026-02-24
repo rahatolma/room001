@@ -37,7 +37,7 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
             )}
 
             {/* Full Width Grid */}
-            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
+            <div className="responsive-grid-5" style={{ minWidth: 0, gap: 0 }}>
                 {displayCurators.map((curator, index) => (
                     <Link
                         key={index}

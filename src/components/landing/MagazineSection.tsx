@@ -91,7 +91,7 @@ export default function MagazineSection() {
                 </div>
             </div>
 
-            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
+            <div className="responsive-grid-4" style={{ minWidth: 0, gap: 0 }}>
                 {MOCK_MAGAZINES.map((mag, index) => (
                     <Link key={index} href={`/magazine/${mag.slug || '#'}`} style={{
                         position: 'relative',

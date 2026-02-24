@@ -31,7 +31,7 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                 </div>
             </div>
 
-            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
+            <div className="responsive-grid-4" style={{ minWidth: 0, gap: 0 }}>
                 {items.map((brand, index) => (
                     <Link key={index} href={`/brands/${brand.slug || '#'}`} style={{
                         position: 'relative',

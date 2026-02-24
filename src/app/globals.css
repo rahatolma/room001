@@ -248,10 +248,20 @@ h6 {
   vertical-align: middle;
 }
 
+.header-logo {
+  font-size: 2.2rem;
+}
+
 /* Responsive Grids */
-.responsive-full-image-grid {
+.responsive-grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
+.responsive-grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 0;
 }
 
@@ -317,7 +327,8 @@ h6 {
     row-gap: 20px;
   }
 
-  .responsive-full-image-grid {
+  .responsive-grid-4,
+  .responsive-grid-5 {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 
@@ -326,7 +337,7 @@ h6 {
   }
 
   .header-logo {
-    font-size: 1.8rem !important;
+    font-size: 1.8rem;
   }
 }
 
