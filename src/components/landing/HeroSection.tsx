@@ -172,17 +172,44 @@ export default function HeroSection() {
                                 <div style={{ height: '140px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
                             </div>
                         </div>
-                    </div>
-                    {/* Floating Earning Tag */}
-                    <div style={{
-                        position: 'absolute', top: '15%', right: '-5%', background: '#fff', padding: '12px 20px',
-                        borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '10px',
-                        animation: 'float 3s ease-in-out infinite'
-                    }}>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#FCE4EC', color: '#C2185B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>✦</div>
-                        <div>
-                            <div style={{ fontSize: '0.75rem', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>Yeni İşbirliği</div>
-                            <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>Dyson Türkiye</div>
+
+                        {/* Floating Earning Tag 1 */}
+                        <div style={{
+                            position: 'absolute', top: '15%', right: '-5%', background: '#fff', padding: '12px 20px',
+                            borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '10px',
+                            animation: 'float 3s ease-in-out infinite'
+                        }}>
+                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#FCE4EC', color: '#C2185B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>✦</div>
+                            <div>
+                                <div style={{ fontSize: '0.75rem', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>Yeni İşbirliği</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>Dyson Türkiye</div>
+                            </div>
+                        </div>
+
+                        {/* Floating Earning Tag 2 */}
+                        <div style={{
+                            position: 'absolute', bottom: '25%', left: '-15%', background: '#fff', padding: '12px 20px',
+                            borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '10px',
+                            animation: 'float 3.5s ease-in-out infinite 1s'
+                        }}>
+                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E3F2FD', color: '#1565C0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>⭐</div>
+                            <div>
+                                <div style={{ fontSize: '0.75rem', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>Seçilmiş Marka</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>Vakko</div>
+                            </div>
+                        </div>
+
+                        {/* Floating Earning Tag 3 */}
+                        <div style={{
+                            position: 'absolute', bottom: '5%', right: '10%', background: '#fff', padding: '12px 20px',
+                            borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '10px',
+                            animation: 'float 4s ease-in-out infinite 0.5s'
+                        }}>
+                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E8F5E9', color: '#2E7D32', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>💰</div>
+                            <div>
+                                <div style={{ fontSize: '0.75rem', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>Yeni Kazanç</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>₺1,250.00</div>
+                            </div>
                         </div>
                     </div>
                 </div>
