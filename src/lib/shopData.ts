@@ -43,3 +43,25 @@ export const featuredCategories: GridItem[] = [
     { id: '7', title: 'Makyaj', slug: 'makeup', imageUrl: 'https://images.unsplash.com/photo-1522335789203-abd1c91f19db?q=80&w=800&auto=format&fit=crop' },
     { id: '8', title: 'Ev Dekorasyon', slug: 'home', imageUrl: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop' }, // Home
 ];
+
+export const featuredProducts: GridItem[] = [
+    { id: '1', title: 'Dyson Airwrap', slug: 'dyson-airwrap', imageUrl: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=800&auto=format&fit=crop' },
+    { id: '2', title: 'YSL Libre', slug: 'ysl-libre', imageUrl: 'https://images.unsplash.com/photo-1595425970377-c9703bc48b12?q=80&w=800&auto=format&fit=crop' },
+    { id: '3', title: 'SKIMS Body', slug: 'skims-body', imageUrl: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=800&auto=format&fit=crop' },
+    { id: '4', title: 'MacBook Pro', slug: 'macbook-pro', imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=800&auto=format&fit=crop' },
+    { id: '5', title: 'Chanel Çanta', slug: 'chanel-bag', imageUrl: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?q=80&w=800&auto=format&fit=crop' },
+    { id: '6', title: 'Charlotte Tilbury', slug: 'charlotte-tilbury', imageUrl: 'https://images.unsplash.com/photo-1522335789203-abd1c91f19db?q=80&w=800&auto=format&fit=crop' },
+    { id: '7', title: 'Nike Air Force', slug: 'nike-air-force', imageUrl: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=800&auto=format&fit=crop' },
+    { id: '8', title: 'Rhode Lip Tint', slug: 'rhode-lip', imageUrl: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop' },
+];
+
+export const featuredMagazines: GridItem[] = [
+    { id: '1', title: 'Yaz Stili Önerileri', slug: 'summer-style', imageUrl: 'https://images.unsplash.com/photo-1523381294911-8d3cead13475?q=80&w=800&auto=format&fit=crop' },
+    { id: '2', title: 'Cilt Bakım Rutini', slug: 'skincare-routine', imageUrl: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=800&auto=format&fit=crop' },
+    { id: '3', title: 'Yeni Sezon Çantalar', slug: 'new-bags', imageUrl: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=800&auto=format&fit=crop' },
+    { id: '4', title: 'Paris Moda Haftası', slug: 'paris-fashion-week', imageUrl: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop' },
+    { id: '5', title: 'Ofis Kombinleri', slug: 'office-looks', imageUrl: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800&auto=format&fit=crop' },
+    { id: '6', title: 'Gelinlik Trendleri', slug: 'wedding-trends', imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop' },
+    { id: '7', title: 'Ev Dekorasyonu 2024', slug: 'home-decor-24', imageUrl: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop' },
+    { id: '8', title: 'Kışlık Ayakkabılar', slug: 'winter-shoes', imageUrl: 'https://images.unsplash.com/photo-1511556820780-dba8c3c29c4b?q=80&w=800&auto=format&fit=crop' },
+];

@@ -101,7 +101,7 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
 
                     {/* Shop By Line */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 15, marginBottom: 10 }}>
-                        <span style={{ fontStyle: 'italic', fontFamily: 'var(--font-playfair), Georgia, serif', fontSize: '1.2rem', color: '#111' }}>
+                        <span style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '1.2rem', color: '#111', fontWeight: 500 }}>
                             {getShopByLabel(type)}
                         </span>
                         <div style={{ height: 1, flex: 1, backgroundColor: '#eaeaea' }} />
@@ -115,7 +115,8 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
                             top: -40,
                             left: -20,
                             fontSize: '8rem',
-                            fontFamily: 'var(--font-playfair), Georgia, serif',
+                            fontFamily: 'var(--font-dm-sans), sans-serif',
+                            fontWeight: 800,
                             color: '#f5f5f5',
                             zIndex: -1,
                             letterSpacing: '-2px',
@@ -135,9 +136,9 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
                                 exit={{ opacity: 0, y: -15 }}
                                 transition={{ duration: 0.4 }}
                                 style={{
-                                    fontFamily: 'var(--font-playfair), Georgia, serif',
+                                    fontFamily: 'var(--font-dm-sans), sans-serif',
                                     fontSize: '3.5rem',
-                                    fontWeight: 400,
+                                    fontWeight: 700,
                                     lineHeight: 1.1,
                                     color: '#000',
                                     margin: '40px 0 20px 0'
@@ -170,7 +171,7 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
 
                     {/* Expanded Search Button Action */}
                     <div style={{ marginTop: 10 }}>
-                        <Link href={`/${type === 'curator' ? 'creators' : type + 's'}`} style={{ textDecoration: 'none' }}>
+                        <Link href={`/search?type=${type === 'curator' ? 'user' : type}`} style={{ textDecoration: 'none' }}>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',

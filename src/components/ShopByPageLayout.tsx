@@ -22,7 +22,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
     // Helper for Turkish grammar (roughly)
     const getTypeLabel = (type: string) => {
         switch (type) {
-            case 'curator': return 'Insider\'lar';
+            case 'curator': return 'Insiderlar';
             case 'circle': return 'Kolektifler';
             case 'brand': return 'Markalar';
             case 'category': return 'Kategoriler';
