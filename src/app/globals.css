@@ -201,6 +201,53 @@ h6 {
   display: none;
 }
 
+/* Landing Page Responsive Components */
+.landing-section-header {
+  padding: 0 0;
+  margin: 0 0 40px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.landing-section-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.landing-section-header h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-top: 5px;
+  line-height: 1;
+}
+
+.landing-section-desc {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.landing-section-desc p {
+  max-width: 400px;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0;
+}
+
+.badge-yeni {
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: black;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  vertical-align: middle;
+}
+
 /* Responsive Grids */
 .responsive-kpi-grid {
   display: grid;
@@ -232,6 +279,27 @@ h6 {
   }
 }
 
+@media (max-width: 768px) {
+  .landing-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .landing-section-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .landing-section-desc {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .landing-section-desc p {
+    text-align: left;
+  }
+}
+
 @media (max-width: 640px) {
   .responsive-kpi-grid {
     grid-template-columns: 1fr;
@@ -241,6 +309,30 @@ h6 {
     grid-template-columns: repeat(2, 1fr);
     column-gap: 10px;
     row-gap: 20px;
+  }
+
+  .responsive-full-image-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  :root {
+    --page-padding-x: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .desktop-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .beta-feedback-btn span {
+    display: none;
+  }
+
+  .beta-feedback-btn {
+    padding: 8px 10px !important;
   }
 }
 

@@ -7,31 +7,27 @@ export default function CircleGrid({ items }: { items?: any[] }) {
 
     return (
         <div style={{ width: '100%' }}>
-            <div style={{ padding: '0 0', margin: '0 0 40px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div className="landing-section-header">
                 <div>
-                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 0 }}>Keşfet</h2>
-                    <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginTop: 5, lineHeight: 1 }}>Topluluklar</h1>
+                    <h2>Keşfet</h2>
+                    <h1>Topluluklar</h1>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                    <p style={{ maxWidth: 400, fontSize: '0.9rem', color: '#666', marginBottom: 20 }}>
+                <div className="landing-section-desc">
+                    <p>
                         Tarzını paylaşan küratör grupları oluştur ve onların en iyi önerilerini keşfet.
                     </p>
-                    <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                         <Link href="/circles/new">
-                            <button style={{ padding: '10px 20px', background: 'transparent', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer' }}>Topluluk Başvurusu</button>
+                            <button style={{ padding: '10px 20px', background: 'transparent', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>Topluluk Başvurusu</button>
                         </Link>
                         <Link href="/circles">
-                            <button style={{ padding: '10px 20px', background: 'black', color: 'white', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer' }}>Tüm Toplulukları Gör</button>
+                            <button style={{ padding: '10px 20px', background: 'black', color: 'white', border: '1px solid black', fontSize: '0.7rem', textTransform: 'uppercase', cursor: 'pointer', whiteSpace: 'nowrap' }}>Tüm Toplulukları Gör</button>
                         </Link>
                     </div>
                 </div>
             </div>
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: 0 // Full bleed
-            }}>
+            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
                 {items.map((circle, index) => (
                     <Link key={index} href={`/circles/${circle.slug || '#'}`} style={{
                         position: 'relative',

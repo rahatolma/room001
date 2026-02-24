@@ -10,37 +10,14 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
         <div style={{ width: '100%', position: 'relative' }}>
             {/* Header Section - Only Show if Hero exists */}
             {hero && (
-                <div style={{
-                    padding: '0 0',
-                    margin: '0 0 40px 0',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'baseline'
-                }}>
+                <div className="landing-section-header">
                     <div>
-                        <h2 style={{
-
-                            fontSize: '1.2rem',
-                            fontWeight: 700,
-                            marginBottom: 0
-                        }}>
-                            {hero.title}
-                        </h2>
-                        <h1 style={{
-
-                            fontSize: '3.5rem', // Slightly smaller for DM Sans
-                            fontWeight: 800,
-                            lineHeight: 1,
-                            marginTop: 5
-                        }}>
-                            Insiderler
-                        </h1>
+                        <h2>{hero.title}</h2>
+                        <h1>Insiderler</h1>
                     </div>
 
-                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 20 }}>
-                        <p style={{ maxWidth: 400, fontSize: '0.9rem', color: '#666', marginBottom: 0 }}>
-                            {hero.description}
-                        </p>
+                    <div className="landing-section-desc">
+                        <p>{hero.description}</p>
                         <Link href="/creators">
                             <button style={{
                                 background: 'black',
@@ -60,11 +37,7 @@ export default function CuratorGrid({ hero, curators }: { hero?: any, curators?:
             )}
 
             {/* Full Width Grid */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)', // 4 columns
-                gap: 0 // No gap for full bleed
-            }}>
+            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
                 {displayCurators.map((curator, index) => (
                     <Link
                         key={index}

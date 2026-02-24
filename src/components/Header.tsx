@@ -162,6 +162,7 @@ export default function Header() {
                     {/* RIGHT ACTIONS */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
                         <button
+                            className="beta-feedback-btn"
                             onClick={() => setIsFeedbackOpen(true)}
                             style={{
                                 display: 'flex', alignItems: 'center', gap: 6,
@@ -171,7 +172,7 @@ export default function Header() {
                                 boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
                             }}
                         >
-                            <MessageSquareShare size={16} /> Beta Geri Bildirim
+                            <MessageSquareShare size={16} /> <span>Beta Geri Bildirim</span>
                         </button>
                         {!user ? (
                             <>

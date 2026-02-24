@@ -67,13 +67,13 @@ const MOCK_MAGAZINES = [
 export default function MagazineSection() {
     return (
         <div style={{ width: '100%' }}>
-            <div style={{ padding: '0 0', margin: '0 0 40px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div className="landing-section-header">
                 <div>
-                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 0 }}>Keşfet</h2>
-                    <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginTop: 5, lineHeight: 1 }}>Dergiler <span style={{ fontSize: '1.2rem', fontWeight: 600, background: 'black', color: 'white', padding: '4px 12px', borderRadius: 20, verticalAlign: 'middle' }}>YENİ</span></h1>
+                    <h2>Keşfet</h2>
+                    <h1>Dergiler <span className="badge-yeni">YENİ</span></h1>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: 20 }}>Moda dünyasının nabzını tutan seçkin yayınları incele.</p>
+                <div className="landing-section-desc">
+                    <p>Moda dünyasının nabzını tutan seçkin yayınları incele.</p>
                     <Link href="/magazines">
                         <button style={{
                             background: 'black',
@@ -91,11 +91,7 @@ export default function MagazineSection() {
                 </div>
             </div>
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: 0
-            }}>
+            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
                 {MOCK_MAGAZINES.map((mag, index) => (
                     <Link key={index} href={`/magazine/${mag.slug || '#'}`} style={{
                         position: 'relative',

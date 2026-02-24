@@ -7,13 +7,13 @@ export default function BrandGrid({ items }: { items?: any[] }) {
 
     return (
         <div style={{ width: '100%' }}>
-            <div style={{ padding: '0 0', margin: '0 0 40px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div className="landing-section-header">
                 <div>
-                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 0 }}>Keşfet</h2>
-                    <h1 style={{ fontSize: '3.5rem', fontWeight: 800, marginTop: 5, lineHeight: 1 }}>Markalar</h1>
+                    <h2>Keşfet</h2>
+                    <h1>Markalar</h1>
                 </div>
-                <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: 20 }}>Bildiğin markaların en iyi ürünlerini keşfet ve seveceğin yeni markalarla tanış.</p>
+                <div className="landing-section-desc">
+                    <p>Bildiğin markaların en iyi ürünlerini keşfet ve seveceğin yeni markalarla tanış.</p>
                     <Link href="/brands">
                         <button style={{
                             background: 'black',
@@ -31,11 +31,7 @@ export default function BrandGrid({ items }: { items?: any[] }) {
                 </div>
             </div>
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: 0
-            }}>
+            <div className="responsive-full-image-grid" style={{ minWidth: 0, gap: 0 }}>
                 {items.map((brand, index) => (
                     <Link key={index} href={`/brands/${brand.slug || '#'}`} style={{
                         position: 'relative',
