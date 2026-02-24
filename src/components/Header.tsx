@@ -19,28 +19,28 @@ const MENU_ITEMS = {
             { title: 'Kolektif Keşfet', description: 'Stilinizi paylaşan Insider grupları.', href: '/circles' },
             { title: 'Marka Keşfet', description: 'Bildiğiniz ve seveceğiniz yeni markaları keşfedin.', href: '/brands' },
             { title: 'Kategori Keşfet', description: 'Her kategorinin en iyilerini güvenle alışveriş yapın.', href: '/categories' },
-            { title: 'Kolektiflerim', description: 'Kendi kişisel mağazalarınız, favori kişileriniz tarafından düzenlenmiş.', href: '/my-circles' },
-            { title: 'Zevk Profilim', description: 'Size özel bir stil oluşturmak için 25 ürünü beğenin.', href: '/style' },
+            { title: 'Ürünleri Gör', description: 'Öne çıkan tüm ürünlerimizi tek tıkla incele.', href: '/products' },
+            { title: 'Dergi & Blog', description: 'Sezonun öne çıkan son trendlerini oku.', href: '/magazines' },
         ]
     },
     creators: {
         label: 'Insider\'lar',
         items: [
-            { title: 'Insider\'lar İçin', description: 'Zevkinizi paraya dönüştürün.', href: '/creators-info' },
-            { title: 'Dijital Mağazalar', description: 'Kitleniz için basitleştirilmiş ve premium bir alışveriş deneyimi.', href: '/digital-shops' },
-            { title: 'Affiliate Linkler', description: 'Önerileri kalıcı gelire dönüştüren profesyonel altyapı.', href: '/affiliate-links' },
-            { title: 'Marka İşbirlikleri', description: 'Otantik zevk arayan premium markalara doğrudan erişim.', href: '/brand-partnerships' },
+            { title: 'Insider\'lar İçin', description: 'Zevkinizi paraya dönüştürün.', href: '/become-creator' },
+            { title: 'Dijital Mağazalar', description: 'Kitleniz için basitleştirilmiş ve premium bir alışveriş deneyimi.', href: '/become-creator' },
+            { title: 'Affiliate Linkler', description: 'Önerileri kalıcı gelire dönüştüren profesyonel altyapı.', href: '/become-creator' },
+            { title: 'Marka İşbirlikleri', description: 'Otantik zevk arayan premium markalara doğrudan erişim.', href: '/become-creator' },
             { title: 'Insider Ol', description: 'Kolektif ağımıza katılın ve premium araçlara erişin.', href: '/become-creator' },
         ]
     },
     brands: {
         label: 'Markalar',
         items: [
-            { title: 'Markalar İçin', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/brands' },
-            { title: 'Keşfet', description: 'Gerçek satışları yönlendiren 185.000+ zevk sahibinden oluşan ağımıza erişin.', href: '/brands/discover' },
-            { title: 'Etkileşim', description: 'Premium zevk sahiplerini performans verileri ve zevk profilleri aracılığıyla bulun.', href: '/brands/engage' },
-            { title: 'Takip', description: 'Kalıcı marka inşası için altyapı aracılığıyla gerçek performansı ve ROI\'yi izleyin.', href: '/brands/track' },
-            { title: 'Büyüt', description: 'Reklamları otantik önerilerle değiştiren ağızdan ağıza altyapı ile ölçeklenin.', href: '/brands/amplify' },
+            { title: 'Markalar İçin', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/for-brands' },
+            { title: 'Keşfet', description: 'Gerçek satışları yönlendiren 185.000+ zevk sahibinden oluşan ağımıza erişin.', href: '/for-brands' },
+            { title: 'Etkileşim', description: 'Premium zevk sahiplerini performans verileri ve zevk profilleri aracılığıyla bulun.', href: '/for-brands' },
+            { title: 'Takip', description: 'Kalıcı marka inşası için altyapı aracılığıyla gerçek performansı ve ROI\'yi izleyin.', href: '/for-brands' },
+            { title: 'Büyüt', description: 'Reklamları otantik önerilerle değiştiren ağızdan ağıza altyapı ile ölçeklenin.', href: '/for-brands' },
         ]
     }
 };
