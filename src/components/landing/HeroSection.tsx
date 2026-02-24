@@ -17,16 +17,18 @@ export default function HeroSection() {
             backgroundColor: 'white', // Changed from #FFFCF8 (cream) to white based on feedback
             padding: '120px 0 80px',
         }}>
-            {/* Abstract Background Design / Glows */}
+            {/* Abstract Background Design / Glows - Added translateZ(0) to fix Safari black box WebKit bug */}
             <div style={{
                 position: 'absolute', top: '-10%', left: '-10%', width: '40%', height: '40%',
                 background: 'radial-gradient(circle, rgba(255,200,150,0.15) 0%, rgba(255,252,248,0) 70%)',
-                borderRadius: '50%', filter: 'blur(60px)', zIndex: 0
+                borderRadius: '50%', filter: 'blur(60px)', WebkitFilter: 'blur(60px)', zIndex: 0,
+                transform: 'translateZ(0)'
             }} />
             <div style={{
                 position: 'absolute', bottom: '-20%', right: '-10%', width: '60%', height: '60%',
                 background: 'radial-gradient(circle, rgba(200,220,255,0.15) 0%, rgba(255,252,248,0) 70%)',
-                borderRadius: '50%', filter: 'blur(60px)', zIndex: 0
+                borderRadius: '50%', filter: 'blur(60px)', WebkitFilter: 'blur(60px)', zIndex: 0,
+                transform: 'translateZ(0)'
             }} />
 
             <div style={{
