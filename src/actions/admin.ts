@@ -746,6 +746,7 @@ export async function getCuratorData(username: string) {
     // Fetch user with collections and products
     let user = await prisma.user.findUnique({
       where: { username },
+      relationLoadStrategy: "join",
       include: {
         collections: {
           orderBy: {
@@ -772,6 +773,7 @@ export async function getCuratorData(username: string) {
         where: {
           username: username.toLowerCase(),
         },
+        relationLoadStrategy: "join",
         include: {
           collections: {
             orderBy: {
@@ -813,6 +815,7 @@ export async function getCuratorData(username: string) {
         if (match) {
           user = await prisma.user.findUnique({
             where: { id: match.id },
+            relationLoadStrategy: "join",
             include: {
               collections: {
                 orderBy: { createdAt: "desc" },
