@@ -22,27 +22,29 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
     // Helper for Turkish grammar
     const getTypeLabel = (type: string) => {
         switch (type) {
-            case 'curator': return 'Curator'; // Using English 'Curator' for watermark elegance as in ShopMy
-            case 'circle': return 'Circle';
-            case 'brand': return 'Brand';
-            case 'category': return 'Category';
-            default: return type;
+            case 'curator': return 'INSIDER';
+            case 'circle': return 'KOLEKTİF';
+            case 'brand': return 'MARKA';
+            case 'category': return 'KATEGORİ';
+            default: return type.toUpperCase();
         }
     };
 
     const getShopByLabel = (type: string) => {
         switch (type) {
-            case 'curator': return 'Shop By';
-            case 'brand': return 'Discover';
-            default: return 'Explore';
+            case 'curator': return 'Öne Çıkan Insider';
+            case 'brand': return 'Öne Çıkan Marka';
+            case 'circle': return 'Öne Çıkan Kolektif';
+            default: return 'Keşfet';
         }
     };
 
-    const getActionLabel = (type: string) => {
+    const getSearchPlaceholder = (type: string) => {
         switch (type) {
-            case 'curator': return 'Favorilerini Seç';
-            case 'brand': return 'Koleksiyonu Gör';
-            default: return 'İncele';
+            case 'curator': return 'Tüm Insiderlar Arasında Ara...';
+            case 'brand': return 'Tüm Markalar Arasında Ara...';
+            case 'circle': return 'Tüm Kolektifler Arasında Ara...';
+            default: return 'Ara...';
         }
     };
 
@@ -166,46 +168,28 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
                         </motion.p>
                     </AnimatePresence>
 
-                    {/* Actions */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
-                        <Link href={getItemLink(activeItem)} style={{ textDecoration: 'none' }}>
-                            <button style={{
-                                background: '#111',
-                                color: '#fff',
-                                border: 'none',
-                                padding: '14px 28px',
-                                fontSize: '0.9rem',
-                                fontWeight: 500,
-                                cursor: 'pointer',
-                                borderRadius: 4,
-                                transition: 'background 0.2s'
-                            }}
-                                onMouseOver={(e) => e.currentTarget.style.background = '#333'}
-                                onMouseOut={(e) => e.currentTarget.style.background = '#111'}
-                            >
-                                {getActionLabel(type)}
-                            </button>
-                        </Link>
-
-                        <Link href={getItemLink(activeItem)} style={{ textDecoration: 'none' }}>
-                            <button style={{
+                    {/* Expanded Search Button Action */}
+                    <div style={{ marginTop: 10 }}>
+                        <Link href={`/${type === 'curator' ? 'creators' : type + 's'}`} style={{ textDecoration: 'none' }}>
+                            <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 48,
-                                height: 48,
-                                borderRadius: '50%',
+                                background: '#f8f8f8',
                                 border: '1px solid #eaeaea',
-                                background: 'transparent',
-                                color: '#666',
+                                padding: '14px 24px',
+                                borderRadius: 30,
                                 cursor: 'pointer',
-                                transition: 'border-color 0.2s, color 0.2s'
+                                transition: 'all 0.2s ease',
+                                maxWidth: 400
                             }}
-                                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.color = '#111'; }}
-                                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.color = '#666'; }}
+                                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.background = '#fff'; }}
+                                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.background = '#f8f8f8'; }}
                             >
-                                <Search size={18} />
-                            </button>
+                                <Search size={20} color="#666" style={{ marginRight: 15 }} />
+                                <span style={{ color: '#666', fontSize: '0.95rem', fontWeight: 500, flex: 1 }}>
+                                    {getSearchPlaceholder(type)}
+                                </span>
+                            </div>
                         </Link>
                     </div>
                 </div>

@@ -7,7 +7,7 @@ export default function CategoriesPage() {
             title="Kategori"
             subtitle="Göz At"
             featuredItems={featuredCategories.slice(0, 5)}
-            items={featuredCategories.slice(5)}
+            items={featuredCategories}
             type="category"
         />
     );

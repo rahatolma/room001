@@ -7,7 +7,7 @@ export default function CirclesPage() {
             title="Çember"
             subtitle="Göz At"
             featuredItems={featuredCircles.slice(0, 5)}
-            items={featuredCircles.slice(5)}
+            items={featuredCircles}
             type="circle"
         />
     );

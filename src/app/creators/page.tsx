@@ -9,7 +9,7 @@ export default async function CuratorsPage() {
             title="INSIDER"
             subtitle="Göz At"
             featuredItems={featuredCurators.slice(0, 5)}
-            items={featuredCurators.slice(5)}
+            items={featuredCurators}
             type="curator"
         />
     );
