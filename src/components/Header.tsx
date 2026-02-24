@@ -161,8 +161,12 @@ export default function Header() {
 
                     {/* RIGHT ACTIONS */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
+                        <button className="mobile-hide-btn" onClick={() => { }} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>
+                            <Search size={22} />
+                        </button>
+
                         <button
-                            className="beta-feedback-btn"
+                            className="beta-feedback-btn mobile-hide-btn"
                             onClick={() => setIsFeedbackOpen(true)}
                             style={{
                                 display: 'flex', alignItems: 'center', gap: 6,
@@ -174,6 +178,7 @@ export default function Header() {
                         >
                             <MessageSquareShare size={16} /> <span>Beta Geri Bildirim</span>
                         </button>
+
                         {!user ? (
                             <>
                                 <button className="mobile-hide-btn" onClick={() => setIsLoginOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem' }}>
@@ -184,14 +189,15 @@ export default function Header() {
                                 </Button>
                             </>
                         ) : (
-                            <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
+                            <Link href="/dashboard" className="mobile-hide-btn" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
                                 <div style={{ width: 36, height: 36, background: '#eee', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black', fontWeight: 700 }}>
                                     {user.avatarInitials}
                                 </div>
                             </Link>
                         )}
 
-                        <button className="mobile-only-btn" onClick={() => setMobileMenuOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', marginLeft: 10 }}>
+                        {/* Hamburger menu is now visible on desktop too, acting as a global side menu */}
+                        <button onClick={() => setMobileMenuOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', marginLeft: 10 }}>
                             <Menu size={28} />
                         </button>
                     </div>
@@ -255,6 +261,19 @@ export default function Header() {
                                     </div>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* General Links (About, Contact, etc.) */}
+                        <div style={{ marginTop: 30, display: 'flex', flexDirection: 'column', gap: 15 }}>
+                            <Link href="/about" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#666', fontSize: '1.05rem', fontWeight: 500 }}>
+                                Hakkımızda
+                            </Link>
+                            <div style={{ textDecoration: 'none', color: '#666', fontSize: '1.05rem', fontWeight: 500, cursor: 'pointer' }}>
+                                İletişim (info@room001.tr)
+                            </div>
+                            <Link href="/categories" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none', color: '#666', fontSize: '1.05rem', fontWeight: 500 }}>
+                                Tüm Kategoriler
+                            </Link>
                         </div>
 
                         {/* Footer in Menu */}
