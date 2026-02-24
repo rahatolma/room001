@@ -28,7 +28,7 @@ export async function getUserQuests(userId: string) {
                 { title: 'TikTok veya Instagram Bağla', description: 'Analitik için sosyal hesaplarını bağla.', points: 20, type: 'SOCIAL', actionUrl: '/dashboard/connected-accounts' },
                 { title: 'İlk Satışını (Dönüşüm) Gerçekleştir', description: 'Linklerinden ilk komisyonunu kazan.', points: 30, type: 'SALES', actionUrl: '/dashboard/analytics' },
             ];
-            await Promise.all(defaultQuests.map(data => prisma.quest.create({ data })));
+            await prisma.quest.createMany({ data: defaultQuests });
             allQuests = await prisma.quest.findMany({ orderBy: { points: 'asc' } });
         }
 

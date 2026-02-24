@@ -390,8 +390,8 @@ export async function getAnalyticsData(userId: string) {
                 });
             }
 
-            // SQLite doesn't support createMany with array objects properly in Prisma
-            await Promise.all(dummyData.map(data => prisma.dailyAnalytics.create({ data })));
+            // Using createMany for better performance on PostgreSQL
+            await prisma.dailyAnalytics.createMany({ data: dummyData, skipDuplicates: true });
 
             analytics = await prisma.dailyAnalytics.findMany({
                 where: { userId },

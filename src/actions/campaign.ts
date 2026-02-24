@@ -42,7 +42,7 @@ export async function getCampaigns() {
                 }
             ];
 
-            await Promise.all(defaultCampaigns.map(data => prisma.campaign.create({ data })));
+            await prisma.campaign.createMany({ data: defaultCampaigns });
             campaigns = await prisma.campaign.findMany({
                 where: { status: 'active' },
                 include: { brand: { select: { name: true, logoUrl: true } } },
