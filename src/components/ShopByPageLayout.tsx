@@ -2,14 +2,12 @@ import React from 'react';
 import ImageFallback from './ImageFallback';
 import Link from 'next/link';
 import { GridItem } from '@/types/shop';
+import FeaturedSlider from './FeaturedSlider';
 
 interface ShopByPageLayoutProps {
     title: string;
     subtitle?: string;
-    heroImage: string;
-    heroTitle: string;
-    heroDescription?: string;
-    heroSlug?: string; // Add this
+    featuredItems: GridItem[];
     items: GridItem[];
     type: 'curator' | 'circle' | 'brand' | 'category';
 }
@@ -17,10 +15,7 @@ interface ShopByPageLayoutProps {
 const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
     title,
     subtitle = "Göz At",
-    heroImage,
-    heroTitle,
-    heroDescription,
-    heroSlug, // Add this
+    featuredItems,
     items,
     type
 }) => {
@@ -53,97 +48,10 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
 
     return (
         <div style={{ paddingBottom: 80, backgroundColor: '#fff' }}>
+            {/* NEW FULL WIDTH FEATURED SLIDER */}
+            <FeaturedSlider items={featuredItems} type={type} />
+
             <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
-                {/* Hero Section */}
-                <div style={{ display: 'flex', minHeight: '600px', flexDirection: 'row', marginBottom: 60 }}>
-                    {/* Left Content */}
-                    <div style={{
-                        flex: '0 0 50%', // Force 50% width
-                        padding: '80px 40px 80px 0',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        background: '#fff'
-                    }}>
-                        <div style={{
-                            textTransform: 'uppercase',
-                            letterSpacing: '1px',
-                            fontSize: '0.9rem',
-                            marginBottom: 20,
-
-                            fontWeight: 700,
-
-                        }}>
-                            {subtitle}
-                        </div>
-                        <h1 style={{
-                            fontSize: '5rem',
-                            lineHeight: 1,
-                            marginBottom: 30,
-                            fontWeight: 800,
-                            color: 'rgba(0,0,0,0.05)',
-
-                            textTransform: 'uppercase'
-                        }}>
-                            {title}
-                        </h1>
-                        <h2 style={{
-                            fontSize: '4rem',
-                            lineHeight: 1.1,
-                            marginBottom: 30,
-                            fontWeight: 700,
-                            marginTop: -60,
-                            position: 'relative',
-                            zIndex: 2,
-
-                        }}>
-                            {heroTitle}
-                        </h2>
-
-                        {heroDescription && (
-                            <p style={{ maxWidth: 400, color: '#666', lineHeight: 1.6, marginBottom: 40 }}>
-                                {heroDescription}
-                            </p>
-                        )}
-
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-                            <Link href={heroSlug ? `/${heroSlug}` : '#'} style={{ textDecoration: 'none' }}>
-                                <button style={{
-                                    background: '#222',
-                                    color: 'white',
-                                    padding: '15px 30px',
-                                    fontSize: '0.9rem',
-                                    border: 'none',
-                                    cursor: 'pointer'
-                                }}>
-                                    En Yenileri Keşfet
-                                </button>
-                            </Link>
-                            <button style={{
-                                width: 50,
-                                height: 50,
-                                borderRadius: '50%',
-                                border: '1px solid #ddd',
-                                background: 'white',
-                                cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center'
-                            }}>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Right Image */}
-                    <div style={{ flex: '0 0 50%', position: 'relative' }}>
-                        <div style={{ position: 'absolute', inset: 0, background: '#f5f5f5' }}>
-                            <ImageFallback
-                                src={heroImage}
-                                alt={heroTitle}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            />
-                        </div>
-                    </div>
-                </div>
 
                 {/* Grid Section */}
                 <div style={{ padding: '0' }}>
@@ -187,7 +95,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                         ))}
                     </div >
                 </div >
-            </div>
+            </div >
         </div >
     );
 };

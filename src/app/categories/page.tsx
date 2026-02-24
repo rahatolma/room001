@@ -6,10 +6,8 @@ export default function CategoriesPage() {
         <ShopByPageLayout
             title="Kategori"
             subtitle="Göz At"
-            heroTitle="Kolyeler"
-            heroDescription="Size özel öneriler"
-            heroImage="https://images.unsplash.com/photo-1599643478518-17488fbbcd75?q=80&w=1000"
-            items={featuredCategories}
+            featuredItems={featuredCategories.slice(0, 5)}
+            items={featuredCategories.slice(5)}
             type="category"
         />
     );
