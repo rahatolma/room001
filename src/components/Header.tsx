@@ -27,9 +27,9 @@ const MENU_ITEMS = {
         label: 'Insider\'lar',
         items: [
             { title: 'Insider\'lar İçin', description: 'Zevkinizi paraya dönüştürün.', href: '/become-creator' },
-            { title: 'Dijital Mağazalar', description: 'Kitleniz için basitleştirilmiş ve premium bir alışveriş deneyimi.', href: '/become-creator' },
-            { title: 'Affiliate Linkler', description: 'Önerileri kalıcı gelire dönüştüren profesyonel altyapı.', href: '/become-creator' },
-            { title: 'Marka İşbirlikleri', description: 'Otantik zevk arayan premium markalara doğrudan erişim.', href: '/become-creator' },
+            { title: 'Dijital Mağazalar', description: 'Kitleniz için basitleştirilmiş ve premium bir alışveriş deneyimi.', href: '/become-creator/digital-shops' },
+            { title: 'Affiliate Linkler', description: 'Önerileri kalıcı gelire dönüştüren profesyonel altyapı.', href: '/become-creator/affiliate-links' },
+            { title: 'Marka İşbirlikleri', description: 'Otantik zevk arayan premium markalara doğrudan erişim.', href: '/become-creator/brand-partnerships' },
             { title: 'Insider Ol', description: 'Kolektif ağımıza katılın ve premium araçlara erişin.', href: '/become-creator' },
         ]
     },
@@ -37,10 +37,10 @@ const MENU_ITEMS = {
         label: 'Markalar',
         items: [
             { title: 'Markalar İçin', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/for-brands' },
-            { title: 'Keşfet', description: 'Gerçek satışları yönlendiren 185.000+ zevk sahibinden oluşan ağımıza erişin.', href: '/for-brands' },
-            { title: 'Etkileşim', description: 'Premium zevk sahiplerini performans verileri ve zevk profilleri aracılığıyla bulun.', href: '/for-brands' },
-            { title: 'Takip', description: 'Kalıcı marka inşası için altyapı aracılığıyla gerçek performansı ve ROI\'yi izleyin.', href: '/for-brands' },
-            { title: 'Büyüt', description: 'Reklamları otantik önerilerle değiştiren ağızdan ağıza altyapı ile ölçeklenin.', href: '/for-brands' },
+            { title: 'Keşfet', description: 'Gerçek satışları yönlendiren 185.000+ zevk sahibinden oluşan ağımıza erişin.', href: '/for-brands/discover' },
+            { title: 'Etkileşim', description: 'Premium zevk sahiplerini performans verileri ve zevk profilleri aracılığıyla bulun.', href: '/for-brands/engage' },
+            { title: 'Takip', description: 'Kalıcı marka inşası için altyapı aracılığıyla gerçek performansı ve ROI\'yi izleyin.', href: '/for-brands/track' },
+            { title: 'Büyüt', description: 'Reklamları otantik önerilerle değiştiren ağızdan ağıza altyapı ile ölçeklenin.', href: '/for-brands/amplify' },
         ]
     }
 };
