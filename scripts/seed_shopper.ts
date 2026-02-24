@@ -19,7 +19,6 @@ async function main() {
             fullName: 'Alışveriş Tutkunu',
             password: '123',
             role: 'shopper', // Explicitly set role
-            avatarInitials: 'AT'
         }
     })
 

@@ -47,8 +47,8 @@ const Footer = () => {
                 <div className={styles.column}>
                     <h3 className={styles.columnHeader}>KEŞFET</h3>
                     <ul className={styles.linkList}>
-                        <li className={styles.linkItem}><Link href="#" className={styles.link}>Blog</Link></li>
-                        <li className={styles.linkItem}><Link href="#" className={styles.link}>Hakkımızda</Link></li>
+                        <li className={styles.linkItem}><Link href="/blog" className={styles.link}>Blog</Link></li>
+                        <li className={styles.linkItem}><Link href="/about" className={styles.link}>Hakkımızda</Link></li>
                         <li className={styles.linkItem}><Link href="#" className={styles.link}>Kariyer</Link></li>
                         <li className={styles.linkItem}><Link href="#" className={styles.link}>Tüm Kategoriler</Link></li>
                     </ul>
@@ -58,11 +58,11 @@ const Footer = () => {
                 <div className={styles.column}>
                     <h3 className={styles.columnHeader}>DESTEK + YASAL</h3>
                     <ul className={styles.linkList}>
-                        <li className={styles.linkItem}><Link href="#" className={styles.link}>Insider Rehberi</Link></li>
+                        <li className={styles.linkItem}><Link href="/guide" className={styles.link}>Insider Rehberi</Link></li>
                         <li className={styles.linkItem}><Link href="#" className={styles.link}>Marka Rehberi</Link></li>
-                        <li className={styles.linkItem}><Link href="#" className={styles.link}>İletişim</Link></li>
-                        <li className={styles.linkItem}><Link href="#" className={styles.link}>Hizmet Şartları</Link></li>
-                        <li className={styles.linkItem}><Link href="#" className={styles.link}>Gizlilik</Link></li>
+                        <li className={styles.linkItem}><Link href="/contact" className={styles.link}>İletişim</Link></li>
+                        <li className={styles.linkItem}><Link href="/legal/terms" className={styles.link}>Hizmet Şartları</Link></li>
+                        <li className={styles.linkItem}><Link href="/legal/privacy" className={styles.link}>Gizlilik</Link></li>
                     </ul>
                 </div>
             </div>

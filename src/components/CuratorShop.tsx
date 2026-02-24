@@ -61,6 +61,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
     const [activeSection, setActiveSection] = useState<string>('all');
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [activePost, setActivePost] = useState<any>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Editor State
     const [isEditMode, setIsEditMode] = useState(false); // New: Toggle for edit mode
@@ -143,9 +144,12 @@ export default function CuratorShop({ profile, sections, products, instagramPost
         return products.filter(product => {
             const matchesSection = activeSection === 'all' || product.sectionId === activeSection;
             const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
-            return matchesSection && matchesCategory;
+            const q = searchQuery.toLowerCase();
+            const matchesSearch = !q || (product.title?.toLowerCase().includes(q) || product.brand?.toLowerCase().includes(q));
+
+            return matchesSection && matchesCategory && matchesSearch;
         });
-    }, [products, activeSection, activeCategory]);
+    }, [products, activeSection, activeCategory, searchQuery]);
 
     // Available Categories
     const categories = [
@@ -329,7 +333,16 @@ export default function CuratorShop({ profile, sections, products, instagramPost
             )}
 
             {/* Sticky Navigation Bars */}
-            <div style={{ position: 'sticky', top: 0, zIndex: 100, backgroundColor: theme?.backgroundColor === 'white' ? 'white' : 'black', borderBottom: '1px solid #eee' }}>
+            <div style={{
+                position: 'sticky',
+                top: 0,
+                zIndex: 100,
+                backgroundColor: theme?.backgroundColor === 'white' ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.85)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.02)'
+            }}>
 
                 {/* Primary Nav (Sections) */}
                 <DndContext
@@ -400,34 +413,67 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     activeSection !== 'instagram' && (
                         <div style={{
                             display: 'flex',
-                            justifyContent: 'center',
-                            gap: 40,
-                            padding: '12px 0',
-                            fontSize: '0.7rem',
-                            color: '#999',
-                            letterSpacing: '1px',
-                            textTransform: 'uppercase',
-                            overflowX: 'auto',
-                            whiteSpace: 'nowrap'
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: 15,
+                            padding: '15px 20px',
+                            borderBottom: '1px solid rgba(0,0,0,0.03)'
                         }}>
-                            {categories.map(cat => {
-                                const count = categoryCounts[cat] || 0;
-                                if (count === 0) return null; // Hide empty categories
+                            {/* Search Bar */}
+                            <div style={{ position: 'relative', width: '100%', maxWidth: 400 }}>
+                                <Search size={16} color="#999" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
+                                <input
+                                    type="text"
+                                    placeholder="Ürün veya marka ara..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    style={{
+                                        width: '100%',
+                                        padding: '10px 14px 10px 40px',
+                                        borderRadius: 20,
+                                        border: '1px solid #e0e0e0',
+                                        backgroundColor: '#f9f9f9',
+                                        fontSize: '0.85rem',
+                                        outline: 'none',
+                                        transition: 'all 0.2s',
+                                    }}
+                                    onFocus={(e) => { e.currentTarget.style.borderColor = '#000'; e.currentTarget.style.backgroundColor = '#fff'; }}
+                                    onBlur={(e) => { e.currentTarget.style.borderColor = '#e0e0e0'; e.currentTarget.style.backgroundColor = '#f9f9f9'; }}
+                                />
+                            </div>
 
-                                return (
-                                    <span
-                                        key={cat}
-                                        onClick={() => setActiveCategory(cat === activeCategory ? 'all' : cat)}
-                                        style={{
-                                            color: activeCategory === cat ? 'var(--color-primary, black)' : '#999',
-                                            fontWeight: activeCategory === cat ? 600 : 400,
-                                            cursor: 'pointer'
-                                        }}
-                                    >
-                                        {cat} {count}
-                                    </span>
-                                );
-                            })}
+                            <div style={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                gap: 40,
+                                fontSize: '0.7rem',
+                                color: '#999',
+                                letterSpacing: '1px',
+                                textTransform: 'uppercase',
+                                overflowX: 'auto',
+                                whiteSpace: 'nowrap',
+                                paddingBottom: 5 // space for scrollbar
+                            }}>
+                                {categories.map(cat => {
+                                    const count = categoryCounts[cat] || 0;
+                                    if (count === 0) return null; // Hide empty categories
+
+                                    return (
+                                        <span
+                                            key={cat}
+                                            onClick={() => setActiveCategory(cat === activeCategory ? 'all' : cat)}
+                                            style={{
+                                                color: activeCategory === cat ? 'var(--color-primary, black)' : '#999',
+                                                fontWeight: activeCategory === cat ? 600 : 400,
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            {cat} {count}
+                                        </span>
+                                    );
+                                })}
+                            </div>
                         </div>
                     )
                 }

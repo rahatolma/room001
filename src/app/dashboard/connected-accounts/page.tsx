@@ -2,12 +2,27 @@
 
 import React, { useState } from 'react';
 import Button from '@/components/Button';
-import { CreditCard, Wallet, Instagram, Link2, Check, Loader2, Store } from 'lucide-react';
+import { CreditCard, Wallet, Instagram, Link2, Check, Loader2, Store, Lock } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '@/context/AuthContext';
+import { getUserQuests } from '@/actions/gamification';
 
 export default function ConnectedAccountsPage() {
     const [connectingId, setConnectingId] = useState<string | null>(null);
     const [connectedAccounts, setConnectedAccounts] = useState<string[]>(['stripe']); // Mock initial state
+    const { user } = useAuth();
+    const [currentScore, setCurrentScore] = useState(0);
+
+    React.useEffect(() => {
+        if (!user?.id) return;
+        async function fetchScore() {
+            const res = await getUserQuests(user!.id);
+            if (res.success && res.currentXp) {
+                setCurrentScore(res.currentXp);
+            }
+        }
+        fetchScore();
+    }, [user?.id]);
 
     const handleConnect = (id: string, name: string) => {
         if (connectedAccounts.includes(id)) {
@@ -29,16 +44,19 @@ export default function ConnectedAccountsPage() {
     };
 
     const platforms = [
-        { id: 'instagram', name: 'Instagram', description: 'Gönderi ve hikayelerine ürün ekle', icon: <Instagram size={28} />, color: '#E1306C' },
-        { id: 'tiktok', name: 'TikTok', description: 'TikTok videolarından satış yap', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19.589 6.686a4.793 4.793 0 01-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 01-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 013.183-4.51v-3.5a6.329 6.329 0 00-5.394 10.692 6.33 6.33 0 0010.857-4.424V8.687a8.182 8.182 0 004.773 1.526V6.79a4.831 4.831 0 01-1.003-.104z" /></svg>, color: '#000000' },
-        { id: 'dolap', name: 'Dolap', description: 'Dolap mağazanı entegre et', icon: <Store size={28} />, color: '#f36f21' },
-        { id: 'gardrops', name: 'Gardrops', description: 'İkinci el ürünlerini listele', icon: <Store size={28} />, color: '#ff3366' },
+        { id: 'instagram', name: 'Instagram', description: 'Gönderi ve hikayelerine ürün ekle', icon: <Instagram size={28} />, color: '#E1306C', minScore: 0 },
+        { id: 'tiktok', name: 'TikTok', description: 'TikTok videolarından satış yap', icon: <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19.589 6.686a4.793 4.793 0 01-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 01-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 013.183-4.51v-3.5a6.329 6.329 0 00-5.394 10.692 6.33 6.33 0 0010.857-4.424V8.687a8.182 8.182 0 004.773 1.526V6.79a4.831 4.831 0 01-1.003-.104z" /></svg>, color: '#000000', minScore: 0 },
+        { id: 'dolap', name: 'Dolap', description: 'Sadece Trendsetter seviyesinde açılır', icon: <Store size={28} />, color: '#f36f21', minScore: 70 },
+        { id: 'gardrops', name: 'Gardrops', description: 'Sadece Trendsetter seviyesinde açılır', icon: <Store size={28} />, color: '#ff3366', minScore: 70 },
     ];
 
     return (
-        <div style={{ paddingBottom: 100, maxWidth: 1000 }}>
+        <div style={{ paddingBottom: 100 }}>
 
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 500, marginBottom: 50, letterSpacing: -0.5 }}>Entegrasyonlar</h1>
+            <div style={{ marginBottom: 40 }}>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: 700, margin: '0 0 10px 0', letterSpacing: -1 }}>Entegrasyonlar</h1>
+                <p style={{ fontSize: '1.2rem', color: '#666', margin: 0, lineHeight: 1.5 }}>Hesaplarını bağlayarak süreçleri otomatikleştir.</p>
+            </div>
 
             {/* PAYMENT METHODS SECTION */}
             <div style={{ marginBottom: 60 }}>
@@ -110,6 +128,7 @@ export default function ConnectedAccountsPage() {
                     {platforms.map(p => {
                         const isConnected = connectedAccounts.includes(p.id);
                         const isConnecting = connectingId === p.id;
+                        const isLocked = currentScore < p.minScore;
 
                         return (
                             <div key={p.id} style={{
@@ -119,15 +138,21 @@ export default function ConnectedAccountsPage() {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: 20,
-                                background: isConnected ? `${p.color}05` : 'white',
+                                background: isConnected ? `${p.color}05` : (isLocked ? '#fcfcfc' : 'white'),
                                 transition: 'all 0.2s ease',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                opacity: isLocked ? 0.7 : 1
                             }}>
                                 {/* Connection Indicator */}
                                 {isConnected && (
                                     <div style={{ position: 'absolute', top: 15, right: 15, color: p.color }}>
                                         <Check size={20} />
+                                    </div>
+                                )}
+                                {isLocked && !isConnected && (
+                                    <div style={{ position: 'absolute', top: 15, right: 15, color: '#999' }}>
+                                        <Lock size={18} />
                                     </div>
                                 )}
 
@@ -137,17 +162,17 @@ export default function ConnectedAccountsPage() {
                                     </div>
                                     <div style={{ paddingRight: 20 }}>
                                         <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0, color: isConnected ? '#111' : '#333' }}>{p.name}</h3>
-                                        <p style={{ fontSize: '0.75rem', color: '#888', margin: '4px 0 0 0', lineHeight: 1.4 }}>{p.description}</p>
+                                        <p style={{ fontSize: '0.75rem', color: isLocked ? '#aaa' : '#888', margin: '4px 0 0 0', lineHeight: 1.4 }}>{p.description}</p>
                                     </div>
                                 </div>
 
                                 <Button
-                                    onClick={() => handleConnect(p.id, p.name)}
-                                    disabled={isConnecting}
+                                    onClick={() => !isLocked && handleConnect(p.id, p.name)}
+                                    disabled={isConnecting || isLocked}
                                     style={{
                                         width: '100%',
-                                        background: isConnected ? 'transparent' : (isConnecting ? '#f5f5f5' : p.color),
-                                        color: isConnected ? '#666' : (isConnecting ? '#999' : 'white'),
+                                        background: isConnected ? 'transparent' : (isLocked ? '#eee' : (isConnecting ? '#f5f5f5' : p.color)),
+                                        color: isConnected ? '#666' : (isLocked ? '#999' : (isConnecting ? '#999' : 'white')),
                                         border: isConnected ? '1px solid #ddd' : 'none',
                                         fontSize: '0.85rem',
                                         fontWeight: 600,
@@ -155,12 +180,14 @@ export default function ConnectedAccountsPage() {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         gap: 8,
-                                        boxShadow: (!isConnected && !isConnecting) ? `0 4px 12px ${p.color}30` : 'none'
+                                        boxShadow: (!isConnected && !isConnecting && !isLocked) ? `0 4px 12px ${p.color}30` : 'none',
+                                        cursor: isLocked ? 'not-allowed' : 'pointer'
                                     }}
                                 >
                                     {isConnecting ? <><Loader2 size={16} className="animate-spin" /> BAĞLANIYOR...</>
-                                        : isConnected ? 'BAĞLANTIYI KES'
-                                            : 'BAĞLA'}
+                                        : isLocked ? `${p.minScore} XP GEREKLİ`
+                                            : isConnected ? 'BAĞLANTIYI KES'
+                                                : 'BAĞLA'}
                                 </Button>
 
                             </div>

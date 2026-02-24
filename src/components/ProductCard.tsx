@@ -33,8 +33,20 @@ export default function ProductCard({ id, image, brand, title, price, curator, l
     };
 
     const content = (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, cursor: 'pointer' }}>
-            <div style={{ position: 'relative', aspectRatio: '4/5', width: '100%', overflow: 'hidden', backgroundColor: '#f5f5f5' }}>
+        <div
+            style={{ display: 'flex', flexDirection: 'column', gap: 12, cursor: 'pointer', transition: 'transform 0.2s ease' }}
+            onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                const img = e.currentTarget.querySelector('img');
+                if (img) img.style.transform = 'scale(1.05)';
+            }}
+            onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                const img = e.currentTarget.querySelector('img');
+                if (img) img.style.transform = 'scale(1)';
+            }}
+        >
+            <div style={{ position: 'relative', aspectRatio: '4/5', width: '100%', overflow: 'hidden', backgroundColor: '#f9f9f9', borderRadius: 8 }}>
                 <ImageFallback
                     src={image}
                     alt={title}
@@ -42,7 +54,7 @@ export default function ProductCard({ id, image, brand, title, price, curator, l
                 />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '0 4px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <div style={{
@@ -54,14 +66,14 @@ export default function ProductCard({ id, image, brand, title, price, curator, l
                         }}>
                             <ImageFallback src={curator.avatar} alt={curator.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
-                        <span style={{ fontSize: '0.7rem', color: '#666', fontWeight: 500 }}>{curator.name}</span>
+                        <span style={{ fontSize: '0.75rem', color: '#666', fontWeight: 500 }}>{curator.name}</span>
                     </div>
                 </div>
 
                 <div>
-                    <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', color: 'var(--text-primary, #333)', marginBottom: 2 }}>{brand}</span>
-                    <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0, lineHeight: 1.3, color: 'var(--text-primary, #000)' }}>{title}</h3>
-                    <span style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-primary, #666)', marginTop: 4 }}>{price}</span>
+                    <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-primary, #111)', letterSpacing: 0.5, marginBottom: 4 }}>{brand}</span>
+                    <h3 style={{ fontSize: '0.95rem', fontWeight: 400, margin: 0, lineHeight: 1.4, color: 'var(--text-primary, #444)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{title}</h3>
+                    <span style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary, #000)', marginTop: 8 }}>{price}</span>
                 </div>
             </div>
         </div>

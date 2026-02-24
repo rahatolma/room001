@@ -92,6 +92,8 @@ export async function getTalentProfile() {
         });
     }
 
+    if (!user) return null;
+
     return {
         ...user,
         totalEarnings: user.totalEarnings ? Number(user.totalEarnings) : 0

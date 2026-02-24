@@ -20,13 +20,7 @@ interface ProductGridProps {
 
 export default function ProductGrid({ products }: ProductGridProps) {
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            columnGap: 20,
-            rowGap: 60,
-            padding: '40px 0'
-        }}>
+        <div className="responsive-product-grid" style={{ padding: '40px 0' }}>
             {products.map(product => (
                 <ProductCard key={product.id} {...product} />
             ))}

@@ -6,7 +6,10 @@ import { Palette, Type } from 'lucide-react';
 export default function ThemePage() {
     return (
         <div style={{ maxWidth: 800, paddingBottom: 100 }}>
-            <h1 style={{ fontSize: '2.5rem',  fontWeight: 700, marginBottom: 30 }}>Tasarım & Tema</h1>
+            <div style={{ marginBottom: 40 }}>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: 700, margin: '0 0 10px 0', letterSpacing: -1 }}>Tasarım & Tema</h1>
+                <p style={{ fontSize: '1.2rem', color: '#666', margin: 0, lineHeight: 1.5 }}>Mağaza vitrininin renk, font ve buton stillerini özelleştir.</p>
+            </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
                 {/* Color Theme */}

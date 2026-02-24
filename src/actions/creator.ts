@@ -76,7 +76,7 @@ export async function submitBrandApplication(data: any) {
                 websiteUrl: data.website,
                 contactName: data.role, // Storing role here for now or update schema later
                 status: 'pending',
-                niche: data.industry
+                description: data.industry
             }
         });
 

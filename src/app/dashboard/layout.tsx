@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -39,7 +39,9 @@ import {
     Sparkles,       // Vision
     Briefcase,
     Users,
-    TrendingUp     // Analytics
+    TrendingUp,     // Analytics
+    Menu,
+    X
 } from 'lucide-react';
 
 // --- NAVIGATION DATA (FLAT LISTS) ---
@@ -69,35 +71,56 @@ const ShopperNavigation = [
     { name: 'Ayarlar', href: '/dashboard/settings', icon: <Settings size={18} /> },
 ];
 
-const CreatorNavigation = [
-    // 0: Room001 (Moved to top)
-    { name: 'Vizyon', href: '/dashboard/vision', icon: <Sparkles size={18} /> },
-    // 1: Panel
-    { name: 'Panel', href: '/dashboard/creator', icon: <LayoutDashboard size={18} /> },
-    // 2-9: Affiliates & Kazançlar
-    { name: 'Linklerim', href: '/dashboard/links', icon: <LinkIcon size={18} /> },
-
-    { name: 'Ürünler', href: '/dashboard/products', icon: <ShoppingBag size={18} /> },
-    { name: 'Tasarım & Tema', href: '/dashboard/theme', icon: <Palette size={18} /> },
-    { name: 'Mağazam', href: '/dashboard/store', icon: <Store size={18} /> },
-    { name: 'Öne Çıkar', href: '/dashboard/promote', icon: <Megaphone size={18} /> },
-    { name: 'Medya Kiti', href: '/dashboard/media-kit', icon: <FileText size={18} /> },
-    { name: 'Kazançlar', href: '/dashboard/earnings', icon: <DollarSign size={18} /> },
-    { name: 'Analizler', href: '/dashboard/analytics', icon: <TrendingUp size={18} /> },
-    { name: 'Insider Seviyesi', href: '/dashboard/tier', icon: <Award size={18} /> },
-    // 10-13: Marka İşbirlikleri
-    { name: 'Mesajlar', href: '/dashboard/chat', icon: <MessageCircle size={18} /> },
-    { name: 'Hediyeleşme', href: '/dashboard/collaborations?tab=GIFTING', icon: <Gift size={18} /> },
-    { name: 'Fırsatlar', href: '/dashboard/collaborations?tab=OPPORTUNITIES', icon: <Zap size={18} /> },
-    { name: 'İndirim Kodları', href: '/dashboard/collaborations?tab=CODES', icon: <Ticket size={18} /> },
-    // 14-15: Alışveriş
-    { name: 'Marka Eşleşmeleri', href: '/dashboard/brand-match', icon: <Compass size={18} /> },
-    { name: 'Favorilerim', href: '/dashboard/favorites', icon: <Heart size={18} /> },
+const CreatorNavGroups = [
+    {
+        title: null,
+        items: [
+            { name: 'Vizyon', href: '/dashboard/vision', icon: <Sparkles size={18} /> },
+        ]
+    },
+    {
+        title: 'Hesabım',
+        items: [
+            { name: 'Panel', href: '/dashboard/creator', icon: <LayoutDashboard size={18} /> },
+            { name: 'Insider Kartı', href: '/dashboard/talent-card', icon: <UserCheck size={18} /> },
+            { name: 'Insider Seviyesi', href: '/dashboard/tier', icon: <Award size={18} /> },
+            { name: 'Medya Kiti', href: '/dashboard/media-kit', icon: <FileText size={18} /> },
+            { name: 'Mağazam', href: '/dashboard/store', icon: <Store size={18} /> },
+            { name: 'Ürünlerim', href: '/dashboard/products', icon: <ShoppingBag size={18} /> },
+            { name: 'Linklerim', href: '/dashboard/links', icon: <LinkIcon size={18} /> },
+            { name: 'Kazançlarım', href: '/dashboard/earnings', icon: <DollarSign size={18} /> },
+            { name: 'Favorilerim', href: '/dashboard/favorites', icon: <Heart size={18} /> },
+            { name: 'Bağlı Hesaplar', href: '/dashboard/connected-accounts', icon: <CreditCard size={18} /> },
+            { name: 'Hesap Ayarları', href: '/dashboard/settings', icon: <Settings size={18} /> },
+        ]
+    },
+    {
+        title: 'Marka İşbirlikleri',
+        items: [
+            { name: 'Mesajlar', href: '/dashboard/chat', icon: <MessageCircle size={18} /> },
+            { name: 'Gelen Teklifler', href: '/dashboard/collaborations?tab=OFFERS', icon: <Zap size={18} /> },
+            { name: 'Açık Kampanyalar', href: '/dashboard/collaborations?tab=CAMPAIGNS', icon: <Megaphone size={18} /> },
+            { name: 'Hediyeleşme', href: '/dashboard/collaborations?tab=GIFTING', icon: <Gift size={18} /> },
+            { name: 'İndirim Kodları', href: '/dashboard/collaborations?tab=CODES', icon: <Ticket size={18} /> },
+            { name: 'Marka Kataloğu', href: '/dashboard/brand-match', icon: <Compass size={18} /> },
+        ]
+    },
+    {
+        title: 'Genel',
+        items: [
+            { name: 'Yardım & Rehber', href: '/dashboard/guide', icon: <BookOpen size={18} /> },
+            { name: 'Tasarım & Tema', href: '/dashboard/theme', icon: <Palette size={18} /> },
+            { name: 'Tavsiye Et / Kazan', href: '/dashboard/referrals', icon: <Users size={18} /> },
+        ]
+    }
 ];
+
+const CreatorNavigation = CreatorNavGroups.flatMap(group => group.items);
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const { user, loading, logout } = useAuth();
     const pathname = usePathname();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     if (loading) return null;
 
@@ -116,64 +139,35 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div style={{ display: 'flex', minHeight: '100vh', background: '#fafafa' }}>
 
             {/* SIDEBAR */}
-            <aside style={{ width: 260, background: 'white', borderRight: '1px solid #eaeaea', position: 'fixed', top: 80, bottom: 0, overflowY: 'auto', padding: '30px 20px' }}>
+            <aside className="dashboard-sidebar">
 
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
 
                     {/* --- CREATOR NAVIGATION (Complex Grouped) --- */}
                     {isCreator ? (
                         <>
-                            {/* Vizyon (now index 0) & Panel (now index 1) */}
-                            {CreatorNavigation.slice(0, 2).map((item) => (
-                                <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === item.href ? 'black' : '#666', background: pathname === item.href ? '#f5f5f5' : 'transparent', fontWeight: pathname === item.href ? 600 : 400 }}>
-                                    {item.icon} {item.name}
-                                </Link>
+                            {CreatorNavGroups.map((group, groupIdx) => (
+                                <React.Fragment key={groupIdx}>
+                                    {group.title && (
+                                        <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'black', marginTop: groupIdx === 0 ? 0 : 20, marginBottom: 10, paddingLeft: 10 }}>
+                                            {group.title}
+                                        </div>
+                                    )}
+                                    {group.items.map((item) => {
+                                        const isActive = pathname === item.href || (item.href.includes('?') && pathname.startsWith(item.href.split('?')[0]) && pathname.includes(item.href.split('?')[1]));
+                                        return (
+                                            <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: isActive ? 'black' : '#666', background: isActive ? '#f5f5f5' : 'transparent', fontWeight: isActive ? 600 : 400 }}>
+                                                {item.icon}
+                                                {item.name}
+                                                {item.name === 'Mesajlar' && <span style={{ marginLeft: 'auto', background: '#ef4444', color: 'white', fontSize: '0.7rem', padding: '2px 6px', borderRadius: 10, fontWeight: 700 }}>2</span>}
+                                            </Link>
+                                        );
+                                    })}
+                                    {groupIdx < CreatorNavGroups.length - 1 && group.title === null && (
+                                        <div style={{ width: '100%', height: 1, background: '#eee', margin: '15px 0' }} />
+                                    )}
+                                </React.Fragment>
                             ))}
-
-                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginTop: 20, marginBottom: 10, paddingLeft: 10, letterSpacing: 0.5 }}>AFFILIATES & KAZANÇLAR</div>
-                            {CreatorNavigation.slice(2, 11).map((item) => (
-                                <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === item.href || pathname?.startsWith(item.href) ? 'black' : '#666', background: pathname === item.href ? '#f5f5f5' : 'transparent', fontWeight: pathname === item.href ? 600 : 400 }}>
-                                    {item.icon} {item.name}
-                                </Link>
-                            ))}
-
-                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginTop: 20, marginBottom: 10, paddingLeft: 10, letterSpacing: 0.5 }}>MARKA İŞBİRLİKLERİ</div>
-                            {CreatorNavigation.slice(11, 15).map((item) => {
-                                const isActive = pathname === item.href || (item.href.includes('?') && pathname.startsWith(item.href.split('?')[0]) && pathname.includes(item.href.split('?')[1]));
-                                return (
-                                    <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: isActive ? 'black' : '#666', background: isActive ? '#f5f5f5' : 'transparent', fontWeight: isActive ? 600 : 400 }}>
-                                        {item.icon}
-                                        {item.name}
-                                        {item.name === 'Mesajlar' && <span style={{ marginLeft: 'auto', background: '#ef4444', color: 'white', fontSize: '0.7rem', padding: '2px 6px', borderRadius: 10, fontWeight: 700 }}>2</span>}
-                                    </Link>
-                                );
-                            })}
-
-                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginTop: 20, marginBottom: 10, paddingLeft: 10, letterSpacing: 0.5 }}>ALIŞVERİŞ</div>
-                            {CreatorNavigation.slice(15, 17).map((item) => (
-                                <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === item.href ? 'black' : '#666', background: pathname === item.href ? '#f5f5f5' : 'transparent', fontWeight: pathname === item.href ? 600 : 400 }}>
-                                    {item.icon} {item.name}
-                                </Link>
-                            ))}
-
-                            <div style={{ width: '100%', height: 1, background: '#eee', margin: '20px 0' }} />
-
-                            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#999', marginBottom: 10, paddingLeft: 10, letterSpacing: 0.5 }}>GENEL</div>
-                            <Link href="/dashboard/talent-card" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === '/dashboard/talent-card' ? 'black' : '#666' }}>
-                                <UserCheck size={18} /> Insider Kartı
-                            </Link>
-                            <Link href="/dashboard/media-kit" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === '/dashboard/media-kit' ? 'black' : '#666' }}>
-                                <FileText size={18} /> Medya Kiti
-                            </Link>
-                            <Link href="/dashboard/connected-accounts" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === '/dashboard/connected-accounts' ? 'black' : '#666' }}>
-                                <CreditCard size={18} /> Bağlı Hesaplar
-                            </Link>
-                            <Link href="/dashboard/settings" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === '/dashboard/settings' ? 'black' : '#666' }}>
-                                <Settings size={18} /> Hesap Ayarları
-                            </Link>
-                            <Link href="/dashboard/guide" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 15px', borderRadius: 8, fontSize: '0.9rem', color: pathname === '/dashboard/guide' ? 'black' : '#666' }}>
-                                <BookOpen size={18} /> Yardım & Rehber
-                            </Link>
                         </>
                     ) : (
                         // --- STANDARD LIST FOR OTHER ROLES (Admin, Brand, Shopper) ---
@@ -208,11 +202,83 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </aside>
 
             {/* MAIN CONTENT */}
-            <main style={{ flex: 1, marginLeft: 260, padding: '40px 60px', marginTop: 80, minHeight: 'calc(100vh - 80px)' }}>
-                <div style={{ maxWidth: 1600, margin: '0 auto', width: '100%' }}>
+            <main className="dashboard-main">
+                <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
                     {children}
                 </div>
             </main>
+
+            {/* MOBILE BOTTOM NAVIGATION */}
+            <nav className="mobile-bottom-nav">
+                <Link href={user?.role === 'admin' ? '/dashboard/admin' : user?.role === 'brand' ? '/dashboard/brand' : user?.role === 'shopper' ? '/dashboard/shopper' : '/dashboard/creator'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: pathname === '/dashboard/creator' || pathname === '/dashboard' ? 'black' : '#999' }}>
+                    <Home size={22} />
+                    <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Panel</span>
+                </Link>
+                {isCreator && (
+                    <Link href="/dashboard/products" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: pathname.startsWith('/dashboard/products') ? 'black' : '#999' }}>
+                        <ShoppingBag size={22} />
+                        <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Ürünler</span>
+                    </Link>
+                )}
+                <Link href="/dashboard/chat" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: pathname.startsWith('/dashboard/chat') ? 'black' : '#999', position: 'relative' }}>
+                    <MessageCircle size={22} />
+                    <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Mesajlar</span>
+                    <span style={{ position: 'absolute', top: -3, right: 0, width: 8, height: 8, background: '#ef4444', borderRadius: '50%' }} />
+                </Link>
+                <button onClick={() => setIsMobileMenuOpen(true)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: '#999', background: 'none', border: 'none', cursor: 'pointer' }}>
+                    <Menu size={22} />
+                    <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Menü</span>
+                </button>
+            </nav>
+
+            {/* MOBILE MENU OVERLAY */}
+            {isMobileMenuOpen && (
+                <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', flexDirection: 'column' }}>
+                    <div onClick={() => setIsMobileMenuOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', opacity: 1, transition: 'opacity 0.3s' }} />
+                    <div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '80%', background: 'white', padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', animation: 'fadeIn 0.3s ease' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                            <div style={{ fontWeight: 700, fontSize: '1.2rem' }}>Menü</div>
+                            <button onClick={() => setIsMobileMenuOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                                <X size={26} color="#666" />
+                            </button>
+                        </div>
+
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                            {isCreator ? (
+                                <>
+                                    {CreatorNavGroups.map((group, groupIdx) => (
+                                        <React.Fragment key={groupIdx}>
+                                            {group.title && <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#999', marginTop: 15, marginBottom: 5 }}>{group.title}</div>}
+                                            {group.items.map((item) => (
+                                                <Link key={item.href} href={item.href} onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 10px', borderRadius: 8, fontSize: '1rem', color: pathname === item.href ? 'black' : '#444', background: pathname === item.href ? '#f5f5f5' : 'transparent', fontWeight: pathname === item.href ? 600 : 400 }}>
+                                                    {item.icon} {item.name}
+                                                </Link>
+                                            ))}
+                                            <div style={{ width: '100%', height: 1, background: '#eee', margin: '10px 0' }} />
+                                        </React.Fragment>
+                                    ))}
+                                </>
+                            ) : (
+                                <>
+                                    {navigationItems.map((item) => (
+                                        <Link key={item.href} href={item.href} onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 10px', borderRadius: 8, fontSize: '1rem', color: pathname === item.href ? 'black' : '#444', background: pathname === item.href ? '#f5f5f5' : 'transparent', fontWeight: pathname === item.href ? 600 : 400 }}>
+                                            {item.icon} {item.name}
+                                        </Link>
+                                    ))}
+                                    <div style={{ width: '100%', height: 1, background: '#eee', margin: '10px 0' }} />
+                                    <Link href="/dashboard/settings" onClick={() => setIsMobileMenuOpen(false)} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 10px', borderRadius: 8, fontSize: '1rem', color: pathname === '/dashboard/settings' ? 'black' : '#444' }}>
+                                        <Settings size={20} /> Hesap Ayarları
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+                        <button onClick={logout} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '15px 10px', fontSize: '1rem', color: '#666', border: 'none', background: 'transparent', cursor: 'pointer', marginTop: 20, textAlign: 'left', fontWeight: 600 }}>
+                            <LogOut size={20} /> Çıkış Yap
+                        </button>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

@@ -97,10 +97,10 @@ export default function CreatorProductsPage() {
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40 }}>
                 <div>
-                    <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: 10 }}>Ürünler</h1>
-                    <p style={{ color: '#666' }}>Mağazanızda sergilediğiniz ürünleri buradan yönetin.</p>
+                    <h1 style={{ fontSize: '2.5rem', fontWeight: 700, margin: '0 0 10px 0', letterSpacing: -1 }}>Ürünler</h1>
+                    <p style={{ fontSize: '1.2rem', color: '#666', margin: 0, lineHeight: 1.5 }}>Mağazan için ürün ekle ve vitrinini düzenle.</p>
                 </div>
                 <Button onClick={handleAddClick}>
                     <Plus size={18} style={{ marginRight: 8 }} />

@@ -8,7 +8,7 @@ import { useAuth } from './AuthContext';
 export const DEFAULT_THEME: ThemePreferences = {
     primaryColor: '#000000',
     backgroundColor: '#ffffff',
-    
+    fontFamily: 'inter',
     buttonStyle: 'rounded'
 };
 

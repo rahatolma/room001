@@ -30,27 +30,27 @@
     "sections": [
       {
         "id": "latest-finds",
-        "title": "Latest Finds",
+        "title": "Son Keşiflerim",
         "order": 0
       },
       {
         "id": "most-popular",
-        "title": "Most Popular",
+        "title": "En Popülerler",
         "order": 1
       },
       {
         "id": "fashion",
-        "title": "Fashion",
+        "title": "Moda",
         "order": 2
       },
       {
         "id": "beauty",
-        "title": "Beauty",
+        "title": "Güzellik",
         "order": 3
       },
       {
         "id": "baby",
-        "title": "Baby",
+        "title": "Bebek",
         "order": 4
       },
       {
@@ -60,17 +60,17 @@
       },
       {
         "id": "srg",
-        "title": "Srg",
+        "title": "Srg Seçkisi",
         "order": 6
       },
       {
         "id": "my-favorite-things-2025",
-        "title": "My Favorite Things of 2025",
+        "title": "2025 Favorilerim",
         "order": 7
       },
       {
         "id": "for-you",
-        "title": "For You",
+        "title": "Senin İçin",
         "order": 8
       }
     ],
@@ -94,12 +94,12 @@
     "sections": [
       {
         "id": "sr-favorites",
-        "title": "SRG Favorites",
+        "title": "Favorilerim",
         "order": 0
       },
       {
         "id": "recently-worn",
-        "title": "Recently Worn",
+        "title": "Son Giyilenler",
         "order": 1
       }
     ],

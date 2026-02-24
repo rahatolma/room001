@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -60,6 +60,9 @@ model User {
   
   themeConfig       String? // JSON string for customization (colors, fonts)
 
+  // Gamification & Tiers
+  xp                Int @default(0)
+
   // Metrics
   followersCount      Int @default(0)
   productsSharedCount Int @default(0)
@@ -76,6 +79,11 @@ model User {
   payouts           Payout[]
   transactions      Transaction[]
   taxInfo           TaxInfo?
+  
+  // Advanced Features
+  campaignApplications CampaignApplication[]
+  userQuests           UserQuest[]
+  feedbacks            Feedback[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,7 +126,8 @@ model Brand {
   taxId            String?
   status           String  @default("pending") // pending, approved, rejected
 
-  products Product[]
+  products  Product[]
+  campaigns Campaign[]
 
   createdAt DateTime @default(now())
 
@@ -348,3 +357,111 @@ model TaxInfo {
   
   @@map("tax_info")
 }
+
+// --- ADVANCED FEATURES (CAMPAIGNS, ANALYTICS, GAMIFICATION) ---
+
+model Campaign {
+  id          String   @id @default(uuid())
+  brandId     String
+  brand       Brand    @relation(fields: [brandId], references: [id])
+  
+  title       String
+  description String
+  requirements String? // e.g. "Min 10k followers on IG"
+  budget      Decimal? // Target budget / max budget
+  currency    String   @default("TRY")
+  
+  type        String   @default("gifting") // gifting, paid, affiliate
+  status      String   @default("active") // active, closed, draft
+
+  applications CampaignApplication[]
+
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+
+  @@map("campaigns")
+}
+
+model CampaignApplication {
+  id          String   @id @default(uuid())
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  pitch       String?  // Why they are a good fit
+  budget      Decimal? // Their proposed rate
+  currency    String   @default("TRY")
+  includeStats Boolean @default(true) // Whether they attached their media kit metrics
+
+  status      String   @default("pending") // pending, approved, rejected, completed
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, campaignId])
+  @@map("campaign_applications")
+}
+
+model DailyAnalytics {
+  id        String   @id @default(uuid())
+  userId    String?  // Nullable if tracking system-wide, but mostly for Creators
+  date      DateTime @default(dbgenerated("CURRENT_DATE"))
+
+  views     Int      @default(0)
+  clicks    Int      @default(0)
+  
+  // Sources Breakdown
+  instagramClicks Int @default(0)
+  tiktokClicks    Int @default(0)
+  directClicks    Int @default(0)
+
+  // Sales Impact
+  ordersGenerated Int     @default(0)
+  estimatedRevenue Decimal @default(0)
+
+  @@unique([userId, date])
+  @@map("daily_analytics")
+}
+
+model Quest {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  points      Int      @default(10)
+  
+  actionUrl   String?  // Where to send the user to complete it (e.g. /dashboard/media-kit)
+  type        String   // e.g. PROFILE_COMPLETION, FIRST_SALE, LINK_SOCIAL
+
+  userQuests  UserQuest[]
+
+  createdAt   DateTime @default(now())
+
+  @@map("quests")
+}
+
+model UserQuest {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questId     String
+  quest       Quest    @relation(fields: [questId], references: [id], onDelete: Cascade)
+
+  isCompleted Boolean  @default(false)
+  completedAt DateTime?
+
+  @@unique([userId, questId])
+  @@map("user_quests")
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  content   String
+  type      String   @default("suggestion") // bug, suggestion, other
+  url       String?  
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  status    String   @default("new") // new, in_progress, resolved
+}
+

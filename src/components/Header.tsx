@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Menu, X, ChevronDown, Search } from 'lucide-react';
+import { Menu, X, ChevronDown, Search, MessageSquareShare } from 'lucide-react';
 import LoginModal from './LoginModal';
 import SignupSelectionModal from './SignupSelectionModal';
 import Button from './Button';
+import FeedbackModal from './FeedbackModal';
 
 // --- MENU DATA ---
 const MENU_ITEMS = {
@@ -35,7 +36,7 @@ const MENU_ITEMS = {
     brands: {
         label: 'Markalar',
         items: [
-            { title: 'Markalar İçin', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/brands-info' },
+            { title: 'Markalar İçin', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/brands' },
             { title: 'Keşfet', description: 'Gerçek satışları yönlendiren 185.000+ zevk sahibinden oluşan ağımıza erişin.', href: '/brands/discover' },
             { title: 'Etkileşim', description: 'Premium zevk sahiplerini performans verileri ve zevk profilleri aracılığıyla bulun.', href: '/brands/engage' },
             { title: 'Takip', description: 'Kalıcı marka inşası için altyapı aracılığıyla gerçek performansı ve ROI\'yi izleyin.', href: '/brands/track' },
@@ -44,17 +45,48 @@ const MENU_ITEMS = {
     }
 };
 
+function HeaderUrlHandler({
+    setIsLoginOpen,
+    setIsSignupOpen
+}: {
+    setIsLoginOpen: (v: boolean) => void,
+    setIsSignupOpen: (v: boolean) => void
+}) {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        const loginParam = searchParams.get('login');
+        const signupParam = searchParams.get('signup');
+
+        if (loginParam === 'true') {
+            setIsLoginOpen(true);
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete('login');
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        } else if (signupParam === 'true') {
+            setIsSignupOpen(true);
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete('signup');
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+        }
+    }, [searchParams, router, pathname, setIsLoginOpen, setIsSignupOpen]);
+
+    return null;
+}
+
 export default function Header() {
     const { user, logout } = useAuth();
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSignupOpen, setIsSignupOpen] = useState(false);
+    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const [isScrolled, setIsScrolled] = useState(false);
 
     // URL handling for modals
-    const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -72,23 +104,6 @@ export default function Header() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    useEffect(() => {
-        const loginParam = searchParams.get('login');
-        const signupParam = searchParams.get('signup');
-
-        if (loginParam === 'true') {
-            setIsLoginOpen(true);
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete('login');
-            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-        } else if (signupParam === 'true') {
-            setIsSignupOpen(true);
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete('signup');
-            router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-        }
-    }, [searchParams, router, pathname]);
 
     const handleMouseEnter = (key: string) => {
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
@@ -109,10 +124,13 @@ export default function Header() {
 
     return (
         <>
+            <Suspense fallback={null}>
+                <HeaderUrlHandler setIsLoginOpen={setIsLoginOpen} setIsSignupOpen={setIsSignupOpen} />
+            </Suspense>
             <header style={{
                 position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
                 backgroundColor: isTransparan ? 'transparent' : 'white',
-                color: isTransparan ? 'white' : 'black',
+                color: 'black', // Always black text for visibility on light backgrounds
                 borderBottom: !isTransparan ? '1px solid #eaeaea' : 'none',
                 transition: 'all 0.3s ease',
                 height: 80,
@@ -142,14 +160,26 @@ export default function Header() {
                     </nav>
 
                     {/* RIGHT ACTIONS */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
+                        <button
+                            onClick={() => setIsFeedbackOpen(true)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: 6,
+                                background: 'linear-gradient(135deg, #10b981, #059669)',
+                                color: 'white', border: 'none', padding: '8px 16px', borderRadius: 30,
+                                fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer',
+                                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                            }}
+                        >
+                            <MessageSquareShare size={16} /> Beta Geri Bildirim
+                        </button>
                         {!user ? (
                             <>
                                 <button onClick={() => setIsLoginOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem' }}>
                                     Giriş Yap
                                 </button>
                                 <Button onClick={() => setIsSignupOpen(true)} style={{ background: activeDropdown || mobileMenuOpen ? 'black' : 'white', color: activeDropdown || mobileMenuOpen ? 'white' : 'black', padding: '12px 24px', borderRadius: 4 }}>
-                                    Üye Ol
+                                    Başvur
                                 </Button>
                             </>
                         ) : (
@@ -160,7 +190,7 @@ export default function Header() {
                             </Link>
                         )}
 
-                        <button onClick={() => setMobileMenuOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', marginLeft: 10 }}>
+                        <button className="mobile-only-btn" onClick={() => setMobileMenuOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', marginLeft: 10 }}>
                             <Menu size={28} />
                         </button>
                     </div>
@@ -256,9 +286,14 @@ export default function Header() {
                 isOpen={isSignupOpen}
                 onClose={() => setIsSignupOpen(false)}
                 onLoginClick={() => { setIsSignupOpen(false); setIsLoginOpen(true); }}
-                onSignupClick={() => { setIsSignupOpen(false); setIsLoginOpen(true); }}
+                onSignupClick={() => { setIsSignupOpen(false); /* redirect to shopper signup */ }}
                 onCreatorClick={() => { setIsSignupOpen(false); router.push('/become-creator'); }}
-                onBrandClick={() => { setIsSignupOpen(false); router.push('/become-brand'); }}
+                onBrandClick={() => { setIsSignupOpen(false); router.push('/brands/inquiry'); }}
+            />
+
+            <FeedbackModal
+                isOpen={isFeedbackOpen}
+                onClose={() => setIsFeedbackOpen(false)}
             />
         </>
     );

@@ -11,7 +11,10 @@ export const revalidate = 0;
 
 export default async function CreatorPage({ params }: { params: Promise<{ creator_slug: string }> }) {
     const { creator_slug } = await params;
-    const data = await getCuratorData(creator_slug);
+    const [data, session] = await Promise.all([
+        getCuratorData(creator_slug),
+        getSessionAction()
+    ]);
 
     if (!data || (data as any).error) {
         console.error("Creator page error/not found:", (data as any)?.error);
@@ -19,21 +22,15 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
     }
 
     const { user, sections, products } = data as any;
-    const session = await getSessionAction();
     const isOwner = session?.id === user.id;
 
-    // Track View
-    // Only track if user exists
+    // Track View without blocking render
     if (user?.id) {
-        try {
-            await trackEvent({
-                type: 'VIEW',
-                entityId: user.id,
-                entityType: 'PROFILE'
-            });
-        } catch (e) {
-            console.error("Tracking error (ignored):", e);
-        }
+        trackEvent({
+            type: 'VIEW',
+            entityId: user.id,
+            entityType: 'PROFILE'
+        }).catch(e => console.error("Tracking error (ignored):", e));
     }
 
     const diffName = user.fullName || user.username || creator_slug;
@@ -62,7 +59,7 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
     const theme = user.themePreferences || {
         primaryColor: 'black',
         backgroundColor: 'white',
-        
+
         buttonStyle: 'sharp'
     };
 

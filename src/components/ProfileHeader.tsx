@@ -39,16 +39,17 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         }}>
             <div className={styles.avatarContainer} style={{ marginBottom: 20 }}>
                 <div className={styles.avatar} style={{
-                    width: 100,
-                    height: 100,
+                    width: 120,
+                    height: 120,
                     borderRadius: '50%',
                     backgroundColor: '#eee',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '2rem',
+                    fontSize: '2.5rem',
                     color: '#333',
-                    border: '1px solid #ddd',
+                    border: '1px solid #eaeaea',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
                     overflow: 'hidden'
                 }}>
                     {avatarImage ? (
@@ -102,8 +103,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                         onClick={onEditClick}
                         style={{
                             border: '1px solid #e0e0e0',
-                            borderRadius: '20px',
-                            padding: '8px 16px',
+                            borderRadius: '24px',
+                            padding: '10px 20px',
                             background: '#fff',
                             fontSize: '0.85rem',
                             fontWeight: 600,
@@ -112,8 +113,12 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                             alignItems: 'center',
                             justifyContent: 'center',
                             margin: '0 auto 30px auto',
-                            gap: 8
+                            gap: 8,
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                            transition: 'all 0.2s ease'
                         }}
+                        onMouseOver={(e) => { e.currentTarget.style.borderColor = '#999'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }}
+                        onMouseOut={(e) => { e.currentTarget.style.borderColor = '#e0e0e0'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; }}
                     >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                         Vitrinini Düzenle
@@ -124,15 +129,20 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                             background: 'var(--color-primary, black)',
                             color: 'white',
                             border: 'none',
-                            borderRadius: 'var(--btn-radius, 0px)',
-                            padding: '14px 28px',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
+                            borderRadius: 'var(--btn-radius, 24px)',
+                            padding: '14px 32px',
+                            fontSize: '0.8rem',
+                            fontWeight: 700,
                             letterSpacing: '1px',
                             cursor: 'pointer',
                             marginBottom: 30,
-                            textTransform: 'uppercase'
-                        }}>
+                            textTransform: 'uppercase',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
+                            transition: 'all 0.2s'
+                        }}
+                            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                        >
                             { /* Fallback to TAKİP ET if no external text is provided */}
                             TAKİP ET
                         </button>

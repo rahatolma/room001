@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Briefcase, Share2, TrendingUp, ArrowRight, Video, ShoppingBag, Sparkles, Target } from 'lucide-react';
+import { Briefcase, Share2, TrendingUp, ArrowRight, Video, ShoppingBag, Sparkles, Target, PieChart, Award as AwardIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function VisionPage() {
@@ -39,7 +39,7 @@ export default function VisionPage() {
             </div>
 
             {/* Vision Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: 30 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 30 }}>
 
                 {/* Card 1 */}
                 <div style={{
@@ -141,6 +141,58 @@ export default function VisionPage() {
                         </p>
                         <Link href="/dashboard/brand-match" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#000', fontWeight: 600, textDecoration: 'none' }}>
                             Markaları Keşfet <ArrowRight size={18} />
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Card 5 (New - Analytics) */}
+                <div style={{
+                    background: 'white', border: '1px solid #eee', borderRadius: 20, overflow: 'hidden',
+                    transition: 'transform 0.2s', cursor: 'default'
+                }}>
+                    <div style={{ height: 180, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+                        <div style={{
+                            width: 70, height: 70, background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)',
+                            borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 10px 30px rgba(16, 185, 129, 0.3)'
+                        }}>
+                            <PieChart size={35} color="white" />
+                        </div>
+                    </div>
+                    <div style={{ padding: 25 }}>
+                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 15 }}>Kreatör Analizleri</h3>
+                        <p style={{ color: '#666', lineHeight: 1.5, marginBottom: 20, fontSize: '0.9rem' }}>
+                            Satışından trafiğine, hangi platformun (Instagram/TikTok) daha çok kazandırdığını yapay zeka öngörüleriyle anlık takip et.
+                        </p>
+                        <Link href="/dashboard/analytics" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#10b981', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>
+                            Analizlere Git <ArrowRight size={16} />
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Card 6 (New - Gamification) */}
+                <div style={{
+                    background: 'white', border: '1px solid #eee', borderRadius: 20, overflow: 'hidden',
+                    transition: 'transform 0.2s', cursor: 'default'
+                }}>
+                    <div style={{ height: 180, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+                        <div style={{
+                            width: 70, height: 70, background: 'linear-gradient(135deg, #f59e0b 0%, #b45309 100%)',
+                            borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 10px 30px rgba(245, 158, 11, 0.3)'
+                        }}>
+                            <AwardIcon size={35} color="white" />
+                        </div>
+                    </div>
+                    <div style={{ padding: 25 }}>
+                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 15 }}>Oyunlaştırılmış Büyüme</h3>
+                        <p style={{ color: '#666', lineHeight: 1.5, marginBottom: 20, fontSize: '0.9rem' }}>
+                            Görevleri tamamla, XP kazan ve seviye atla. Her yeni seviyede platform içi dev ayrıcalıkların kilidini aç.
+                        </p>
+                        <Link href="/dashboard/tier" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#f59e0b', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>
+                            Seviyeleri Gör <ArrowRight size={16} />
                         </Link>
                     </div>
                 </div>

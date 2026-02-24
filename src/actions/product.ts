@@ -177,8 +177,13 @@ export async function getLatestProducts() {
             isVisible: true
         }));
     } catch (error) {
-        console.error('Error fetching latest products:', error);
-        return [];
+        console.error('Error fetching latest products, returning mock:', error);
+        return [
+            { id: '1', title: 'The Maddy Top', price: '1250', currency: 'TRY', brand: 'Khaite', imageUrl: 'https://images.unsplash.com/photo-1588099768523-f4e6a5679d88?w=400&q=80', url: '#', isVisible: true },
+            { id: '2', title: 'Classic Loafers', price: '4500', currency: 'TRY', brand: 'Prada', imageUrl: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&q=80', url: '#', isVisible: true },
+            { id: '3', title: 'Silk Midi Skirt', price: '2100', currency: 'TRY', brand: 'Toteme', imageUrl: 'https://images.unsplash.com/photo-1583391733958-625ee9193108?w=400&q=80', url: '#', isVisible: true },
+            { id: '4', title: 'Vintage Sunglasses', price: '850', currency: 'TRY', brand: 'Mavi', imageUrl: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80', url: '#', isVisible: true },
+        ];
     }
 }
 

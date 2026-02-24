@@ -58,7 +58,7 @@ export default function ShopperDashboardHome() {
                 </div>
                 <div style={{ padding: 40, background: '#f5f5f5', borderRadius: 16, textAlign: 'center' }}>
                     <p>Daha fazla içerik üreticisini takip ederek akışınızı kişiselleştirin.</p>
-                    <Link href="/dashboard/brand-match" style={{ marginTop: 20, display: 'inline-flex', padding: '12px 24px', background: 'black', color: 'white', borderRadius: 30, textDecoration: 'none', fontWeight: 600 }}>
+                    <Link href="/creators" style={{ marginTop: 20, display: 'inline-flex', padding: '12px 24px', background: 'black', color: 'white', borderRadius: 30, textDecoration: 'none', fontWeight: 600 }}>
                         Insider'ları Keşfet
                     </Link>
                 </div>

@@ -104,7 +104,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             };
             await setMockSessionAction(brandUser);
             setUser(brandUser);
-            router.push('/dashboard/brand');
+            router.push('/brand/dashboard');
             return true;
         }
 

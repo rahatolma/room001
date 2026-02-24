@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Search, SlidersHorizontal, ArrowUpDown, Paperclip, Send, MoreVertical, CheckCircle2 } from 'lucide-react';
-import { getInitials } from '@/utils/stringUtils';
 
 // --- MOCK BRAND DATA ---
 

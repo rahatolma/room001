@@ -1,7 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Award, Lock, CheckCircle, Info } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { getUserQuests, completeQuest } from '@/actions/gamification';
+import toast from 'react-hot-toast';
 
 const TIERS = [
     { name: 'Enthusiast', minScore: 0, color: '#9e9e9e', benefits: ['Insider Erişim', 'Temel Analitik'] },
@@ -24,21 +27,25 @@ const ProgressBar = ({ progress }: { progress: number }) => (
 );
 
 export default function CreatorTierPage() {
-    // GAMIFICATION STATE
-    const [quests, setQuests] = React.useState([
-        { id: 'q1', title: 'Profilini Tamamla', desc: 'Biyografi ve iletişim bilgilerini gir.', points: 10, completed: true, link: '/dashboard/settings' },
-        { id: 'q2', title: 'İlk Ürün Seçkisini (Koleksiyon) Oluştur', desc: 'Takipçilerin için 5 favori ürününü bir araya getir.', points: 15, completed: true, link: '/dashboard/store' },
-        { id: 'q3', title: 'Medya Kitini Doldur', desc: 'Audience verilerini girerek markalara kendini göster.', points: 15, completed: false, link: '/dashboard/media-kit' },
-        { id: 'q4', title: 'TikTok veya Instagram Bağla', desc: 'Analitik için sosyal hesaplarını bağla.', points: 20, completed: false, link: '/dashboard/connected-accounts' },
-        { id: 'q5', title: 'İlk Satışını (Dönüşüm) Gerçekleştir', desc: 'Linklerinden ilk komisyonunu kazan.', points: 30, completed: false, link: '/dashboard/analytics' },
-    ]);
+    const { user } = useAuth();
+    const [quests, setQuests] = useState<any[]>([]);
+    const [claimedRewards, setClaimedRewards] = useState<string[]>([]);
+    const [currentScore, setCurrentScore] = useState(0);
+    const [loading, setLoading] = useState(true);
 
-    const [claimedRewards, setClaimedRewards] = React.useState<string[]>([]);
-
-    // CALCULATE SCORE DYNAMICALLY BASED ON QUESTS
-    const baseScore = 15; // Starting points
-    const earnedPoints = quests.filter(q => q.completed).reduce((sum, q) => sum + q.points, 0);
-    const currentScore = baseScore + earnedPoints;
+    useEffect(() => {
+        if (!user?.id) return;
+        async function fetchQuests() {
+            setLoading(true);
+            const res = await getUserQuests(user!.id);
+            if (res.success && res.quests) {
+                setQuests(res.quests);
+                setCurrentScore(res.currentXp || 0);
+            }
+            setLoading(false);
+        }
+        fetchQuests();
+    }, [user?.id]);
 
     const currentTierIndex = TIERS.findIndex((t, i) => currentScore >= t.minScore && (TIERS[i + 1] ? currentScore < TIERS[i + 1].minScore : true));
     const currentTier = TIERS[currentTierIndex];
@@ -53,22 +60,30 @@ export default function CreatorTierPage() {
     const handleClaim = (tierName: string) => {
         if (!claimedRewards.includes(tierName)) {
             setClaimedRewards([...claimedRewards, tierName]);
-            // Dynamically import toast if needed, assuming it's available globally or we can use a native alert for simplicity in this mock
-            // But we can import it at the top
-            import('react-hot-toast').then(m => m.toast.success(`${tierName} ödülleri kalıcı olarak açıldı! 🎉`));
+            toast.success(`${tierName} ödülleri kalıcı olarak açıldı! 🎉`);
         }
     };
 
-    const handleQuestClick = (quest: any) => {
-        if (quest.completed) return;
-        // Simulate completing a quest for demo purposes
-        const newQuests = quests.map(q => q.id === quest.id ? { ...q, completed: true } : q);
-        setQuests(newQuests);
-        import('react-hot-toast').then(m => m.toast.success(`Tebrikler! +${quest.points} XP Kazandın! 🏆`));
+    const handleQuestClick = async (quest: any) => {
+        if (quest.completed || !user?.id) return;
+
+        const loadingToast = toast.loading('Görev tamamlanıyor...');
+        const res = await completeQuest(user.id, quest.id);
+
+        if (res.success) {
+            toast.success(`Tebrikler! +${res.addedXp} XP Kazandın! 🏆`, { id: loadingToast });
+            // Optimistic update
+            setQuests(quests.map(q => q.id === quest.id ? { ...q, completed: true } : q));
+            setCurrentScore(prev => prev + (res.addedXp || 0));
+        } else {
+            toast.error(res.error || 'Bir hata oluştu.', { id: loadingToast });
+        }
     };
 
+    if (loading) return <div style={{ padding: 50, textAlign: 'center' }}>Insider verileri yükleniyor...</div>;
+
     return (
-        <div style={{ maxWidth: 1000, paddingBottom: 60 }}>
+        <div style={{ paddingBottom: 60 }}>
             {/* GAMIFIED HEADER ZONE */}
             <div style={{
                 background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
@@ -78,6 +93,8 @@ export default function CreatorTierPage() {
                 marginBottom: 30,
                 boxShadow: '0 20px 40px rgba(15, 23, 42, 0.2)',
                 display: 'flex',
+                flexWrap: 'wrap',
+                gap: 30,
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
@@ -93,7 +110,7 @@ export default function CreatorTierPage() {
                     </p>
                 </div>
 
-                <div style={{ width: 350, background: 'rgba(255,255,255,0.05)', padding: 25, borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ flex: '1 1 300px', maxWidth: '100%', background: 'rgba(255,255,255,0.05)', padding: 25, borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
                         <span style={{ fontSize: '2.5rem', fontWeight: 800 }}>{currentScore} <span style={{ fontSize: '1rem', fontWeight: 500, color: '#94a3b8' }}>XP</span></span>
 
@@ -115,7 +132,7 @@ export default function CreatorTierPage() {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: 30 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 30 }}>
                 {/* LEFT COL: QUESTS */}
                 <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>

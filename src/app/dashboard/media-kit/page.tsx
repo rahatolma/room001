@@ -84,7 +84,7 @@ export default function MediaKitPage() {
     };
 
     return (
-        <div className="media-kit-container" style={{ maxWidth: 1000, margin: '0 auto', paddingBottom: 100, }}>
+        <div className="media-kit-container" style={{ paddingBottom: 100, }}>
             <style jsx global>{`
                 @media print {
                     @page { margin: 0; size: auto; }

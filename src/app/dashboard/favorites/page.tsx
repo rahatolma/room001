@@ -4,6 +4,8 @@ import { getUserFavorites } from '@/actions/favorite';
 import ProductGrid from '@/components/landing/ProductGrid';
 import { Heart } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function FavoritesPage() {
     const favorites = await getUserFavorites();
 

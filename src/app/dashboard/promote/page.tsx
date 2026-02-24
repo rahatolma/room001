@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import Button from '@/components/Button';
 import { createPaymentIntent, completePaymentSimulation } from '@/actions/payment';
 
+export const dynamic = 'force-dynamic';
+
 export default function PromotePage() {
     const [selectedPackage, setSelectedPackage] = useState<'boost_1_week' | 'boost_1_month' | null>(null);
     const [step, setStep] = useState(1); // 1: Select, 2: Pay, 3: Success
@@ -42,13 +44,15 @@ export default function PromotePage() {
 
     return (
         <div style={{ paddingBottom: 60 }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: 10 }}>Öne Çıkar</h1>
-            <p style={{ color: '#666', marginBottom: 40, fontSize: '1.2rem' }}>
-                Profilini Room001 ana sayfasında milyonlara göster. Küratörlüğünü bir üst seviyeye taşı.
-            </p>
+            <div style={{ marginBottom: 40 }}>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: 700, margin: '0 0 10px 0', letterSpacing: -1 }}>Öne Çıkar</h1>
+                <p style={{ fontSize: '1.2rem', color: '#666', margin: 0, lineHeight: 1.5 }}>
+                    Profilini Room001 ana sayfasında milyonlara göster. Küratörlüğünü bir üst seviyeye taşı.
+                </p>
+            </div>
 
             {step === 1 && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 30 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 30 }}>
                     {/* Package 1 */}
                     <div style={{
                         border: '1px solid #ddd',

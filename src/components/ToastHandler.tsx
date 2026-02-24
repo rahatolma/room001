@@ -1,10 +1,10 @@
 'use client';
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { Toaster, toast } from 'sonner';
 
-export default function ToastHandler({ toastParam }: { toastParam?: string }) {
+function ToastLogic({ toastParam }: { toastParam?: string }) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -23,5 +23,14 @@ export default function ToastHandler({ toastParam }: { toastParam?: string }) {
         }
     }, [toastParam, router, pathname, searchParams]);
 
-    return <Toaster richColors />;
+    return null;
+}
+
+export default function ToastHandler({ toastParam }: { toastParam?: string }) {
+    return (
+        <Suspense fallback={null}>
+            <ToastLogic toastParam={toastParam} />
+            <Toaster richColors />
+        </Suspense>
+    );
 }

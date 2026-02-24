@@ -354,3 +354,70 @@ export async function getMediaKitData(userId: string) {
         return null;
     }
 }
+
+// --- NEW: Daily Analytics (Insights Dashboard) ---
+export async function getAnalyticsData(userId: string) {
+    if (!userId) return { success: false, error: 'Unauthorized' };
+
+    try {
+        // In a real app, this would aggregate `DailyAnalytics` for the last 30 days.
+        // For demonstration, we'll fetch existing records or return simulated data if none exist.
+
+        let analytics = await prisma.dailyAnalytics.findMany({
+            where: { userId },
+            orderBy: { date: 'asc' },
+            take: 30
+        });
+
+        // Seed some mock data if empty for demo purposes
+        if (analytics.length === 0) {
+            // Generating 30 days of dummy data ending today
+            const dummyData = [];
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+
+                dummyData.push({
+                    userId,
+                    date,
+                    views: Math.floor(Math.random() * 5000) + 1000,
+                    clicks: Math.floor(Math.random() * 800) + 100,
+                    instagramClicks: Math.floor(Math.random() * 500) + 50,
+                    tiktokClicks: Math.floor(Math.random() * 300) + 20,
+                    directClicks: Math.floor(Math.random() * 100) + 5,
+                    ordersGenerated: Math.floor(Math.random() * 10) + 1,
+                    estimatedRevenue: Math.floor(Math.random() * 500) + 50
+                });
+            }
+
+            // SQLite doesn't support createMany with array objects properly in Prisma
+            await Promise.all(dummyData.map(data => prisma.dailyAnalytics.create({ data })));
+
+            analytics = await prisma.dailyAnalytics.findMany({
+                where: { userId },
+                orderBy: { date: 'asc' }
+            });
+        }
+
+        // Aggregate Totals
+        const totals = analytics.reduce((acc: any, curr: any) => ({
+            views: acc.views + curr.views,
+            clicks: acc.clicks + curr.clicks,
+            instagramClicks: acc.instagramClicks + curr.instagramClicks,
+            tiktokClicks: acc.tiktokClicks + curr.tiktokClicks,
+            directClicks: acc.directClicks + curr.directClicks,
+            ordersGenerated: acc.ordersGenerated + curr.ordersGenerated,
+            revenue: Number(acc.revenue) + Number(curr.estimatedRevenue)
+        }), {
+            views: 0, clicks: 0,
+            instagramClicks: 0, tiktokClicks: 0, directClicks: 0,
+            ordersGenerated: 0, revenue: 0
+        });
+
+        return { success: true, timeline: analytics, totals };
+
+    } catch (error: any) {
+        console.error('Error fetching analytics:', error);
+        return { success: false, error: 'Analitik verileri yüklenirken bir hata oluştu.' };
+    }
+}
