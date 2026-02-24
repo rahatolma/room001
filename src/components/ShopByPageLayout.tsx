@@ -25,14 +25,24 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
     const [sortBy, setSortBy] = useState('recommended');
 
     // Filter items locally based on search query
-    const filteredItems = items.filter(item =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredItems = items.filter(item => {
+        const titleStr = item?.title ? String(item.title) : '';
+        const searchStr = searchQuery ? String(searchQuery) : '';
+        return titleStr.toLowerCase().includes(searchStr.toLowerCase());
+    });
 
     // Mock sorting
     const sortedItems = [...filteredItems].sort((a, b) => {
-        if (sortBy === 'newest') return b.id.localeCompare(a.id);
-        if (sortBy === 'popular') return a.title.localeCompare(b.title);
+        if (sortBy === 'newest') {
+            const idA = a?.id ? String(a.id) : '';
+            const idB = b?.id ? String(b.id) : '';
+            return idB.localeCompare(idA);
+        }
+        if (sortBy === 'popular') {
+            const titleA = a?.title ? String(a.title) : '';
+            const titleB = b?.title ? String(b.title) : '';
+            return titleA.localeCompare(titleB);
+        }
         return 0;
     });
     // Helper for Turkish grammar (roughly)
