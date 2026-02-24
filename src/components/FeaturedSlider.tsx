@@ -10,9 +10,10 @@ import ImageFallback from './ImageFallback';
 interface FeaturedSliderProps {
     items: GridItem[];
     type: 'curator' | 'circle' | 'brand' | 'category';
+    onSearchChange?: (query: string) => void;
 }
 
-const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
+const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type, onSearchChange }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
     if (!items || items.length === 0) return null;
@@ -169,29 +170,39 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type }) => {
                         </motion.p>
                     </AnimatePresence>
 
-                    {/* Expanded Search Button Action */}
+                    {/* Expanded Search Input Action */}
                     <div style={{ marginTop: 10 }}>
-                        <Link href={`/search?type=${type === 'curator' ? 'user' : type}`} style={{ textDecoration: 'none' }}>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                background: '#f8f8f8',
-                                border: '1px solid #eaeaea',
-                                padding: '14px 24px',
-                                borderRadius: 30,
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                                maxWidth: 400
-                            }}
-                                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.background = '#fff'; }}
-                                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.background = '#f8f8f8'; }}
-                            >
-                                <Search size={20} color="#666" style={{ marginRight: 15 }} />
-                                <span style={{ color: '#666', fontSize: '0.95rem', fontWeight: 500, flex: 1 }}>
-                                    {getSearchPlaceholder(type)}
-                                </span>
-                            </div>
-                        </Link>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            background: '#f8f8f8',
+                            border: '1px solid #eaeaea',
+                            padding: '14px 24px',
+                            borderRadius: 30,
+                            transition: 'all 0.2s ease',
+                            maxWidth: 400
+                        }}
+                            onMouseOver={(e) => { e.currentTarget.style.borderColor = '#111'; e.currentTarget.style.background = '#fff'; }}
+                            onMouseOut={(e) => { e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.background = '#f8f8f8'; }}
+                        >
+                            <Search size={20} color="#666" style={{ marginRight: 15 }} />
+                            <input
+                                type="text"
+                                placeholder={getSearchPlaceholder(type)}
+                                onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+                                style={{
+                                    border: 'none',
+                                    background: 'transparent',
+                                    outline: 'none',
+                                    color: '#666',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 500,
+                                    flex: 1,
+                                    fontFamily: 'var(--font-dm-sans), sans-serif',
+                                    width: '100%'
+                                }}
+                            />
+                        </div>
                     </div>
                 </div>
 

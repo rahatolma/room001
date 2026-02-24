@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import ImageFallback from './ImageFallback';
 import Link from 'next/link';
 import { GridItem } from '@/types/shop';
@@ -19,6 +21,20 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
     items,
     type
 }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('recommended');
+
+    // Filter items locally based on search query
+    const filteredItems = items.filter(item =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Mock sorting
+    const sortedItems = [...filteredItems].sort((a, b) => {
+        if (sortBy === 'newest') return b.id.localeCompare(a.id);
+        if (sortBy === 'popular') return a.title.localeCompare(b.title);
+        return 0;
+    });
     // Helper for Turkish grammar (roughly)
     const getTypeLabel = (type: string) => {
         switch (type) {
@@ -49,29 +65,55 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
     return (
         <div style={{ paddingBottom: 80, backgroundColor: '#fff' }}>
             {/* NEW FULL WIDTH FEATURED SLIDER */}
-            <FeaturedSlider items={featuredItems} type={type} />
+            <FeaturedSlider items={featuredItems} type={type} onSearchChange={setSearchQuery} />
 
             <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
 
                 {/* Grid Section */}
                 <div style={{ padding: '0' }}>
-                    <h3 style={{
-
-                        fontWeight: 700,
-                        fontSize: '1.5rem',
-                        marginBottom: 40,
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                         borderTop: '1px solid #eee',
-                        paddingTop: 40
+                        paddingTop: 40,
+                        marginBottom: 40
                     }}>
-                        Öne Çıkan {getTypeLabel(type)}
-                    </h3>
+                        <h3 style={{ fontWeight: 700, fontSize: '1.5rem', margin: 0 }}>
+                            {getTypeLabel(type)}
+                        </h3>
+
+                        {/* Sorting Dropdown */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <span style={{ fontSize: '0.9rem', color: '#666', fontWeight: 500 }}>Sıralama:</span>
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                style={{
+                                    padding: '8px 16px',
+                                    borderRadius: 30,
+                                    border: '1px solid #eaeaea',
+                                    fontFamily: 'var(--font-dm-sans)',
+                                    fontSize: '0.9rem',
+                                    background: '#f8f8f8',
+                                    color: '#111',
+                                    outline: 'none',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <option value="recommended">Önerilenler</option>
+                                <option value="popular">En Çok Tıklananlar</option>
+                                <option value="newest">En Yeniler</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                         gap: 40
                     }}>
-                        {items.map(item => (
+                        {sortedItems.map(item => (
                             <Link key={item.id} href={getItemLink(item)} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <div style={{ position: 'relative', aspectRatio: '3/4', marginBottom: 20, overflow: 'hidden' }}>
                                     <ImageFallback
