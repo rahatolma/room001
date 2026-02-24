@@ -139,7 +139,7 @@ export default function Header() {
                 <div style={{ maxWidth: pathname?.startsWith('/dashboard') ? '100%' : 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
                     {/* LOGO */}
-                    <Link href="/" style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '2.2rem', fontWeight: 800, letterSpacing: -1, textDecoration: 'none', color: 'inherit' }}>
+                    <Link href="/" className="header-logo" style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontWeight: 800, letterSpacing: -1, textDecoration: 'none', color: 'inherit' }}>
                         ROOM001
                     </Link>
 
@@ -176,7 +176,7 @@ export default function Header() {
                         </button>
                         {!user ? (
                             <>
-                                <button onClick={() => setIsLoginOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem' }}>
+                                <button className="mobile-hide-btn" onClick={() => setIsLoginOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem' }}>
                                     Giriş Yap
                                 </button>
                                 <Button onClick={() => setIsSignupOpen(true)} style={{ background: activeDropdown || mobileMenuOpen ? 'black' : 'white', color: activeDropdown || mobileMenuOpen ? 'white' : 'black', padding: '12px 24px', borderRadius: 4 }}>

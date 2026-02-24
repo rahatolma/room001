@@ -249,6 +249,12 @@ h6 {
 }
 
 /* Responsive Grids */
+.responsive-full-image-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+
 .responsive-kpi-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -318,6 +324,10 @@ h6 {
   :root {
     --page-padding-x: 10px;
   }
+
+  .header-logo {
+    font-size: 1.8rem !important;
+  }
 }
 
 @media (max-width: 900px) {
@@ -333,6 +343,10 @@ h6 {
 
   .beta-feedback-btn {
     padding: 8px 10px !important;
+  }
+
+  .mobile-hide-btn {
+    display: none !important;
   }
 }
 
