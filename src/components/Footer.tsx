@@ -70,7 +70,7 @@ const Footer = () => {
             <div className={styles.bottomBar}>
                 <div className={styles.container} style={{ alignItems: 'center', marginTop: 0 }}>
                     <div>
-                        <span className={styles.logo}>room001</span>
+                        <span className={styles.logo} style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '1.8rem', fontWeight: 800, letterSpacing: -1 }}>ROOM001</span>
                         <p className={styles.copyright}>© Copyright 2026 Room001, Inc. All Rights Reserved.</p>
                     </div>
                 </div>

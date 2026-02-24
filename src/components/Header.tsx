@@ -139,8 +139,8 @@ export default function Header() {
                 <div style={{ maxWidth: pathname?.startsWith('/dashboard') ? '100%' : 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
                     {/* LOGO */}
-                    <Link href="/" style={{ fontSize: '2rem', fontWeight: 700, letterSpacing: -1, textDecoration: 'none', color: 'inherit' }}>
-                        room001
+                    <Link href="/" style={{ fontFamily: 'var(--font-dm-sans), sans-serif', fontSize: '2.2rem', fontWeight: 800, letterSpacing: -1, textDecoration: 'none', color: 'inherit' }}>
+                        ROOM001
                     </Link>
 
                     {/* DESKTOP NAV */}
