@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { User } from '@/types';
 
-const COOKIE_NAME = 'shopmy_session';
+const COOKIE_NAME = 'room001_session';
 
 // Helper to map Prisma User to Frontend User Type
 function mapPrismaUser(user: any): User {
@@ -159,7 +159,7 @@ export async function getSessionAction(): Promise<User | null> {
     if (userId === 'admin_1') {
         return {
             id: 'admin_1',
-            email: 'admin@shopmy.tr',
+            email: 'admin@room001.tr',
             fullName: 'Platform Yöneticisi',
             username: 'admin',
             role: 'admin',
@@ -169,7 +169,7 @@ export async function getSessionAction(): Promise<User | null> {
     if (userId === 'shopper_1') {
         return {
             id: 'shopper_1',
-            email: 'shopper@shopmy.tr',
+            email: 'shopper@room001.tr',
             fullName: 'Alışveriş Tutkunu',
             username: 'shopaholic',
             role: 'shopper',
@@ -179,7 +179,7 @@ export async function getSessionAction(): Promise<User | null> {
     if (userId === 'creator_1') {
         return {
             id: 'creator_1',
-            email: 'insider@shopmy.tr',
+            email: 'insider@room001.tr',
             fullName: 'Asena Sarıbatur',
             username: 'asenasaribatur',
             role: 'creator',
@@ -190,7 +190,7 @@ export async function getSessionAction(): Promise<User | null> {
     if (userId === 'brand_1') {
         return {
             id: 'brand_1',
-            email: 'brand@shopmy.tr',
+            email: 'brand@room001.tr',
             fullName: 'Beymen',
             username: 'beymen',
             role: 'brand',

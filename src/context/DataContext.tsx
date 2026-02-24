@@ -17,7 +17,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const [collections, setCollections] = useState<Collection[]>([]);
 
     useEffect(() => {
-        const stored = localStorage.getItem('shopmy_collections');
+        const stored = localStorage.getItem('room001_collections');
         if (stored) {
             setCollections(JSON.parse(stored));
         } else {
@@ -41,14 +41,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
                 }
             ];
             setCollections(INITIAL_COLLECTIONS);
-            localStorage.setItem('shopmy_collections', JSON.stringify(INITIAL_COLLECTIONS));
+            localStorage.setItem('room001_collections', JSON.stringify(INITIAL_COLLECTIONS));
         }
     }, []);
 
     const addCollection = (collection: Collection) => {
         const updated = [...collections, collection];
         setCollections(updated);
-        localStorage.setItem('shopmy_collections', JSON.stringify(updated));
+        localStorage.setItem('room001_collections', JSON.stringify(updated));
     };
 
     const getCollectionsByCreator = (creatorId: string) => {
@@ -76,7 +76,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         });
 
         setCollections(updatedCollections);
-        localStorage.setItem('shopmy_collections', JSON.stringify(updatedCollections));
+        localStorage.setItem('room001_collections', JSON.stringify(updatedCollections));
     };
 
     const updateCollection = (id: string, updates: Partial<Collection>) => {
@@ -87,7 +87,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
             return col;
         });
         setCollections(updatedCollections);
-        localStorage.setItem('shopmy_collections', JSON.stringify(updatedCollections));
+        localStorage.setItem('room001_collections', JSON.stringify(updatedCollections));
     };
 
     return (

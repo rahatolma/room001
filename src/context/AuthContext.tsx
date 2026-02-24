@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (checkInput === '05551111111' || checkInput === '5551111111') {
             const adminUser: User = {
                 id: 'admin_1',
-                email: 'admin@shopmy.tr',
+                email: 'admin@room001.tr',
                 fullName: 'Platform Yöneticisi',
                 username: 'admin',
                 role: 'admin',
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (checkInput === '05552222222' || checkInput === '5552222222') {
             const shopperUser: User = {
                 id: 'shopper_1',
-                email: 'shopper@shopmy.tr',
+                email: 'shopper@room001.tr',
                 fullName: 'Alışveriş Tutkunu',
                 username: 'shopaholic',
                 role: 'shopper',
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (checkInput === '05553333333' || checkInput === '5553333333') {
             const creatorUser: User = {
                 id: 'creator_1',
-                email: 'insider@shopmy.tr',
+                email: 'insider@room001.tr',
                 fullName: 'Asena Sarıbatur',
                 username: 'asenasaribatur',
                 role: 'creator',
@@ -95,7 +95,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (checkInput === '05554444444' || checkInput === '5554444444') {
             const brandUser: User = {
                 id: 'brand_1',
-                email: 'brand@shopmy.tr',
+                email: 'brand@room001.tr',
                 fullName: 'Beymen',
                 username: 'beymen',
                 role: 'brand',

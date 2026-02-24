@@ -106,7 +106,7 @@ export default function SettingsPage() {
                 <div>
                     <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, marginBottom: 8 }}>Amazon Affiliate Kodu</label>
                     <div style={{ fontSize: '0.75rem', color: '#999', marginBottom: 8 }}>
-                        Kendi Amazon affiliate kodunuzu kullanmak isterseniz aşağıya girin. ShopMy linklerini otomatik olarak dönüştüreceğiz.
+                        Kendi Amazon affiliate kodunuzu kullanmak isterseniz aşağıya girin. Uygulama içi linkleri otomatik olarak dönüştüreceğiz.
                     </div>
                     <input
                         type="text"

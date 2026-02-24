@@ -130,7 +130,7 @@ export default function HeroSection() {
                     </div>
                 </div>
 
-                {/* Imagery / UI Mockup representing LTK/ShopMy profile */}
+                {/* Imagery / UI Mockup representing LTK/Room001 profile */}
                 <div style={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center', position: 'relative' }}>
                     <div style={{
                         position: 'relative',

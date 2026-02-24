@@ -126,7 +126,7 @@ export default function BecomeCreatorPage() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 40 }}>
                     {[
                         { icon: <LinkIcon size={30} />, title: 'Güçlü Affiliate Linkleri', desc: 'Tek bir premium link oluşturun. Takipçileriniz tıkladığında Room001 alandan sapmadan, en yüksek dönüşüm oranıyla satın almayı tamamlar.' },
-                        { icon: <Sparkles size={30} />, title: 'Zarif Mağaza Vitrini', desc: 'ShopMyt tarzı kişiselleştirilmiş bir mağaza oluşturun. Ürünlerinizi, koleksiyonlarınızı ve sosyal medya postlarınızı tek bir şık adreste toplayın.' },
+                        { icon: <Sparkles size={30} />, title: 'Zarif Mağaza Vitrini', desc: 'Global standartlarda kişiselleştirilmiş bir mağaza oluşturun. Ürünlerinizi, koleksiyonlarınızı ve sosyal medya postlarınızı tek bir şık adreste toplayın.' },
                         { icon: <Target size={30} />, title: 'Premium Marka Eşleşmeleri', desc: 'Ağa katıldığınız an, Dior, Sephora, Dyson gibi kurumsal markaların keşfet paneline girersiniz. Size özel kampanyalar ve hediye ürün teklifleri alın.' },
                         { icon: <TrendingUp size={30} />, title: 'Gelişmiş Analitik', desc: 'Hangi ürünün daha çok sattığını, kitlenizin hangi saatlerde daha çok tıkladığını gerçek zamanlı olarak ölçün ve stratejinizi geliştirin.' }
                     ].map((feat, idx) => (

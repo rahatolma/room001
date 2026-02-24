@@ -284,7 +284,7 @@ export default function ShopSectionEditorModal({ isOpen, onClose, section, onSav
                                     </div>
                                     <div style={{ textAlign: 'center' }}>
                                         <div style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: 5 }}>Katalogdan Seç</div>
-                                        <div style={{ fontSize: '0.9rem', color: '#666' }}>ShopMy partner markalarının ürünleri arasında arama yapın</div>
+                                        <div style={{ fontSize: '0.9rem', color: '#666' }}>Room001 partner markalarının ürünleri arasında arama yapın</div>
                                     </div>
                                 </button>
                             </div>
@@ -358,7 +358,7 @@ export default function ShopSectionEditorModal({ isOpen, onClose, section, onSav
                                                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)', display: 'flex', alignItems: 'flex-end', padding: 15 }}>
                                                     <div style={{ color: 'white' }}>
                                                         <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{brand.name}</div>
-                                                        <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>ShopMy Partner</div>
+                                                        <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>Room001 Partner</div>
                                                     </div>
                                                     <div style={{ marginLeft: 'auto', background: 'white', color: 'black', padding: '4px 8px', borderRadius: 4, fontSize: '0.8rem', fontWeight: 700 }}>
                                                         %{Number(brand.commissionRate)}
@@ -467,7 +467,7 @@ export default function ShopSectionEditorModal({ isOpen, onClose, section, onSav
                                                             %{product.brand?.commissionRate || 10} komisyon
                                                         </div>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.75rem', fontWeight: 600, color: '#10b981', marginTop: 4 }}>
-                                                            <CheckCircle2 size={12} fill="#10b981" color="white" /> ShopMy Partner
+                                                            <CheckCircle2 size={12} fill="#10b981" color="white" /> Room001 Partner
                                                         </div>
                                                     </div>
 

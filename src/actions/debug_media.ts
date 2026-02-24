@@ -50,7 +50,7 @@ export async function ensureMockUserExists() {
                 bio: 'Moda ve yaşam tarzı içerikleri üretiyorum. Estetik ve minimal tasarımları seviyorum.',
                 niche: 'Moda & Tasarım',
                 location: 'İstanbul, TR',
-                websiteUrl: 'https://shopmy.tr/@asenasaribatur',
+                websiteUrl: 'https://room001.com/@asenasaribatur',
                 productsSharedCount: 142,
                 profileViewCount: 15403,
                 instagramFollowerCount: 125000

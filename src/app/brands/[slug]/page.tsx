@@ -12,7 +12,7 @@ export default async function BrandPage({ params }: { params: Promise<{ slug: st
     const displayProducts = brand.products.map((p: any) => ({
         ...p,
         brand: brand.name, // Ensure brand name is set
-        curator: p.curator || { name: 'ShopMy', avatar: '' }
+        curator: p.curator || { name: 'Room001', avatar: '' }
     }));
 
     return (

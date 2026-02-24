@@ -17,7 +17,7 @@ export default function PublicMediaKitPage() {
         // Here we simulate fetching the user data from localStorage if it matches, 
         // or fallback to mock data
 
-        const storedUser = localStorage.getItem('shopmy_user');
+        const storedUser = localStorage.getItem('room001_user');
         let userData = storedUser ? JSON.parse(storedUser) : null;
 
         // simplistic: if the logged in user matches the slug, show their data

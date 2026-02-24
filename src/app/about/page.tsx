@@ -18,7 +18,7 @@ export default function AboutPage() {
                         Room001, Türkiye'de markalar ve içerik üreticileri (Insider'lar) arasındaki uçurumu kapatmak üzere doğdu. Geleneksel reklamcılığın güvenilmez hissettirdiği günümüzde biz, samimi önerilere ve kürasyona inanıyoruz.
                     </p>
                     <p style={{ fontSize: '1.1rem', color: '#555', lineHeight: 1.8, marginBottom: '30px' }}>
-                        Tıpkı ShopMy veya LTK gibi, amacımız sana ait bir dijital vitrin sunmak. Algoritmaların kölesi olmadan, doğrudan takipçilerine ulaşabildiğin saydam bir ekosistem yaratıyoruz. Sen sadece sevdiğin ürünleri paylaş, geri kalan altyapıyı biz halledelim.
+                        Global çözümlere yerli bir alternatif olarak, amacımız sana ait bir dijital vitrin sunmak. Algoritmaların kölesi olmadan, doğrudan takipçilerine ulaşabildiğin saydam bir ekosistem yaratıyoruz. Sen sadece sevdiğin ürünleri paylaş, geri kalan altyapıyı biz halledelim.
                     </p>
 
                     <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '20px', marginTop: '50px' }}>Misyonumuz</h2>
