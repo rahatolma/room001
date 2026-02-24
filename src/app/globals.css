@@ -350,20 +350,18 @@ h6 {
   .desktop-nav {
     display: none !important;
   }
-}
-
-@media (max-width: 480px) {
-  .beta-feedback-btn span {
-    display: none;
-  }
 
   .beta-feedback-btn {
-    padding: 8px 10px !important;
+    display: none !important;
   }
 
   .mobile-hide-btn {
     display: none !important;
   }
+}
+
+@media (max-width: 480px) {
+  /* Retained for specific adjustments if needed, though beta is hidden above */
 }
 
 /* Desktop Only Dashboard Blocker */

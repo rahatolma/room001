@@ -179,7 +179,7 @@ export default function Header() {
                                 <button className="mobile-hide-btn" onClick={() => setIsLoginOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem' }}>
                                     Giriş Yap
                                 </button>
-                                <Button onClick={() => setIsSignupOpen(true)} style={{ background: activeDropdown || mobileMenuOpen ? 'black' : 'white', color: activeDropdown || mobileMenuOpen ? 'white' : 'black', padding: '12px 24px', borderRadius: 4 }}>
+                                <Button className="mobile-hide-btn" onClick={() => setIsSignupOpen(true)} style={{ background: activeDropdown || mobileMenuOpen ? 'black' : 'white', color: activeDropdown || mobileMenuOpen ? 'white' : 'black', padding: '12px 24px', borderRadius: 4 }}>
                                     Başvur
                                 </Button>
                             </>
@@ -263,11 +263,25 @@ export default function Header() {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
                                     <Button onClick={() => { setIsSignupOpen(true); setMobileMenuOpen(false); }} style={{ width: '100%', padding: '15px 0' }}>BAŞVUR</Button>
                                     <Button variant="outline" onClick={() => { setIsLoginOpen(true); setMobileMenuOpen(false); }} style={{ width: '100%', padding: '15px 0' }}>GİRİŞ YAP</Button>
+                                    <Button
+                                        onClick={() => { setIsFeedbackOpen(true); setMobileMenuOpen(false); }}
+                                        style={{ width: '100%', padding: '15px 0', background: 'linear-gradient(135deg, #10b981, #059669)', color: 'white', border: 'none' }}
+                                    >
+                                        BETA GERİ BİLDİRİM
+                                    </Button>
                                 </div>
                             ) : (
-                                <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                                    <Button style={{ width: '100%', padding: '15px 0' }}>PANELİM</Button>
-                                </Link>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: 'none' }}>
+                                        <Button style={{ width: '100%', padding: '15px 0' }}>PANELİM</Button>
+                                    </Link>
+                                    <Button
+                                        onClick={() => { setIsFeedbackOpen(true); setMobileMenuOpen(false); }}
+                                        style={{ width: '100%', padding: '15px 0', background: 'linear-gradient(135deg, #10b981, #059669)', color: 'white', border: 'none' }}
+                                    >
+                                        BETA GERİ BİLDİRİM
+                                    </Button>
+                                </div>
                             )}
                         </div>
 
