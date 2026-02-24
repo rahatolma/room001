@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ContactPage() {
     return (
-        <main style={{ background: '#FFFCF8', minHeight: '100vh', paddingTop: '120px', paddingBottom: '100px' }}>
+        <main style={{ background: '#fff', minHeight: '100vh', paddingTop: '120px', paddingBottom: '100px' }}>
             <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 20px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '60px' }}>
                     <h1 style={{ fontSize: '3.5rem', fontWeight: 800, letterSpacing: '-1px', marginBottom: '20px' }}>İletişim</h1>

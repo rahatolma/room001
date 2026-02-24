@@ -117,7 +117,7 @@ export default function BecomeCreatorPage() {
             </section>
 
             {/* FEATURES SECTION */}
-            <section style={{ padding: '100px 20px', maxWidth: 1200, margin: '0 auto' }}>
+            <section style={{ padding: '100px 20px', maxWidth: 'var(--max-width)', margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: 80 }}>
                     <h2 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 20 }}>Neden Room001?</h2>
                     <p style={{ fontSize: '1.2rem', color: '#666', maxWidth: 600, margin: '0 auto' }}>Sadece bir link paylaşım platformu değil, içerik üreticilerinin işlerini büyütmeleri için tasarlanmış bir ekosistem.</p>
@@ -131,7 +131,7 @@ export default function BecomeCreatorPage() {
                         { icon: <TrendingUp size={30} />, title: 'Gelişmiş Analitik', desc: 'Hangi ürünün daha çok sattığını, kitlenizin hangi saatlerde daha çok tıkladığını gerçek zamanlı olarak ölçün ve stratejinizi geliştirin.' }
                     ].map((feat, idx) => (
                         <div key={idx} style={{ background: 'white', padding: 40, borderRadius: 24, border: '1px solid #eaeaea', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-                            <div style={{ width: 60, height: 60, background: '#fefce8', color: '#d97706', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 25 }}>
+                            <div style={{ width: 60, height: 60, background: '#f5f5f5', color: '#111', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 25 }}>
                                 {feat.icon}
                             </div>
                             <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 15 }}>{feat.title}</h3>

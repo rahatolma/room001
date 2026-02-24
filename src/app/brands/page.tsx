@@ -51,7 +51,7 @@ export default function BrandsLandingPage() {
             {/* TRUSTED BY / LOGOS (Animated Slider) */}
             <section style={{
                 padding: '80px 0',
-                background: 'linear-gradient(to bottom, #f0fdf4, #eafbf1)',
+                background: '#fff',
                 textAlign: 'center',
                 overflow: 'hidden'
             }}>
@@ -82,7 +82,7 @@ export default function BrandsLandingPage() {
                                         height: 100,
                                         background: 'white',
                                         borderRadius: 16,
-                                        border: '1px solid #bce2c7',
+                                        border: '1px solid #eaeaea',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
@@ -127,7 +127,7 @@ export default function BrandsLandingPage() {
             </section>
 
             {/* FEATURES */}
-            <section id="features" style={{ padding: '100px 20px', maxWidth: 1200, margin: '0 auto' }}>
+            <section id="features" style={{ padding: '100px 20px', maxWidth: 'var(--max-width)', margin: '0 auto' }}>
                 <div style={{ textAlign: 'center', marginBottom: 80 }}>
                     <h2 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 20 }}>Veri Odaklı Eşleşme.</h2>
                     <p style={{ fontSize: '1.2rem', color: '#666', maxWidth: 600, margin: '0 auto' }}>Artık boşa harcanan marketing bütçelerine son. Sadece size yüksek getiri (ROAS) sağlayan üreticileri bulun.</p>
@@ -141,7 +141,7 @@ export default function BrandsLandingPage() {
                         { icon: <ShieldCheck size={30} />, title: 'Güvenli Sözleşmeler', desc: 'Tüm ödemeleriniz ve anlaşmalarınız Room001 altyapısının garantisi altındadır.' }
                     ].map((feat, idx) => (
                         <div key={idx} style={{ background: 'white', padding: 40, borderRadius: 24, border: '1px solid #eaeaea', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-                            <div style={{ width: 60, height: 60, background: '#fefce8', color: '#d97706', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 25 }}>
+                            <div style={{ width: 60, height: 60, background: '#f5f5f5', color: '#111', borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 25 }}>
                                 {feat.icon}
                             </div>
                             <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 15 }}>{feat.title}</h3>
@@ -152,12 +152,12 @@ export default function BrandsLandingPage() {
             </section>
 
             {/* CTA */}
-            <section style={{ padding: '120px 20px', background: '#fefce8', borderTop: '1px solid #fef08a', textAlign: 'center' }}>
+            <section style={{ padding: '120px 20px', background: '#fff', borderTop: '1px solid #eaeaea', textAlign: 'center' }}>
                 <div style={{ maxWidth: 800, margin: '0 auto' }}>
-                    <h2 style={{ fontSize: '3.5rem', fontWeight: 800, letterSpacing: '-0.03em', color: '#854d0e', marginBottom: 30 }}>
+                    <h2 style={{ fontSize: '3.5rem', fontWeight: 800, letterSpacing: '-0.03em', color: '#111', marginBottom: 30 }}>
                         Markanızı Büyütmeye Hazır Mısınız?
                     </h2>
-                    <p style={{ fontSize: '1.2rem', color: '#a16207', marginBottom: 40, maxWidth: 600, margin: '0 auto 40px auto' }}>
+                    <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: 40, maxWidth: 600, margin: '0 auto 40px auto' }}>
                         Uzman ekibimiz, hedeflerinize uygun doğru stratejiyi kurgulamak için sizi bekliyor.
                     </p>
                     <Link href="/brands/inquiry">

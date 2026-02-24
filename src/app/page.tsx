@@ -19,7 +19,7 @@ export default async function Home() {
   ]);
 
   return (
-    <main style={{ background: '#FFFCF8' }}>
+    <main style={{ background: '#fff' }}>
       <HeroSection />
 
       {/* 1. Insiderler */}
@@ -30,7 +30,7 @@ export default async function Home() {
       </div>
 
       {/* 2. Markalar */}
-      <div style={{ background: '#FFFCF8', padding: '100px 0' }}>
+      <div style={{ background: '#fff', padding: '100px 0' }}>
         <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
           <BrandGrid items={brands} />
         </div>
@@ -44,7 +44,7 @@ export default async function Home() {
       </div>
 
       {/* 4. Dergiler */}
-      <div style={{ background: '#FFFCF8', padding: '100px 0' }}>
+      <div style={{ background: '#fff', padding: '100px 0' }}>
         <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
           <MagazineSection />
         </div>
@@ -58,7 +58,7 @@ export default async function Home() {
       </div>
 
       {/* 6. Ürünler */}
-      <div style={{ background: '#FFFCF8', padding: '100px 0' }}>
+      <div style={{ background: '#fff', padding: '100px 0' }}>
         <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
           <ProductGrid items={products} />
         </div>
