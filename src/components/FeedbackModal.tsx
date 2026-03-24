@@ -18,6 +18,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
     const pathname = usePathname();
     const [type, setType] = useState('suggestion');
     const [content, setContent] = useState('');
+    const [email, setEmail] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -29,7 +30,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
         setIsSubmitting(true);
         const res = await submitFeedback({
-            content,
+            content: email ? `[Email: ${email}]\n${content}` : content,
             type,
             url: pathname,
             userId: user?.id,
@@ -52,7 +53,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         <Modal isOpen={isOpen} onClose={onClose} title="Geri Bildirim Gönder">
             {isSuccess ? (
                 <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-                    <CheckCircle2 size={48} color="#16a34a" style={{ margin: '0 auto 20px auto' }} />
+                    <CheckCircle2 size={48} color="black" style={{ margin: '0 auto 20px auto' }} />
                     <h3 style={{ fontSize: '1.5rem', marginBottom: 10 }}>Teşekkürler!</h3>
                     <p style={{ color: '#666' }}>Geri bildiriminiz başarıyla alındı. Geliştirmelere hemen başlayacağız.</p>
                 </div>
@@ -69,11 +70,11 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                             style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                                 padding: '12px', borderRadius: 8, border: `2px solid ${type === 'suggestion' ? 'black' : '#eaeaea'}`,
-                                background: type === 'suggestion' ? '#f8f9fa' : 'white',
-                                cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem'
+                                background: type === 'suggestion' ? '#f9f9f9' : 'white',
+                                cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem', color: type === 'suggestion' ? 'black' : '#666'
                             }}
                         >
-                            <Lightbulb size={18} color={type === 'suggestion' ? '#eab308' : '#888'} /> Öneri
+                            <Lightbulb size={18} color={type === 'suggestion' ? 'black' : '#888'} /> Öneri
                         </button>
                         <button
                             type="button"
@@ -81,12 +82,27 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                             style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                                 padding: '12px', borderRadius: 8, border: `2px solid ${type === 'bug' ? 'black' : '#eaeaea'}`,
-                                background: type === 'bug' ? '#fcf0f0' : 'white',
-                                cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem'
+                                background: type === 'bug' ? '#f9f9f9' : 'white',
+                                cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem', color: type === 'bug' ? 'black' : '#666'
                             }}
                         >
-                            <Bug size={18} color={type === 'bug' ? '#ef4444' : '#888'} /> Hata Bildir
+                            <Bug size={18} color={type === 'bug' ? 'black' : '#888'} /> Hata Bildir
                         </button>
+                    </div>
+
+                    <div style={{ marginBottom: 20 }}>
+                        <label style={{ display: 'block', marginBottom: 8, fontSize: '0.9rem', fontWeight: 600 }}>E-posta (İsteğe Bağlı)</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Size ulaşabilmemiz için e-posta adresiniz..."
+                            style={{
+                                width: '100%', padding: '12px 15px', borderRadius: 8,
+                                border: '1px solid #ccc', fontSize: '0.95rem',
+                                outline: 'none'
+                            }}
+                        />
                     </div>
 
                     <div style={{ marginBottom: 20 }}>

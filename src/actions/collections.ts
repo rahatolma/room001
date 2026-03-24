@@ -99,3 +99,98 @@ export async function deleteCollection(collectionId: string) {
         return { success: false, error: 'Failed to delete collection' };
     }
 }
+
+export async function getCollectionDetails(id: string) {
+    const user = await getSessionAction();
+    if (!user) return null;
+
+    try {
+        const collection = await prisma.collection.findUnique({
+            where: {
+                id: id,
+                userId: user.id
+            },
+            include: {
+                user: {
+                    select: {
+                        username: true,
+                        fullName: true,
+                    }
+                },
+                items: {
+                    include: {
+                        product: {
+                            include: { brand: true }
+                        }
+                    },
+                    orderBy: { displayOrder: 'asc' }
+                }
+            }
+        });
+
+        return collection;
+    } catch (error) {
+        console.error('Error fetching collection details:', error);
+        return null;
+    }
+}
+
+export async function removeProductFromCollection(collectionId: string, productId: string) {
+    const user = await getSessionAction();
+    if (!user) return { success: false, error: 'Unauthorized' };
+
+    try {
+        // Find if this collection belongs to the user
+        const collection = await prisma.collection.findUnique({
+            where: { id: collectionId, userId: user.id }
+        });
+
+        if (!collection) return { success: false, error: 'Collection not found' };
+
+        await prisma.collectionItem.deleteMany({
+            where: {
+                collectionId: collectionId,
+                productId: productId
+            }
+        });
+
+        revalidatePath(`/dashboard/collections/${collectionId}`);
+        return { success: true };
+    } catch (error) {
+        console.error('Error removing product from collection:', error);
+        return { success: false, error: 'Failed to remove product' };
+    }
+}
+
+export async function updateCollectionItemOrder(collectionId: string, items: { id: string, displayOrder: number }[]) {
+    const user = await getSessionAction();
+    if (!user) return { success: false, error: 'Unauthorized' };
+
+    try {
+        // Verify ownership
+        const collection = await prisma.collection.findUnique({
+            where: { id: collectionId, userId: user.id }
+        });
+
+        if (!collection) return { success: false, error: 'Collection not found' };
+
+        // Update orders inside a transaction
+        const transaction = items.map((item) =>
+            prisma.collectionItem.update({
+                where: {
+                    id: item.id,
+                    collectionId: collectionId
+                },
+                data: { displayOrder: item.displayOrder },
+            })
+        );
+
+        await prisma.$transaction(transaction);
+        revalidatePath(`/dashboard/collections/${collectionId}`);
+        revalidatePath(`/${user.username || user.id}`);
+        return { success: true };
+    } catch (error) {
+        console.error('Error updating collection item order:', error);
+        return { success: false, error: 'Failed to update order' };
+    }
+}

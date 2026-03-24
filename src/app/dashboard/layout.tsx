@@ -41,7 +41,8 @@ import {
     Users,
     TrendingUp,     // Analytics
     Menu,
-    X
+    X,
+    Plus
 } from 'lucide-react';
 
 // --- NAVIGATION DATA (FLAT LISTS) ---
@@ -86,7 +87,9 @@ const CreatorNavGroups = [
             { name: 'Insider Seviyesi', href: '/dashboard/tier', icon: <Award size={18} /> },
             { name: 'Medya Kiti', href: '/dashboard/media-kit', icon: <FileText size={18} /> },
             { name: 'Mağazam', href: '/dashboard/store', icon: <Store size={18} /> },
+            { name: 'Koleksiyonlarım', href: '/dashboard/collections', icon: <Layers size={18} /> },
             { name: 'Ürünlerim', href: '/dashboard/products', icon: <ShoppingBag size={18} /> },
+            { name: 'Ürün Ekle', href: '/dashboard/products/add', icon: <Plus size={18} /> },
             { name: 'Linklerim', href: '/dashboard/links', icon: <LinkIcon size={18} /> },
             { name: 'Kazançlarım', href: '/dashboard/earnings', icon: <DollarSign size={18} /> },
             { name: 'Favorilerim', href: '/dashboard/favorites', icon: <Heart size={18} /> },
@@ -123,6 +126,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     if (loading) return null;
+    if (!user) return null;
 
     // Determine navigation based on role
     let navigationItems: any[] = [];
@@ -215,7 +219,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* MOBILE BOTTOM NAVIGATION */}
             <nav className="mobile-bottom-nav">
-                <Link href={user?.role === 'admin' ? '/dashboard/admin' : user?.role === 'brand' ? '/dashboard/brand' : user?.role === 'shopper' ? '/dashboard/shopper' : '/dashboard/creator'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: pathname === '/dashboard/creator' || pathname === '/dashboard' ? 'black' : '#999' }}>
+                <Link href={user?.role === 'admin' ? '/dashboard/admin' : user?.role === 'brand' ? '/dashboard/brand' : user?.role === 'shopper' ? '/dashboard/shopper' : '/dashboard/creator'} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: (pathname === '/dashboard/creator' || pathname === '/dashboard/shopper' || pathname === '/dashboard') ? 'black' : '#999' }}>
                     <Home size={22} />
                     <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Panel</span>
                 </Link>
@@ -225,10 +229,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Ürünler</span>
                     </Link>
                 )}
-                <Link href="/dashboard/chat" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: pathname.startsWith('/dashboard/chat') ? 'black' : '#999', position: 'relative' }}>
-                    <MessageCircle size={22} />
-                    <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Mesajlar</span>
-                    <span style={{ position: 'absolute', top: -3, right: 0, width: 8, height: 8, background: '#ef4444', borderRadius: '50%' }} />
+                {user?.role === 'shopper' && (
+                    <Link href="/dashboard/favorites" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: pathname.startsWith('/dashboard/favorites') ? 'black' : '#999' }}>
+                        <Heart size={22} />
+                        <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>Favoriler</span>
+                    </Link>
+                )}
+                <Link href={user?.role === 'shopper' ? "/dashboard/orders" : "/dashboard/chat"} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: (pathname.startsWith('/dashboard/chat') || pathname.startsWith('/dashboard/orders')) ? 'black' : '#999', position: 'relative' }}>
+                    {user?.role === 'shopper' ? <ShoppingBag size={22} /> : <MessageCircle size={22} />}
+                    <span style={{ fontSize: '0.65rem', fontWeight: 600 }}>{user?.role === 'shopper' ? 'Siparişler' : 'Mesajlar'}</span>
+                    {user?.role !== 'shopper' && <span style={{ position: 'absolute', top: -3, right: 0, width: 8, height: 8, background: '#ef4444', borderRadius: '50%' }} />}
                 </Link>
                 <button onClick={() => setIsMobileMenuOpen(true)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, color: '#999', background: 'none', border: 'none', cursor: 'pointer' }}>
                     <Menu size={22} />

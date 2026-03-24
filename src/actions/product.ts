@@ -52,16 +52,29 @@ export async function addProductToCollection(collectionId: string | null, produc
     imageUrl: string;
     url: string;
 }) {
-    const user = await getSessionAction();
-    if (!user) return { success: false, error: 'Unauthorized' };
+    const userSession = await getSessionAction();
+    if (!userSession) return { success: false, error: 'Unauthorized' };
 
     try {
+        // Fetch full user to check XP
+        const dbUser = await prisma.user.findUnique({ where: { id: userSession.id } });
+        if (!dbUser) return { success: false, error: 'User not found' };
+
+        // 🛡️ GAMIFICATION / QUALITY CONTROL GATE
+        const isSecondHand = productData.url.includes('dolap.com') || productData.url.includes('gardrops.com');
+        if (isSecondHand && dbUser.xp < 40) {
+            return {
+                success: false,
+                error: 'İkinci el platform (Dolap/Gardrops) linkleri ekleyebilmek için Ambassador (40 XP) seviyesine ulaşmalısınız.'
+            };
+        }
+
         let targetCollectionId = collectionId;
 
         // If no collection specified, find or create "Genel" (General)
         if (!targetCollectionId) {
             const defaultCollection = await prisma.collection.findFirst({
-                where: { userId: user.id, title: 'Genel' }
+                where: { userId: userSession.id, title: 'Genel' }
             });
 
             if (defaultCollection) {
@@ -69,7 +82,7 @@ export async function addProductToCollection(collectionId: string | null, produc
             } else {
                 const newCol = await prisma.collection.create({
                     data: {
-                        userId: user.id,
+                        userId: userSession.id,
                         title: 'Genel',
                         slug: `genel-${Date.now()}`
                     }
@@ -109,8 +122,14 @@ export async function addProductToCollection(collectionId: string | null, produc
             }
         });
 
+        // 3. GAMIFICATION: Reward user with +5 XP for adding a product
+        await prisma.user.update({
+            where: { id: userSession.id },
+            data: { xp: { increment: 5 } }
+        });
+
         revalidatePath('/dashboard/products');
-        revalidatePath(`/${user.username}`);
+        revalidatePath(`/${userSession.username}`);
         return { success: true };
 
     } catch (error) {
@@ -255,9 +274,24 @@ export async function searchProducts(query: string, category?: string) {
 
 export async function createQuickLink(productId: string) {
     const session = await getSessionAction();
-    if (!session) return { success: false };
+    if (!session) return { success: false, error: 'Unauthorized' };
 
     try {
+        const product = await prisma.product.findUnique({ where: { id: productId } });
+        if (!product) return { success: false, error: 'Ürün bulunamadı' };
+
+        // 🛡️ GAMIFICATION / QUALITY CONTROL GATE
+        const isSecondHand = product.productUrl.includes('dolap.com') || product.productUrl.includes('gardrops.com');
+        if (isSecondHand) {
+            const dbUser = await prisma.user.findUnique({ where: { id: session.id } });
+            if (dbUser && dbUser.xp < 40) {
+                return {
+                    success: false,
+                    error: 'İkinci el platform (Dolap/Gardrops) linkleri ekleyebilmek için Ambassador (40 XP) seviyesine ulaşmalısınız.'
+                };
+            }
+        }
+
         // 1. Find or Create "Hızlı Linkler"
         let col = await prisma.collection.findFirst({
             where: { userId: session.id, title: 'Hızlı Linkler' }
@@ -286,6 +320,12 @@ export async function createQuickLink(productId: string) {
                 productId,
                 isVisible: true
             }
+        });
+
+        // GAMIFICATION: Reward user with +5 XP for quick link creation
+        await prisma.user.update({
+            where: { id: session.id },
+            data: { xp: { increment: 5 } }
         });
 
         revalidatePath('/dashboard/links');

@@ -329,6 +329,7 @@ export default function BrandMatchPage() {
 
                         <div style={{ flex: 1, padding: 30, overflowY: 'auto' }}>
                             <ProductSelector
+                                brandName={selectedMatch.name}
                                 onSelect={(id) => {
                                     if (selectedProducts.includes(id)) {
                                         setSelectedProducts(prev => prev.filter(p => p !== id));
@@ -360,16 +361,16 @@ export default function BrandMatchPage() {
 }
 
 // --- SUB-COMPONENT: PRODUCT SELECTOR ---
-function ProductSelector({ onSelect, selectedIds }: { onSelect: (id: string) => void, selectedIds: string[] }) {
+function ProductSelector({ onSelect, selectedIds, brandName }: { onSelect: (id: string) => void, selectedIds: string[], brandName?: string }) {
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(brandName || '');
 
     useEffect(() => {
-        // Initial fetch - get some products
+        // Initial fetch - get some products (pre-filter by brandName if provided)
         const fetchInitial = async () => {
             try {
-                const res = await searchProducts('');
+                const res = await searchProducts(brandName || '');
                 setProducts(res);
             } catch (e) {
                 console.error(e);
@@ -378,7 +379,7 @@ function ProductSelector({ onSelect, selectedIds }: { onSelect: (id: string) => 
             }
         };
         fetchInitial();
-    }, []);
+    }, [brandName]);
 
     const handleSearch = async (val: string) => {
         setQuery(val);
@@ -506,11 +507,15 @@ function DiscoverView({ onSwitchToList }: { onSwitchToList: () => void }) {
 
     if (!currentCard) {
         return (
-            <div style={{ textAlign: 'center', padding: 80, background: '#fff', borderRadius: 32, border: '1px solid #eee', minHeight: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ fontSize: '4rem', marginBottom: 20 }}>🎉</div>
-                <h2 style={{ fontSize: '2.5rem', marginBottom: 15 }}>Harikasın!</h2>
-                <p style={{ color: '#666', fontSize: '1.1rem' }}>Bugünlük tüm markaları inceledin.</p>
-                <button onClick={onSwitchToList} style={{ marginTop: 30, padding: '15px 30px', background: 'black', color: 'white', borderRadius: 12, border: 'none', cursor: 'pointer', fontWeight: 600 }}>Eşleşmelerime Git</button>
+            <div style={{ textAlign: 'center', padding: '100px 40px', background: 'linear-gradient(180deg, #fafafa 0%, #ffffff 100%)', borderRadius: 32, border: '1px dashed #e0e0e0', minHeight: 600, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 100, height: 100, borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24, boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }}>
+                    <div style={{ fontSize: '3rem' }}>🎉</div>
+                </div>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, margin: '0 0 12px 0', letterSpacing: '-0.02em', color: '#111' }}>Harikasın!</h2>
+                <p style={{ color: '#666', fontSize: '1.2rem', maxWidth: 400, lineHeight: 1.5 }}>Bugünlük senin için seçtiğimiz tüm markaları inceledin. Yarın yeni markalarla görüşmek üzere.</p>
+                <button onClick={onSwitchToList} style={{ marginTop: 30, padding: '16px 36px', background: 'linear-gradient(90deg, #111 0%, #333 100%)', color: 'white', borderRadius: 100, textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                    Eşleşmelerime Git
+                </button>
             </div>
         );
     }
@@ -525,8 +530,8 @@ function DiscoverView({ onSwitchToList }: { onSwitchToList: () => void }) {
                 animate={controls}
                 style={{
                     width: '100%', maxWidth: 450, height: 620, background: 'white', borderRadius: 32,
-                    boxShadow: '0 40px 80px -20px rgba(0,0,0,0.2)', overflow: 'hidden', position: 'relative',
-                    border: '1px solid #f0f0f0', cursor: 'grab', touchAction: 'none'
+                    boxShadow: '0 20px 60px -10px rgba(0,0,0,0.15)', overflow: 'hidden', position: 'relative',
+                    border: '1px solid rgba(0,0,0,0.05)', cursor: 'grab', touchAction: 'none'
                 }}
             >
                 <div style={{ height: '100%', position: 'relative' }}>

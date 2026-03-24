@@ -30,7 +30,7 @@ export const MOCK_PRODUCTS: Product[] = [
 export const searchProducts = (query: string): Product[] => {
     const lowerQuery = query.toLowerCase();
     return MOCK_PRODUCTS.filter(p =>
-        p.name.toLowerCase().includes(lowerQuery) ||
-        p.brand.toLowerCase().includes(lowerQuery)
+        (p.name || '').toLowerCase().includes(lowerQuery) ||
+        (p.brand || '').toLowerCase().includes(lowerQuery)
     );
 };

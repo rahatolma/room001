@@ -32,7 +32,10 @@ export default async function Home() {
       {/* 2. Markalar */}
       <div style={{ background: '#fff', padding: '100px 0' }}>
         <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: '0 var(--page-padding-x)' }}>
-          <BrandGrid items={brands} />
+          <BrandGrid items={[
+            { id: 'spotlight-1', title: 'Dyson Haftası', subtitle: 'Saç bakımında %20 İndirim ve VIP Fırsatlar', imageUrl: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=800', slug: 'dyson', isSpotlight: true },
+            ...brands.slice(0, 7)
+          ]} />
         </div>
       </div>
 

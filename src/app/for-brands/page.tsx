@@ -34,7 +34,7 @@ export default function BrandsLandingPage() {
                         Doğru kitleye, doğru ürünle, en yüksek ROI üzerinden doğrudan satış yapın.
                     </p>
                     <div style={{ display: 'flex', gap: 15, justifyContent: 'center' }}>
-                        <Link href="/brands/inquiry">
+                        <Link href="/for-brands/inquiry">
                             <Button style={{ padding: '16px 36px', fontSize: '1.1rem', background: 'white', color: 'black' }}>
                                 Hemen Başvurun
                             </Button>
@@ -106,7 +106,7 @@ export default function BrandsLandingPage() {
                 </div>
 
                 <div style={{ marginTop: 50 }}>
-                    <Link href="/brands/inquiry">
+                    <Link href="/for-brands/inquiry">
                         <Button style={{
                             background: '#1f2937',
                             color: 'white',
@@ -160,7 +160,7 @@ export default function BrandsLandingPage() {
                     <p style={{ fontSize: '1.2rem', color: '#666', marginBottom: 40, maxWidth: 600, margin: '0 auto 40px auto' }}>
                         Uzman ekibimiz, hedeflerinize uygun doğru stratejiyi kurgulamak için sizi bekliyor.
                     </p>
-                    <Link href="/brands/inquiry">
+                    <Link href="/for-brands/inquiry">
                         <Button style={{ padding: '20px 40px', fontSize: '1.2rem', background: '#111', color: 'white' }}>
                             Satış Ekibimizle Görüşün <ArrowRight size={20} style={{ marginLeft: 10, display: 'inline' }} />
                         </Button>

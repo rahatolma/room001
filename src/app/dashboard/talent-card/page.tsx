@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { updateTalentProfileAction, getTalentProfile } from '@/actions/talent';
 
 const PREFERENCES_OPTS = ['Moda', 'Güzellik', 'Cilt Bakımı', 'Sağlık', 'Ev & Yaşam', 'Fitness', 'Teknoloji', 'Bebek & Çocuk'];
-const IDENTITY_OPTS = ['Yaşam Tarzı Etkileyicisi', 'Moda Tutkunu', 'Güzellik Gurusu', 'Anne Blogger', 'Teknoloji Meraklısı', 'Geasgin', 'Öğrenci'];
+const IDENTITY_OPTS = ['Yaşam Tarzı Etkileyicisi', 'Moda Tutkunu', 'Güzellik Gurusu', 'Anne Blogger', 'Teknoloji Meraklısı', 'Gezgin', 'Öğrenci'];
 const FAMILY_OPTS = ['Bekar', 'Evli', 'İlişkisi Var', 'Ebeveyn'];
 const LIFE_EVENTS_OPTS = ['Evleniyorum', 'Taşınıyorum', 'Bebek Bekliyorum', 'Mezun Oldum', 'Yeni İşe Başladım'];
 

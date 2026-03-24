@@ -1,51 +1,55 @@
-
 import React from 'react';
-import { getUserFavorites } from '@/actions/favorite';
 import ProductGrid from '@/components/landing/ProductGrid';
 import { Heart } from 'lucide-react';
-
-export const dynamic = 'force-dynamic';
+import prisma from '@/lib/prisma';
+import { getSessionAction } from '@/actions/auth';
 
 export default async function FavoritesPage() {
-    const favorites = await getUserFavorites();
+    const user = await getSessionAction();
+
+    // Fetch real favorites from DB pointing to specific products
+    const favs = user
+        ? await prisma.favorite.findMany({
+            where: { userId: user.id },
+            include: { product: { include: { brand: true } } },
+            orderBy: { createdAt: 'desc' }
+        })
+        : [];
+
+    const favoriteProducts = favs.map(f => ({
+        id: f.product.id,
+        title: f.product.title,
+        brand: f.product.brand?.name || 'Marka Yok',
+        price: f.product.price ? f.product.price.toString() : '0',
+        imageUrl: f.product.imageUrl || '',
+        url: f.product.productUrl,
+        currency: f.product.currency
+    }));
 
     return (
-        <div>
-            <div style={{ marginBottom: 30, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div>
-                    <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: 5, display: 'flex', alignItems: 'center' }}>
-                        <Heart size={28} style={{ marginRight: 12, fill: '#ff4444', color: '#ff4444' }} />
-                        Favorilerim
-                    </h1>
-                    <p style={{ color: '#666' }}>Beğendiğiniz ürünleri burada bulabilirsiniz.</p>
-                </div>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+            <div style={{ marginBottom: 40, borderBottom: '1px solid #eaeaea', paddingBottom: 20 }}>
+                <h1 style={{ fontSize: '2rem', fontWeight: 800, margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Heart size={28} color="black" fill="black" /> Favorilerim
+                </h1>
+                <p style={{ color: '#666', fontSize: '1.1rem', margin: 0 }}>
+                    Kaydettiğiniz tüm ürünler ve içerikler burada listelenir.
+                </p>
             </div>
 
-            {favorites.length > 0 ? (
-                <ProductGrid items={favorites} showHeader={false} />
+            {favoriteProducts && favoriteProducts.length > 0 ? (
+                <div style={{ padding: '20px 0' }}>
+                    <ProductGrid items={favoriteProducts} />
+                </div>
             ) : (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '60px 20px',
-                    background: '#f9f9f9',
-                    borderRadius: 12,
-                    border: '1px dashed #ddd'
-                }}>
-                    <Heart size={48} style={{ margin: '0 auto 20px', color: '#ccc' }} />
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: 10 }}>Henüz favori ürününüz yok</h3>
-                    <p style={{ color: '#666', marginBottom: 20 }}>
-                        Ürünleri incelerken kalp ikonuna tıklayarak buraya ekleyebilirsiniz.
-                    </p>
-                    <a href="/" style={{
-                        display: 'inline-block',
-                        padding: '12px 24px',
-                        background: '#000',
-                        color: '#fff',
-                        borderRadius: 8,
-                        textDecoration: 'none',
-                        fontWeight: 500
-                    }}>
-                        Ürünleri Keşfet
+                <div style={{ textAlign: 'center', padding: '100px 20px', background: 'linear-gradient(180deg, #fafafa 0%, #ffffff 100%)', borderRadius: 24, border: '1px dashed #e0e0e0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px auto', boxShadow: '0 8px 24px rgba(0,0,0,0.06)' }}>
+                        <Heart size={36} color="#aaa" />
+                    </div>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0 0 12px 0', letterSpacing: '-0.02em', color: '#111' }}>Henüz Favoriniz Yok</h2>
+                    <p style={{ color: '#666', marginBottom: 36, fontSize: '1.1rem', maxWidth: 400 }}>İlginizi çeken ürünleri kalp ikonuna tıklayarak favorilerinize ekleyebilirsiniz.</p>
+                    <a href="/creators" style={{ padding: '14px 28px', background: 'linear-gradient(90deg, #111 0%, #333 100%)', color: 'white', borderRadius: 100, textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 8, transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                        Vitrinleri Keşfet
                     </a>
                 </div>
             )}

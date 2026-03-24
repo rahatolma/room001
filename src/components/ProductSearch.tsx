@@ -12,7 +12,7 @@ interface ProductSearchProps {
 
 export default function ProductSearch({ onAddProduct }: ProductSearchProps) {
     const [activeTab, setActiveTab] = useState<'search' | 'manual'>('search');
-    const [manualProduct, setManualProduct] = useState({ name: '', brand: '', link: '', imageUrl: '' });
+    const [manualProduct, setManualProduct] = useState({ name: '', brand: '', link: '', imageUrl: '', price: '', currency: 'TRY' });
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -46,12 +46,13 @@ export default function ProductSearch({ onAddProduct }: ProductSearchProps) {
             id: 'mock-' + Date.now(),
             title: manualProduct.name || 'Yeni Ürün (Linkten)',
             brandId: manualProduct.brand || 'Bilinmeyen',
-            price: 0,
+            price: manualProduct.price || '0',
+            currency: manualProduct.currency || 'TRY',
             imageUrl: manualProduct.imageUrl || '',
             url: manualProduct.link
         };
         onAddProduct(mockProduct);
-        setManualProduct({ name: '', brand: '', link: '', imageUrl: '' });
+        setManualProduct({ name: '', brand: '', link: '', imageUrl: '', price: '', currency: 'TRY' });
         setActiveTab('search');
     };
 
@@ -164,6 +165,25 @@ export default function ProductSearch({ onAddProduct }: ProductSearchProps) {
                         onChange={e => setManualProduct({ ...manualProduct, imageUrl: e.target.value })}
                         style={{ padding: 10, borderRadius: 4, border: '1px solid #ddd' }}
                     />
+                    <div style={{ display: 'flex', gap: 10 }}>
+                        <input
+                            placeholder="Price (Optional)"
+                            type="number"
+                            value={manualProduct.price}
+                            onChange={e => setManualProduct({ ...manualProduct, price: e.target.value })}
+                            style={{ padding: 10, borderRadius: 4, border: '1px solid #ddd', flex: 1 }}
+                        />
+                        <select
+                            value={manualProduct.currency}
+                            onChange={e => setManualProduct({ ...manualProduct, currency: e.target.value })}
+                            style={{ padding: 10, borderRadius: 4, border: '1px solid #ddd', width: 100 }}
+                        >
+                            <option value="TRY">TRY</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
                     <button
                         type="button"
                         onClick={handleManualSubmit}

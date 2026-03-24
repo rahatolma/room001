@@ -36,13 +36,14 @@ export default function CreateLinkModal({ isOpen, onClose }: CreateLinkModalProp
             // Case 2: Manual Product
             else {
                 // If manual, ProductSearch passes a mock object. We need to actually create it.
-                // product.link contains the URL
+                // product.url contains the URL from the mock
                 const res = await addProductToCollection(null, { // null collectionId defaults to "Genel"
-                    title: product.name,
-                    brand: product.brand,
-                    price: '0', // Manual entry might not have price, default 0
+                    title: (product as any).title || 'Yeni Ürün',
+                    brand: (product as any).brandId || 'Bilinmeyen',
+                    price: (product as any).price?.toString() || '0',
+                    currency: (product as any).currency || 'TRY',
                     imageUrl: product.imageUrl || '',
-                    url: product.link || ''
+                    url: (product as any).url || ''
                 });
 
                 if (res.success) {

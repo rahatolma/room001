@@ -17,11 +17,22 @@ export default function BecomeCreatorPage() {
     const [step, setStep] = useState(1);
     const [instagramHandle, setInstagramHandle] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [countryCode, setCountryCode] = useState('+90');
     const [otpCode, setOtpCode] = useState('');
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [eligibilityMsg, setEligibilityMsg] = useState('');
+    const [otpTimer, setOtpTimer] = useState(0);
+
+    // OTP Timer countdown
+    React.useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (otpTimer > 0) {
+            timer = setTimeout(() => setOtpTimer(otpTimer - 1), 1000);
+        }
+        return () => clearTimeout(timer);
+    }, [otpTimer]);
 
     // Step 1: Check Instagram
     const handleCheckInstagram = async (e: React.FormEvent) => {
@@ -42,7 +53,7 @@ export default function BecomeCreatorPage() {
             setEligibilityMsg(result.message || '');
             setStep(2);
         } else {
-            setError(result.message || 'Üzgünüz, kriterleri sağlamıyorsunuz.');
+            setError(result.message || 'Üzgünüz, Insider ağına katılım için minimum 20.000 takipçi (veya eşdeğer aktif etkileşim) gereklidir.');
         }
     };
 
@@ -52,13 +63,30 @@ export default function BecomeCreatorPage() {
         setLoading(true);
         setError('');
 
-        const result = await sendPhoneOtpAction(phoneNumber);
+        const cleanPhone = phoneNumber.replace(/\s/g, '');
+        const result = await sendPhoneOtpAction(cleanPhone, 'creator', 'signup');
         setLoading(false);
 
         if (result.success) {
             setStep(3);
+            setOtpTimer(60);
         } else {
             setError(result.error || 'SMS gönderilemedi.');
+        }
+    };
+
+    const handleResendOtp = async () => {
+        if (otpTimer > 0) return;
+        setLoading(true);
+        setError('');
+        const cleanPhone = phoneNumber.replace(/\s/g, '');
+        const result = await sendPhoneOtpAction(cleanPhone, 'creator', 'signup');
+        setLoading(false);
+        if (result.success) {
+            setOtpTimer(60);
+            setError('Yeni kod gönderildi.');
+        } else {
+            setError(result.error || 'Kod gönderilemedi.');
         }
     };
 
@@ -75,7 +103,7 @@ export default function BecomeCreatorPage() {
                 phoneNumber: phoneNumber,
                 socials: { instagram: instagramHandle }
             });
-            router.push('/dashboard');
+            window.location.href = '/dashboard/creator';
         } else {
             setLoading(false);
             setError(result.error || 'Kod hatalı.');
@@ -187,7 +215,14 @@ export default function BecomeCreatorPage() {
                                     </div>
                                 </div>
 
-                                {error && <div style={{ color: '#e00', background: '#ffebeb', padding: 12, borderRadius: 8, fontSize: '0.95rem', fontWeight: 500 }}>{error}</div>}
+                                {error && (
+                                    <div style={{ color: '#e00', background: '#ffebeb', padding: 12, borderRadius: 8, fontSize: '0.95rem', fontWeight: 500 }}>
+                                        {error}
+                                        <div style={{ marginTop: 8, fontSize: '0.85rem' }}>
+                                            <Link href="/about" style={{ textDecoration: 'underline', color: '#b91c1c' }}>Platform Kriterlerini İncele</Link>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <Button type="submit" fullWidth disabled={loading} style={{ padding: '18px', fontSize: '1.1rem', background: '#111', color: 'white', borderRadius: 12 }}>
                                     {loading ? 'Kontrol Ediliyor...' : 'Uygunluğu Kontrol Et'}
@@ -207,13 +242,37 @@ export default function BecomeCreatorPage() {
 
                                 <div>
                                     <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, fontSize: '0.9rem' }}>Cep Telefonu</label>
-                                    <input
-                                        type="tel"
-                                        value={phoneNumber}
-                                        onChange={(e) => setPhoneNumber(e.target.value)}
-                                        placeholder="0555 123 45 67"
-                                        style={{ width: '100%', padding: '16px', border: '1px solid #ddd', borderRadius: 12, fontSize: '1.05rem', outline: 'none' }}
-                                    />
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        <select
+                                            value={countryCode}
+                                            onChange={(e) => setCountryCode(e.target.value)}
+                                            style={{
+                                                fontSize: '1rem', padding: '0 10px', border: '1px solid #ddd', borderRadius: 12, background: '#f9f9f9', outline: 'none', cursor: 'pointer'
+                                            }}
+                                        >
+                                            <option value="+90">🇹🇷 +90</option>
+                                            <option value="+1">🇺🇸 +1</option>
+                                            <option value="+44">🇬🇧 +44</option>
+                                            <option value="+49">🇩🇪 +49</option>
+                                        </select>
+                                        <input
+                                            type="tel"
+                                            value={phoneNumber}
+                                            onChange={(e) => {
+                                                let val = e.target.value.replace(/\D/g, '');
+                                                if (val.startsWith('0')) val = val.substring(1);
+                                                let formatted = '';
+                                                if (val.length > 0) formatted += val.substring(0, 3);
+                                                if (val.length > 3) formatted += ' ' + val.substring(3, 6);
+                                                if (val.length > 6) formatted += ' ' + val.substring(6, 8);
+                                                if (val.length > 8) formatted += ' ' + val.substring(8, 10);
+                                                setPhoneNumber(formatted);
+                                            }}
+                                            required
+                                            placeholder="555 123 45 67"
+                                            style={{ flex: 1, width: '100%', padding: '16px', border: '1px solid #ddd', borderRadius: 12, fontSize: '1.05rem', outline: 'none' }}
+                                        />
+                                    </div>
                                 </div>
 
                                 {error && <div style={{ color: '#e00', background: '#ffebeb', padding: 12, borderRadius: 8, fontSize: '0.95rem', fontWeight: 500 }}>{error}</div>}
@@ -246,7 +305,18 @@ export default function BecomeCreatorPage() {
                                     {loading ? 'Hesap Oluşturuluyor...' : 'Onayla ve Profiline Git'}
                                 </Button>
 
-                                <button type="button" onClick={() => setStep(2)} style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '0.9rem', marginTop: 10, textDecoration: 'underline' }}>Telefon Numarasını Değiştir</button>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, marginTop: 10 }}>
+                                    {otpTimer > 0 ? (
+                                        <span style={{ fontSize: '0.9rem', color: '#666' }}>Yeni kod için bekleyin: {otpTimer}s</span>
+                                    ) : (
+                                        <button type="button" onClick={handleResendOtp} disabled={loading} style={{ background: 'none', border: 'none', color: '#111', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem', textDecoration: 'underline' }}>
+                                            Kodu Yeniden Gönder
+                                        </button>
+                                    )}
+                                    <button type="button" onClick={() => setStep(2)} style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: '0.9rem', textDecoration: 'underline' }}>
+                                        Telefon Numarasını Değiştir
+                                    </button>
+                                </div>
                             </form>
                         )}
 

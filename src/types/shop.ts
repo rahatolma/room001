@@ -4,6 +4,7 @@ export interface GridItem {
     subtitle?: string; // e.g., "Stylist", "Dermatologist"
     imageUrl: string;
     slug: string;
+    isSpotlight?: boolean;
 }
 
 export interface ShopPyPageProps {

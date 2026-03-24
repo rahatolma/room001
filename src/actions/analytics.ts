@@ -414,7 +414,12 @@ export async function getAnalyticsData(userId: string) {
             ordersGenerated: 0, revenue: 0
         });
 
-        return { success: true, timeline: analytics, totals };
+        const serializedAnalytics = analytics.map((a: any) => ({
+            ...a,
+            estimatedRevenue: Number(a.estimatedRevenue)
+        }));
+
+        return { success: true, timeline: serializedAnalytics, totals };
 
     } catch (error: any) {
         console.error('Error fetching analytics:', error);

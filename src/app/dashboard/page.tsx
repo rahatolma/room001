@@ -10,6 +10,10 @@ export default function DashboardRedirect() {
 
     useEffect(() => {
         if (!loading) {
+            if (!user) {
+                router.push('/');
+                return;
+            }
             if (user?.role === 'admin') {
                 router.push('/dashboard/admin');
             } else if (user?.role === 'brand') {

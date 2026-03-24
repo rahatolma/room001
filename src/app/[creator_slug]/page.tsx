@@ -5,15 +5,17 @@ import { getCuratorData } from '@/actions/admin';
 import { notFound } from 'next/navigation';
 import { trackEvent } from '@/actions/analytics';
 import { getSessionAction } from '@/actions/auth';
+import { getActiveNativeAds } from '@/actions/ads';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function CreatorPage({ params }: { params: Promise<{ creator_slug: string }> }) {
     const { creator_slug } = await params;
-    const [data, session] = await Promise.all([
+    const [data, session, adsRes] = await Promise.all([
         getCuratorData(creator_slug),
-        getSessionAction()
+        getSessionAction(),
+        getActiveNativeAds()
     ]);
 
     if (!data || (data as any).error) {
@@ -22,7 +24,10 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
     }
 
     const { user, sections, products } = data as any;
-    const isOwner = session?.id === user.id;
+
+    // Serialize the user object to avoid passing Prisma Decimal or Date objects directly to Client Component
+    const safeUser = JSON.parse(JSON.stringify(user));
+    const isOwner = session?.id === safeUser.id;
 
     // Track View without blocking render
     if (user?.id) {
@@ -33,30 +38,31 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
         }).catch(e => console.error("Tracking error (ignored):", e));
     }
 
-    const diffName = user.fullName || user.username || creator_slug;
+    const diffName = safeUser.fullName || safeUser.username || creator_slug;
 
     const socials = [];
-    if (user.instagramUrl) socials.push({ platform: 'Instagram', url: user.instagramUrl });
-    if (user.tiktokUrl) socials.push({ platform: 'TikTok', url: user.tiktokUrl });
-    if (user.youtubeUrl) socials.push({ platform: 'YouTube', url: user.youtubeUrl });
-    if (user.websiteUrl) socials.push({ platform: 'Website', url: user.websiteUrl });
-    if (user.dolapAccountUrl) socials.push({ platform: 'Dolap', url: user.dolapAccountUrl });
-    if (user.gardropsAccountUrl) socials.push({ platform: 'Gardrops', url: user.gardropsAccountUrl });
+    if (safeUser.instagramUrl) socials.push({ platform: 'Instagram', url: safeUser.instagramUrl });
+    if (safeUser.tiktokUrl) socials.push({ platform: 'TikTok', url: safeUser.tiktokUrl });
+    if (safeUser.youtubeUrl) socials.push({ platform: 'YouTube', url: safeUser.youtubeUrl });
+    if (safeUser.websiteUrl) socials.push({ platform: 'Website', url: safeUser.websiteUrl });
+    if (safeUser.dolapAccountUrl) socials.push({ platform: 'Dolap', url: safeUser.dolapAccountUrl });
+    if (safeUser.gardropsAccountUrl) socials.push({ platform: 'Gardrops', url: safeUser.gardropsAccountUrl });
 
     // Merge with legacy mock socials if needed, but for now prefer DB
-    if (socials.length === 0 && user.socialStats) {
-        user.socialStats.forEach((s: any) => socials.push({ platform: s.platform, url: s.url }));
+    if (socials.length === 0 && safeUser.socialStats) {
+        safeUser.socialStats.forEach((s: any) => socials.push({ platform: s.platform, url: s.url }));
     }
 
     const profile = {
         name: diffName,
-        bio: user.bio || "Welcome to my shop!",
-        initials: user.avatarInitials || diffName.substring(0, 2).toUpperCase(),
+        username: safeUser.username || creator_slug,
+        bio: safeUser.bio || "Welcome to my shop!",
+        initials: safeUser.avatarInitials || diffName.substring(0, 2).toUpperCase(),
         socials: socials,
-        location: user.location
+        location: safeUser.location
     };
 
-    const theme = user.themePreferences || {
+    const theme = safeUser.themePreferences || {
         primaryColor: 'black',
         backgroundColor: 'white',
 
@@ -68,10 +74,11 @@ export default async function CreatorPage({ params }: { params: Promise<{ creato
             profile={profile}
             sections={sections}
             products={products}
-            instagramPosts={data.instagramPosts}
-            tiktokPosts={data.tiktokPosts}
+            instagramPosts={(data as any).instagramPosts}
+            tiktokPosts={(data as any).tiktokPosts}
             theme={theme}
             isOwner={isOwner}
+            ads={adsRes.ads || []}
         />
     );
 }

@@ -170,9 +170,9 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
 
             {/* TAB CONTENT: MY LINKS */}
             {activeTab === 'LINKS' && (
-                <div style={{ border: '1px solid #eaeaea', borderRadius: 8, overflow: 'hidden', overflowX: 'auto' }}>
+                <div style={{ border: '1px solid #eaeaea', borderRadius: 16, overflow: 'hidden', overflowX: 'auto', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.02)' }}>
                     {/* Header */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(50px, 0.5fr) minmax(100px, 1fr) minmax(250px, 3fr) minmax(200px, 2fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(250px, 3fr)', background: '#1a1a1a', color: 'white', padding: '15px 20px', fontSize: '0.8rem', fontWeight: 600, minWidth: '1000px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(50px, 0.5fr) minmax(100px, 1fr) minmax(250px, 3fr) minmax(200px, 2fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(250px, 3fr)', background: '#fafafa', color: '#666', padding: '16px 20px', fontSize: '0.8rem', fontWeight: 600, minWidth: '1000px', borderBottom: '1px solid #eaeaea', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                         <div></div>{/* Checkbox */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>Oluşturuldu <ArrowDown size={14} /></div>
                         <div>Ürün</div>
@@ -185,58 +185,74 @@ export default function LinksTabs({ initialLinks, initialPerformance }: LinksTab
 
                     {/* Rows */}
                     {filteredLinks.length === 0 ? (
-                        <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>Link bulunamadı.</div>
+                        <div style={{ padding: '80px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'linear-gradient(180deg, #ffffff 0%, #fafafa 100%)' }}>
+                            <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20, color: '#ccc' }}>
+                                <ExternalLink size={32} />
+                            </div>
+                            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '0 0 10px 0', color: '#111' }}>Henüz Linkiniz Yok</h3>
+                            <p style={{ color: '#666', marginBottom: 30, maxWidth: 400, lineHeight: 1.5 }}>
+                                Takipçilerinizle paylaşmak ve kazanmaya başlamak için ilk komisyonlu linkinizi oluşturun.
+                            </p>
+                            <Button onClick={() => setIsCreateModalOpen(true)} style={{ padding: '12px 30px', borderRadius: 100, fontWeight: 600, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                                Yeni Link Oluştur
+                            </Button>
+                        </div>
                     ) : (
                         filteredLinks.map((link) => (
                             <div key={link.id} style={{
                                 display: 'grid', gridTemplateColumns: 'minmax(50px, 0.5fr) minmax(100px, 1fr) minmax(250px, 3fr) minmax(200px, 2fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(80px, 1fr) minmax(250px, 3fr)',
                                 padding: '20px', borderBottom: '1px solid #f5f5f5', alignItems: 'center', background: 'white',
-                                fontSize: '0.9rem', minWidth: '1000px'
-                            }}>
+                                fontSize: '0.9rem', minWidth: '1000px', transition: 'background 0.2s'
+                            }} className="hover:bg-gray-50">
                                 <div>
-                                    <input type="checkbox" style={{ width: 16, height: 16, cursor: 'pointer' }} />
+                                    <input type="checkbox" style={{ width: 16, height: 16, cursor: 'pointer', accentColor: 'black' }} />
                                 </div>
                                 <div style={{ color: '#666', fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase' }}>
                                     {link.date}
                                 </div>
                                 <div style={{ display: 'flex', gap: 15, alignItems: 'center' }}>
-                                    <div style={{ width: 50, height: 60, background: '#f9f9f9', position: 'relative', overflow: 'hidden' }}>
+                                    <div style={{ width: 56, height: 56, background: '#f9f9f9', position: 'relative', overflow: 'hidden', borderRadius: 8, border: '1px solid #eee' }}>
                                         {link.product.image && (
-                                            <Image src={link.product.image} alt={link.product.name} fill style={{ objectFit: 'contain' }} />
+                                            <Image src={link.product.image} alt={link.product.name} fill style={{ objectFit: 'cover' }} />
                                         )}
                                     </div>
-                                    <div style={{ maxWidth: 200 }}>
-                                        <div style={{ fontWeight: 600, marginBottom: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: '1.2' }} title={link.product.name}>
+                                    <div style={{ maxWidth: 220 }}>
+                                        <div style={{ fontWeight: 600, marginBottom: 4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: '1.3' }} title={link.product.name}>
                                             {link.product.name}
                                         </div>
-                                        <div style={{ fontSize: '0.8rem', color: '#666' }}>{link.product.brand}</div>
-                                        <div style={{ fontSize: '0.75rem', color: '#999', marginTop: 2 }}>{link.product.commission} komisyon ⓘ</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#666', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                            {link.product.brand}
+                                            <span style={{ fontSize: '0.7rem', color: '#059669', background: '#ecfdf5', padding: '2px 6px', borderRadius: 4, fontWeight: 700 }}>
+                                                %{link.product.commission}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <a href="#" style={{ textDecoration: 'underline', color: '#333', fontWeight: 500 }}>{link.content}</a>
+                                    <a href="#" style={{ textDecoration: 'underline', color: '#444', fontWeight: 500, fontSize: '0.85rem' }}>{link.content}</a>
                                 </div>
-                                <div style={{ fontWeight: 600 }}>{link.clicks}</div>
-                                <div>{link.orders}</div>
-                                <div>{link.earned}</div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                                <div style={{ fontWeight: 600, fontSize: '1.05rem' }}>{link.clicks}</div>
+                                <div style={{ fontWeight: 500 }}>{link.orders}</div>
+                                <div style={{ fontWeight: 700, color: '#10b981' }}>{link.earned}</div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 0, paddingRight: 10 }}>
                                     <input
                                         readOnly
                                         value={link.affiliateLink}
                                         style={{
-                                            width: '100%', padding: '8px 10px', fontSize: '0.8rem', border: '1px solid #ddd',
-                                            borderRight: 'none', borderRadius: '4px 0 0 4px', background: '#fdfdfd', color: '#666'
+                                            width: '100%', padding: '10px 12px', fontSize: '0.8rem', border: '1px solid #ddd',
+                                            borderRight: 'none', borderRadius: '8px 0 0 8px', background: '#fcfcfc', color: '#666', outline: 'none'
                                         }}
+                                        onFocus={(e) => e.target.select()}
                                     />
                                     <button
                                         onClick={() => handleCopy(link.affiliateLink, link.id)}
                                         style={{
-                                            padding: '8px 12px', background: '#333', color: 'white', border: 'none',
-                                            borderRadius: '0 4px 4px 0', fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer',
-                                            minWidth: 80
+                                            padding: '10.5px 16px', background: copiedId === link.id ? '#10b981' : '#111', color: 'white', border: 'none',
+                                            borderRadius: '0 8px 8px 0', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
+                                            minWidth: 90, transition: 'background 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6
                                         }}
                                     >
-                                        {copiedId === link.id ? 'OK' : 'KOPYALA'}
+                                        {copiedId === link.id ? <><Check size={14} /> OK</> : <><Copy size={14} /> KOPYALA</>}
                                     </button>
                                 </div>
                             </div>

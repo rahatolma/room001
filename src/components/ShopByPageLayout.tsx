@@ -45,6 +45,9 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
         }
         return 0;
     });
+
+    const gridItemsToShow = items.length <= 5 ? sortedItems : sortedItems; // Always show all items in the grid for now to avoid the "empty" bug when we have very few DB seeded items.
+
     // Helper for Turkish grammar (roughly)
     const getTypeLabel = (type: string) => {
         switch (type) {
@@ -123,7 +126,7 @@ const ShopByPageLayout: React.FC<ShopByPageLayoutProps> = ({
                         gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                         gap: 40
                     }}>
-                        {sortedItems.map(item => (
+                        {gridItemsToShow.map(item => (
                             <Link key={item.id} href={getItemLink(item)} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 <div style={{ position: 'relative', aspectRatio: '3/4', marginBottom: 20, overflow: 'hidden' }}>
                                     <ImageFallback

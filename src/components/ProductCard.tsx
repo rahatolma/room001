@@ -10,9 +10,9 @@ interface ProductCardProps {
     brand: string;
     title: string;
     price: string;
-    curator: {
-        name: string;
-        avatar: string;
+    curator?: {
+        name?: string;
+        avatar?: string;
     };
     link?: string;
     collectionItemId?: string;
@@ -55,25 +55,27 @@ export default function ProductCard({ id, image, brand, title, price, curator, l
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '0 4px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <div style={{
-                            width: 20,
-                            height: 20,
-                            borderRadius: '50%',
-                            overflow: 'hidden',
-                            backgroundColor: '#ccc'
-                        }}>
-                            <ImageFallback src={curator.avatar} alt={curator.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                {curator && curator.name && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <div style={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: '50%',
+                                overflow: 'hidden',
+                                backgroundColor: '#ccc'
+                            }}>
+                                <ImageFallback src={curator.avatar || ''} alt={curator.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                            <span style={{ fontSize: '0.75rem', color: '#666', fontWeight: 500 }}>{curator.name}</span>
                         </div>
-                        <span style={{ fontSize: '0.75rem', color: '#666', fontWeight: 500 }}>{curator.name}</span>
                     </div>
-                </div>
+                )}
 
                 <div>
-                    <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-primary, #111)', letterSpacing: 0.5, marginBottom: 4 }}>{brand}</span>
-                    <h3 style={{ fontSize: '0.95rem', fontWeight: 400, margin: 0, lineHeight: 1.4, color: 'var(--text-primary, #444)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{title}</h3>
-                    <span style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary, #000)', marginTop: 8 }}>{price}</span>
+                    <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-primary, #111)', letterSpacing: 0.5, marginBottom: 4 }}>{brand || 'Markasız'}</span>
+                    <h3 style={{ fontSize: '0.95rem', fontWeight: 400, margin: 0, lineHeight: 1.4, color: 'var(--text-primary, #444)', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{title || 'İsimsiz Ürün'}</h3>
+                    <span style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-primary, #000)', marginTop: 8 }}>{price ? `${price} TL` : ''}</span>
                 </div>
             </div>
         </div>

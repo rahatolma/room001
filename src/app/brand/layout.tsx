@@ -30,6 +30,7 @@ export default function BrandLayout({ children }: { children: React.ReactNode })
     const pathname = usePathname();
 
     if (loading) return null;
+    if (!user) return null;
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh', background: '#fafafa' }}>

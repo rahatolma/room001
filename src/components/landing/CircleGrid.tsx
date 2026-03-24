@@ -14,7 +14,7 @@ export default function CircleGrid({ items }: { items?: any[] }) {
                 </div>
                 <div className="landing-section-desc">
                     <p>
-                        Tarzını paylaşan küratör grupları oluştur ve onların en iyi önerilerini keşfet.
+                        Tarzını paylaşan Insider grupları oluştur ve onların en iyi önerilerini keşfet.
                     </p>
                     <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                         <Link href="/circles/new">
@@ -76,6 +76,6 @@ export default function CircleGrid({ items }: { items?: any[] }) {
                     </Link>
                 ))}
             </div>
-        </div>
+        </div >
     );
 }

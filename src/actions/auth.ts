@@ -155,51 +155,6 @@ export async function getSessionAction(): Promise<User | null> {
 
     if (!userId) return null;
 
-    // --- MOCK USERS PERSISTENCE ---
-    if (userId === 'admin_1') {
-        return {
-            id: 'admin_1',
-            email: 'admin@room001.tr',
-            fullName: 'Platform Yöneticisi',
-            username: 'admin',
-            role: 'admin',
-            avatarInitials: 'AD'
-        };
-    }
-    if (userId === 'shopper_1') {
-        return {
-            id: 'shopper_1',
-            email: 'shopper@room001.tr',
-            fullName: 'Alışveriş Tutkunu',
-            username: 'shopaholic',
-            role: 'shopper',
-            avatarInitials: 'AT'
-        };
-    }
-    if (userId === 'creator_1') {
-        return {
-            id: 'creator_1',
-            email: 'insider@room001.tr',
-            fullName: 'Asena Sarıbatur',
-            username: 'asenasaribatur',
-            role: 'creator',
-            avatarInitials: 'AS',
-            avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80'
-        };
-    }
-    if (userId === 'brand_1') {
-        return {
-            id: 'brand_1',
-            email: 'brand@room001.tr',
-            fullName: 'Beymen',
-            username: 'beymen',
-            role: 'brand',
-            avatarInitials: 'B',
-            avatarUrl: 'https://images.unsplash.com/photo-1541533848490-bc9c15ceaccb?w=150&q=80'
-        };
-    }
-    // -----------------------------
-
     try {
         const user = await prisma.user.findUnique({
             where: { id: userId },
@@ -219,15 +174,51 @@ export async function updateProfileAction(updates: Partial<User>) {
     const cookieStore = await cookies();
     const userId = cookieStore.get(COOKIE_NAME)?.value;
 
+    console.log("updateProfileAction invoked for user:", userId);
+    console.log("Updates requested:", updates);
+
     if (!userId) return { success: false, error: 'Oturum bulunamadı' };
 
     try {
         const updateData: any = {};
-        if (updates.fullName) updateData.fullName = updates.fullName;
-        if (updates.email) updateData.email = updates.email;
-        if (updates.password) updateData.password = updates.password;
-        if (updates.bio) updateData.bio = updates.bio;
+
+        // Uniqueness checks
+        if (updates.email !== undefined && updates.email !== '') {
+            const existingEmail = await prisma.user.findFirst({
+                where: { email: updates.email, id: { not: userId } }
+            });
+            if (existingEmail) {
+                console.log("Email already in use:", updates.email);
+                return { success: false, error: 'Bu e-posta adresi başka bir hesap tarafından kullanılıyor.' };
+            }
+            updateData.email = updates.email;
+        }
+
+        if (updates.phoneNumber !== undefined) {
+            if (updates.phoneNumber === '') {
+                // Ignore empty strings, or handle deletion if preferred. We'll ignore for now to avoid breaking existing.
+            } else {
+                const cleanPhone = updates.phoneNumber.replace(/[^0-9]/g, '');
+                if (cleanPhone.length >= 10) {
+                    const existingPhone = await prisma.user.findFirst({
+                        where: { phoneNumber: cleanPhone, id: { not: userId } }
+                    });
+                    if (existingPhone) {
+                        return { success: false, error: 'Bu telefon numarası başka bir hesap tarafından kullanılıyor.' };
+                    }
+                    updateData.phoneNumber = cleanPhone;
+                }
+            }
+        }
+
+        if (updates.fullName !== undefined) updateData.fullName = updates.fullName;
+        if (updates.password !== undefined) updateData.password = updates.password;
+        if (updates.bio !== undefined) updateData.bio = updates.bio;
+        if (updates.username !== undefined) updateData.username = updates.username;
+        if (updates.location !== undefined) updateData.location = updates.location;
         // Add other fields as necessary
+
+        console.log("Executing prisma update with data:", updateData);
 
         const updatedUser = await prisma.user.update({
             where: { id: userId },
@@ -235,6 +226,7 @@ export async function updateProfileAction(updates: Partial<User>) {
             include: { socialAccounts: true }
         });
 
+        console.log("Successfully updated user profile for id:", userId);
         return { success: true, user: mapPrismaUser(updatedUser) };
     } catch (error) {
         console.error('Update profile error:', error);
@@ -262,10 +254,31 @@ function generateOtp() {
     return '123456'; // FIXED OTP FOR DEVELOPMENT
 }
 
-export async function sendPhoneOtpAction(phoneNumber: string) {
+export async function sendPhoneOtpAction(phoneNumber: string, role: string = 'shopper', mode: 'login' | 'signup' = 'signup') {
     // 1. Validate phone (rudimentary)
+    console.log("SERVER OTP ACTION TRIGGERED. phoneNumber received:", `"${phoneNumber}"`, "Role:", role, "Mode:", mode);
     const cleanPhone = phoneNumber.replace(/[^0-9]/g, '');
-    if (cleanPhone.length < 10) return { success: false, error: 'Geçersiz telefon numarası' };
+    console.log("SERVER OTP ACTION. cleanPhone length:", cleanPhone.length, "Value:", `"${cleanPhone}"`);
+    if (cleanPhone.length < 10) return { success: false, error: `Geçersiz: '${cleanPhone}' Lütfen 10 haneli geçerli bir telefon numarası giriniz.` };
+
+    if (mode === 'login') {
+        const existingUser = await prisma.user.findUnique({
+            where: { phoneNumber: cleanPhone }
+        });
+        if (!existingUser) {
+            return { success: false, error: 'Hesabınız yok, lütfen kayıt olunuz.' };
+        }
+        if (existingUser.role !== role) {
+            return { success: false, error: `Bu telefon numarası bir ${existingUser.role === 'shopper' ? 'Alışveriş Sever' : (existingUser.role === 'creator' ? 'Insider' : existingUser.role)} hesabı ile kayıtlı. Lütfen ilgili bölümden giriş yapınız veya farklı bir numara kullanınız.` };
+        }
+    } else if (mode === 'signup') {
+        const existingUser = await prisma.user.findUnique({
+            where: { phoneNumber: cleanPhone }
+        });
+        if (existingUser) {
+            return { success: false, error: `Bu telefon numarası kullanımdadır. Hesabınız varsa giriş yapınız.` };
+        }
+    }
 
     const otp = generateOtp();
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 mins
@@ -284,10 +297,10 @@ export async function sendPhoneOtpAction(phoneNumber: string) {
             create: {
                 phoneNumber: cleanPhone,
                 email: `temp_${cleanPhone}@room001.com`, // Temp email
-                username: `user${cleanPhone.slice(-4)}`, // Temp username
+                username: `user${cleanPhone.slice(-4)}${Math.floor(Math.random() * 1000)}`, // Temp username
                 password: '', // No password for phone users
                 fullName: 'Yeni Üye',
-                role: 'creator', // Default to creator for testing purposes, usually 'shopper'
+                role: role, // Dynamically use the passed role, fallback to 'shopper'
                 isVerified: false,
                 phoneCode: otp,
                 phoneCodeExpires: expiresAt
@@ -324,6 +337,7 @@ export async function verifyPhoneOtpAction(phoneNumber: string, code: string) {
         if (user.phoneCode !== code) {
             return { success: false, error: 'Hatalı kod.' };
         }
+
 
         // Verification successful
         // Clean up OTP fields and verify user
@@ -384,8 +398,11 @@ export async function submitBrandApplication(data: {
     brandName: string;
     websiteUrl: string;
     contactName: string;
+    contactTitle?: string;
     contactEmail: string;
     contactPhone: string;
+    estimatedBudget?: string;
+    mainGoal?: string;
     taxId: string;
 }) {
     try {
@@ -398,8 +415,11 @@ export async function submitBrandApplication(data: {
                 slug: slug,
                 websiteUrl: data.websiteUrl,
                 contactName: data.contactName,
+                contactTitle: data.contactTitle,
                 contactEmail: data.contactEmail,
                 contactPhone: data.contactPhone,
+                estimatedBudget: data.estimatedBudget,
+                mainGoal: data.mainGoal,
                 taxId: data.taxId,
                 status: 'pending' // Important
             }

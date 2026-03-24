@@ -197,6 +197,58 @@ export default function VisionPage() {
                     </div>
                 </div>
 
+                {/* Card 7 (New - Ads) */}
+                <div style={{
+                    background: 'white', border: '1px solid #eee', borderRadius: 20, overflow: 'hidden',
+                    transition: 'transform 0.2s', cursor: 'default'
+                }}>
+                    <div style={{ height: 180, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+                        <div style={{
+                            width: 70, height: 70, background: 'linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%)',
+                            borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 10px 30px rgba(29, 78, 216, 0.3)'
+                        }}>
+                            <Target size={35} color="white" />
+                        </div>
+                    </div>
+                    <div style={{ padding: 25 }}>
+                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 15 }}>Spotlight & Doğal Reklamlar</h3>
+                        <p style={{ color: '#666', lineHeight: 1.5, marginBottom: 20, fontSize: '0.9rem' }}>
+                            Markanı ana sayfada Spotlight ile saniyeler içinde binlerce kişiye ulaştır veya içerikler arasına doğal reklamlar yerleştir.
+                        </p>
+                        <Link href="/for-brands" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#1d4ed8', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>
+                            Reklam Alanları <ArrowRight size={16} />
+                        </Link>
+                    </div>
+                </div>
+
+                {/* Card 8 (New - Magazines) */}
+                <div style={{
+                    background: 'white', border: '1px solid #eee', borderRadius: 20, overflow: 'hidden',
+                    transition: 'transform 0.2s', cursor: 'default'
+                }}>
+                    <div style={{ height: 180, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
+                        <div style={{
+                            width: 70, height: 70, background: 'linear-gradient(135deg, #be185d 0%, #9f1239 100%)',
+                            borderRadius: 18, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 10px 30px rgba(190, 24, 93, 0.3)'
+                        }}>
+                            <Video size={35} color="white" />
+                        </div>
+                    </div>
+                    <div style={{ padding: 25 }}>
+                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 15 }}>İnteraktif Dijital Dergiler</h3>
+                        <p style={{ color: '#666', lineHeight: 1.5, marginBottom: 20, fontSize: '0.9rem' }}>
+                            Sadece link eklemekle kalma. Canlı sayfa çevirme efektli şık dijital dergilerle kendi yayınını yaratıp okunma başına gelir elde et.
+                        </p>
+                        <Link href="/magazines" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#be185d', fontWeight: 600, textDecoration: 'none', fontSize: '0.9rem' }}>
+                            Dergileri İncele <ArrowRight size={16} />
+                        </Link>
+                    </div>
+                </div>
+
             </div>
         </div>
     );

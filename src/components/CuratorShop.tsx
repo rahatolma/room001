@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { SortableNavItem } from './SortableNavItem';
+import Link from 'next/link';
 
 
 interface Product {
@@ -46,6 +47,7 @@ interface CuratorShopProps {
         buttonStyle: string;
     };
     isOwner?: boolean;
+    ads?: any[];
 }
 
 const THEME_COLORS: Record<string, string> = {
@@ -57,7 +59,7 @@ const THEME_COLORS: Record<string, string> = {
     orange: '#ea580c',
 };
 
-export default function CuratorShop({ profile, sections, products, instagramPosts = [], tiktokPosts = [], theme, isOwner = false }: CuratorShopProps) {
+export default function CuratorShop({ profile, sections, products, instagramPosts = [], tiktokPosts = [], theme, isOwner = false, ads = [] }: CuratorShopProps) {
     const [activeSection, setActiveSection] = useState<string>('all');
     const [activeCategory, setActiveCategory] = useState<string>('all');
     const [activePost, setActivePost] = useState<any>(null);
@@ -270,7 +272,7 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                     </div>
 
                     <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-                        <ProductGrid products={formatProductsForGrid(postProducts)} />
+                        <ProductGrid products={formatProductsForGrid(postProducts)} ads={ads} />
                     </div>
                 </div>
             </main>
@@ -509,12 +511,78 @@ export default function CuratorShop({ profile, sections, products, instagramPost
                             </div>
                         )}
                     </div>
+                ) : activeSection === 'all' && filteredProducts.length === products.length ? (
+                    /* INITIAL VIEW: ALL COLLECTIONS GRID */
+                    <div style={{ padding: '20px 0 60px' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 24 }}>
+                            {localSections.map((section: any) => {
+                                // Find products belonging to this section to show thumbnails
+                                const sectionProducts = products.filter(p => p.sectionId === section.id).slice(0, 4);
+
+                                return (
+                                    <Link
+                                        key={section.id}
+                                        href={`/${profile.username}/c/${section.id}`}
+                                        style={{ textDecoration: 'none', color: 'inherit' }}
+                                    >
+                                        <div style={{
+                                            background: '#fff', border: '1px solid #eaeaea', borderRadius: 20, padding: 20,
+                                            transition: 'transform 0.2s, box-shadow 0.2s', cursor: 'pointer', height: '100%',
+                                            display: 'flex', flexDirection: 'column'
+                                        }}
+                                            onMouseOver={(e) => {
+                                                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)';
+                                                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 12px 24px rgba(0,0,0,0.06)';
+                                            }}
+                                            onMouseOut={(e) => {
+                                                (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
+                                                (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
+                                            }}
+                                        >
+                                            <h3 style={{ margin: '0 0 15px 0', fontSize: '1.25rem', fontWeight: 600, letterSpacing: '-0.01em' }}>
+                                                {section.title}
+                                            </h3>
+
+                                            {/* Mini Image Grid for Preview */}
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, flex: 1 }}>
+                                                {sectionProducts.length > 0 ? (
+                                                    sectionProducts.map((p: any) => (
+                                                        <div key={p.id} style={{ position: 'relative', aspectRatio: '1/1', background: '#f5f5f5', borderRadius: 10, overflow: 'hidden' }}>
+                                                            {p.image ? (
+                                                                <ImageFallback src={p.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                            ) : null}
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div style={{ gridColumn: '1 / -1', height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9f9f9', borderRadius: 12, color: '#999', fontSize: '0.85rem' }}>
+                                                        Boş Koleksiyon
+                                                    </div>
+                                                )}
+
+                                                {/* Fill empty spots if less than 4 products */}
+                                                {sectionProducts.length > 0 && sectionProducts.length < 4 &&
+                                                    Array.from({ length: 4 - sectionProducts.length }).map((_, i) => (
+                                                        <div key={`empty-${i}`} style={{ background: '#f9f9f9', borderRadius: 10 }}></div>
+                                                    ))
+                                                }
+                                            </div>
+
+                                            <div style={{ marginTop: 15, display: 'flex', alignItems: 'center', color: 'var(--color-primary, #000)', fontSize: '0.9rem', fontWeight: 600, gap: 5 }}>
+                                                Koleksiyonu İncele <ChevronRight size={16} />
+                                            </div>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </div>
                 ) : (
+                    /* CATEGORY OR SINGLE SECTION VIEW: DIRECT PRODUCT GRID */
                     filteredProducts.length > 0 ? (
-                        <ProductGrid products={formatProductsForGrid(filteredProducts)} />
+                        <ProductGrid products={formatProductsForGrid(filteredProducts)} ads={ads} />
                     ) : (
                         <div style={{ textAlign: 'center', padding: 50, color: '#999' }}>
-                            Bu kategoride henüz ürün yok.
+                            Bu alanda henüz ürün yok.
                         </div>
                     )
                 )}

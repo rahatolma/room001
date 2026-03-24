@@ -19,24 +19,23 @@ const MENU_ITEMS = {
             { title: 'Kolektif Keşfet', description: 'Stilinizi paylaşan Insider grupları.', href: '/circles' },
             { title: 'Marka Keşfet', description: 'Bildiğiniz ve seveceğiniz yeni markaları keşfedin.', href: '/brands' },
             { title: 'Kategori Keşfet', description: 'Her kategorinin en iyilerini güvenle alışveriş yapın.', href: '/categories' },
-            { title: 'Ürünleri Gör', description: 'Öne çıkan tüm ürünlerimizi tek tıkla incele.', href: '/products' },
-            { title: 'Dergi & Blog', description: 'Sezonun öne çıkan son trendlerini oku.', href: '/magazines' },
+            { title: 'Ürün Keşfet', description: 'Öne çıkan tüm ürünlerimizi tek tıkla incele.', href: '/products' },
+            { title: 'Dergi Keşfet', description: 'Sezonun öne çıkan son trendlerini oku.', href: '/magazines' },
         ]
     },
     creators: {
         label: 'Insider\'lar',
         items: [
-            { title: 'Insider\'lar İçin', description: 'Zevkinizi paraya dönüştürün.', href: '/become-creator' },
-            { title: 'Dijital Mağazalar', description: 'Kitleniz için basitleştirilmiş ve premium bir alışveriş deneyimi.', href: '/become-creator/digital-shops' },
-            { title: 'Affiliate Linkler', description: 'Önerileri kalıcı gelire dönüştüren profesyonel altyapı.', href: '/become-creator/affiliate-links' },
-            { title: 'Marka İşbirlikleri', description: 'Otantik zevk arayan premium markalara doğrudan erişim.', href: '/become-creator/brand-partnerships' },
-            { title: 'Insider Ol', description: 'Kolektif ağımıza katılın ve premium araçlara erişin.', href: '/become-creator' },
+            { title: 'Insider Olarak Katıl', description: 'Zevkinizi paraya dönüştürün.', href: '/become-creator' },
+            { title: 'Dijital Mağazanı Kur', description: 'Kitleniz için basitleştirilmiş ve premium bir alışveriş deneyimi.', href: '/become-creator/digital-shops' },
+            { title: 'Link Paylaş', description: 'Önerileri kalıcı gelire dönüştüren profesyonel altyapı.', href: '/become-creator/affiliate-links' },
+            { title: 'Marka İşbirliklerini İncele', description: 'Otantik zevk arayan premium markalara doğrudan erişim.', href: '/become-creator/brand-partnerships' },
         ]
     },
     brands: {
         label: 'Markalar',
         items: [
-            { title: 'Markalar İçin', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/for-brands' },
+            { title: 'Marka Olarak Katıl', description: 'Kültür yaratan zevk sahipleriyle keşfedin, etkileşime geçin ve işbirliği yapın.', href: '/for-brands' },
             { title: 'Keşfet', description: 'Gerçek satışları yönlendiren 185.000+ zevk sahibinden oluşan ağımıza erişin.', href: '/for-brands/discover' },
             { title: 'Etkileşim', description: 'Premium zevk sahiplerini performans verileri ve zevk profilleri aracılığıyla bulun.', href: '/for-brands/engage' },
             { title: 'Takip', description: 'Kalıcı marka inşası için altyapı aracılığıyla gerçek performansı ve ROI\'yi izleyin.', href: '/for-brands/track' },
@@ -47,10 +46,12 @@ const MENU_ITEMS = {
 
 function HeaderUrlHandler({
     setIsLoginOpen,
-    setIsSignupOpen
+    setIsSignupOpen,
+    setLoginMode
 }: {
     setIsLoginOpen: (v: boolean) => void,
-    setIsSignupOpen: (v: boolean) => void
+    setIsSignupOpen: (v: boolean) => void,
+    setLoginMode: (v: 'login' | 'signup') => void
 }) {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -61,6 +62,7 @@ function HeaderUrlHandler({
         const signupParam = searchParams.get('signup');
 
         if (loginParam === 'true') {
+            setLoginMode('login');
             setIsLoginOpen(true);
             const params = new URLSearchParams(searchParams.toString());
             params.delete('login');
@@ -79,6 +81,7 @@ function HeaderUrlHandler({
 export default function Header() {
     const { user, logout } = useAuth();
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [loginMode, setLoginMode] = useState<'login' | 'signup'>('login');
     const [isSignupOpen, setIsSignupOpen] = useState(false);
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -125,7 +128,7 @@ export default function Header() {
     return (
         <>
             <Suspense fallback={null}>
-                <HeaderUrlHandler setIsLoginOpen={setIsLoginOpen} setIsSignupOpen={setIsSignupOpen} />
+                <HeaderUrlHandler setIsLoginOpen={setIsLoginOpen} setIsSignupOpen={setIsSignupOpen} setLoginMode={setLoginMode} />
             </Suspense>
             <header style={{
                 position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
@@ -152,78 +155,109 @@ export default function Header() {
                                 onMouseLeave={handleMouseLeave}
                                 style={{ height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer', position: 'relative' }}
                             >
-                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.95rem', fontWeight: 500, }}>
-                                    {section.label} <ChevronDown size={14} />
+                                <span style={{
+                                    display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.95rem', fontWeight: 600,
+                                    color: activeDropdown === key ? 'black' : 'inherit',
+                                    transition: 'color 0.2s ease'
+                                }}>
+                                    {section.label} <ChevronDown size={14} style={{
+                                        transform: activeDropdown === key ? 'rotate(180deg)' : 'rotate(0deg)',
+                                        transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                                    }} />
                                 </span>
                             </div>
                         ))}
                     </nav>
 
                     {/* RIGHT ACTIONS */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
-                        <button className="mobile-hide-btn" onClick={() => { }} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer' }}>
-                            <Search size={22} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+                        <button className="mobile-hide-btn hover-opacity" style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', transition: 'opacity 0.2s' }}>
+                            <Search size={20} />
                         </button>
 
                         <button
                             className="beta-feedback-btn mobile-hide-btn"
                             onClick={() => setIsFeedbackOpen(true)}
                             style={{
-                                display: 'flex', alignItems: 'center', gap: 6,
-                                background: 'linear-gradient(135deg, #10b981, #059669)',
-                                color: 'white', border: 'none', padding: '8px 16px', borderRadius: 30,
+                                display: 'flex', alignItems: 'center', gap: 8,
+                                background: 'linear-gradient(135deg, #111, #333)',
+                                color: 'white', border: 'none', padding: '10px 18px', borderRadius: 30,
                                 fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer',
-                                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                                transition: 'transform 0.2s, box-shadow 0.2s'
                             }}
+                            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.15)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)'; }}
                         >
                             <MessageSquareShare size={16} /> <span>Beta Geri Bildirim</span>
                         </button>
 
                         {!user ? (
-                            <>
-                                <button className="mobile-hide-btn" onClick={() => setIsLoginOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <button className="mobile-hide-btn" onClick={() => { setLoginMode('login'); setIsLoginOpen(true); }} style={{ background: 'none', border: 'none', color: 'inherit', fontWeight: 600, cursor: 'pointer', fontSize: '0.95rem', transition: 'opacity 0.2s' }}>
                                     Giriş Yap
                                 </button>
-                                <Button className="mobile-hide-btn" onClick={() => setIsSignupOpen(true)} style={{ background: activeDropdown || mobileMenuOpen ? 'black' : 'white', color: activeDropdown || mobileMenuOpen ? 'white' : 'black', padding: '12px 24px', borderRadius: 4 }}>
+                                <Button className="mobile-hide-btn" onClick={() => setIsSignupOpen(true)} style={{
+                                    background: activeDropdown || mobileMenuOpen ? 'black' : '#111',
+                                    color: 'white', padding: '10px 24px', borderRadius: 30, fontWeight: 700,
+                                    border: 'none', transition: 'all 0.3s ease'
+                                }}>
                                     Başvur
                                 </Button>
-                            </>
+                            </div>
                         ) : (
                             <Link href="/dashboard" className="mobile-hide-btn" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
-                                <div style={{ width: 36, height: 36, background: '#eee', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black', fontWeight: 700 }}>
+                                <div style={{
+                                    width: 40, height: 40, background: '#f5f5f5', borderRadius: '50%',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    color: 'black', fontWeight: 700, border: '1px solid #eaeaea',
+                                    transition: 'transform 0.2s, box-shadow 0.2s'
+                                }}
+                                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)'; }}
+                                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}
+                                >
                                     {user.avatarInitials}
                                 </div>
                             </Link>
                         )}
 
                         {/* Hamburger menu is now visible on desktop too, acting as a global side menu */}
-                        <button onClick={() => setMobileMenuOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', marginLeft: 10 }}>
+                        <button onClick={() => setMobileMenuOpen(true)} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', marginLeft: 10, transition: 'opacity 0.2s' }} className="hover-opacity">
                             <Menu size={28} />
                         </button>
                     </div>
                 </div>
 
                 {/* MEGA MENU DROPDOWN */}
-                {activeDropdown && (
-                    <div
-                        onMouseEnter={() => { if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current); }}
-                        onMouseLeave={handleMouseLeave}
-                        style={{
-                            position: 'absolute', top: 80, left: 0, right: 0, background: 'white',
-                            padding: '40px 0 60px', borderTop: '1px solid #f0f0f0', boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
-                            color: 'black'
-                        }}
-                    >
-                        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, padding: '0 40px' }}>
-                            {MENU_ITEMS[activeDropdown as keyof typeof MENU_ITEMS].items.map((item: any, idx) => (
-                                <Link key={idx} href={item.href} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-                                    <h3 style={{ fontSize: '1.2rem', marginBottom: 8, fontWeight: 700 }}>{item.title}</h3>
-                                    <p style={{ fontSize: '0.9rem', color: '#666', lineHeight: 1.5, margin: 0 }}>{item.description}</p>
-                                </Link>
-                            ))}
-                        </div>
+                <div
+                    onMouseEnter={() => { if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current); }}
+                    onMouseLeave={handleMouseLeave}
+                    style={{
+                        position: 'absolute', top: 80, left: 0, right: 0, background: 'rgba(255, 255, 255, 0.98)',
+                        backdropFilter: 'blur(10px)',
+                        padding: '40px 0 60px', borderTop: '1px solid #f0f0f0', boxShadow: '0 20px 40px rgba(0,0,0,0.06)',
+                        color: 'black',
+                        opacity: activeDropdown ? 1 : 0,
+                        visibility: activeDropdown ? 'visible' : 'hidden',
+                        transform: activeDropdown ? 'translateY(0)' : 'translateY(-10px)',
+                        pointerEvents: activeDropdown ? 'auto' : 'none',
+                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                    }}
+                >
+                    <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 50, padding: '0 40px' }}>
+                        {activeDropdown && MENU_ITEMS[activeDropdown as keyof typeof MENU_ITEMS].items.map((item: any, idx) => (
+                            <Link key={idx} href={item.href} style={{ textDecoration: 'none', color: 'inherit', display: 'block', padding: '15px 20px', borderRadius: 12, transition: 'background 0.2s' }}
+                                onMouseEnter={(e) => e.currentTarget.style.background = '#f9f9f9'}
+                                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                            >
+                                <h3 style={{ fontSize: '1.25rem', marginBottom: 8, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    {item.title} <span style={{ opacity: 0, transform: 'translateX(-10px)', transition: 'all 0.3s ease', display: 'inline-block' }} className="menu-arrow">→</span>
+                                </h3>
+                                <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.5, margin: 0 }}>{item.description}</p>
+                            </Link>
+                        ))}
                     </div>
-                )}
+                </div>
             </header>
 
             {/* SPACER FOR FIXED HEADER (Only on non-home pages AND non-dashboard pages) */}
@@ -281,7 +315,7 @@ export default function Header() {
                             {!user ? (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
                                     <Button onClick={() => { setIsSignupOpen(true); setMobileMenuOpen(false); }} style={{ width: '100%', padding: '15px 0' }}>BAŞVUR</Button>
-                                    <Button variant="outline" onClick={() => { setIsLoginOpen(true); setMobileMenuOpen(false); }} style={{ width: '100%', padding: '15px 0' }}>GİRİŞ YAP</Button>
+                                    <Button variant="outline" onClick={() => { setLoginMode('login'); setIsLoginOpen(true); setMobileMenuOpen(false); }} style={{ width: '100%', padding: '15px 0' }}>GİRİŞ YAP</Button>
                                     <Button
                                         onClick={() => { setIsFeedbackOpen(true); setMobileMenuOpen(false); }}
                                         style={{ width: '100%', padding: '15px 0', background: 'linear-gradient(135deg, #10b981, #059669)', color: 'white', border: 'none' }}
@@ -311,18 +345,19 @@ export default function Header() {
             {/* Modals */}
             <LoginModal
                 isOpen={isLoginOpen}
+                mode={loginMode}
                 onClose={() => setIsLoginOpen(false)}
-                type="shopper"
+                type={undefined}
                 onSwitchToSignup={() => { setIsLoginOpen(false); setIsSignupOpen(true); }}
-                onLoginSuccess={() => router.push('/dashboard')}
+                onLoginSuccess={() => { window.location.href = '/dashboard'; }}
             />
             <SignupSelectionModal
                 isOpen={isSignupOpen}
                 onClose={() => setIsSignupOpen(false)}
-                onLoginClick={() => { setIsSignupOpen(false); setIsLoginOpen(true); }}
-                onSignupClick={() => { setIsSignupOpen(false); /* redirect to shopper signup */ }}
+                onLoginClick={() => { setIsSignupOpen(false); setLoginMode('login'); setIsLoginOpen(true); }}
+                onSignupClick={() => { setIsSignupOpen(false); setLoginMode('signup'); setIsLoginOpen(true); }}
                 onCreatorClick={() => { setIsSignupOpen(false); router.push('/become-creator'); }}
-                onBrandClick={() => { setIsSignupOpen(false); router.push('/brands/inquiry'); }}
+                onBrandClick={() => { setIsSignupOpen(false); router.push('/for-brands/inquiry'); }}
             />
 
             <FeedbackModal

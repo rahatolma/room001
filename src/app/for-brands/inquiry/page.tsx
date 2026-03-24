@@ -9,14 +9,32 @@ export default function BrandInquiryPage() {
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulasyon API call
-        setTimeout(() => {
-            setIsSubmitting(false);
+
+        const formData = new FormData(e.currentTarget);
+        const data = {
+            brandName: formData.get('brandName') as string,
+            websiteUrl: formData.get('websiteUrl') as string,
+            contactName: `${formData.get('firstName')} ${formData.get('lastName')}`,
+            contactTitle: formData.get('contactTitle') as string,
+            contactEmail: formData.get('contactEmail') as string,
+            contactPhone: formData.get('contactPhone') as string,
+            estimatedBudget: formData.get('estimatedBudget') as string,
+            mainGoal: formData.get('mainGoal') as string,
+            taxId: 'Kurumsal'
+        };
+
+        const { submitBrandApplication } = await import('@/actions/auth');
+        const result = await submitBrandApplication(data);
+
+        setIsSubmitting(false);
+        if (result.success) {
             setSubmitted(true);
-        }, 1500);
+        } else {
+            alert(result.error || 'Bir hata oluştu.');
+        }
     };
 
     if (submitted) {
@@ -76,27 +94,44 @@ export default function BrandInquiryPage() {
                         <div style={{ display: 'flex', gap: 20 }}>
                             <div style={{ flex: 1 }}>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Adınız *</label>
-                                <input type="text" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="Örn: Asena" />
+                                <input type="text" name="firstName" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="Örn: Asena" />
                             </div>
                             <div style={{ flex: 1 }}>
                                 <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Soyadınız *</label>
-                                <input type="text" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="Örn: Yılmaz" />
+                                <input type="text" name="lastName" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="Örn: Yılmaz" />
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: 20 }}>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Şirket E-postası *</label>
+                                <input type="email" name="contactEmail" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="isim@sirketiniz.com" />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Cep Telefonu *</label>
+                                <input type="tel" name="contactPhone" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="0555 123 45 67" />
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: 20 }}>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Marka / Şirket Adı *</label>
+                                <input type="text" name="brandName" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="Marka Adı" />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Şirketteki Ünvanınız *</label>
+                                <input type="text" name="contactTitle" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="Pazarlama Müdürü" />
                             </div>
                         </div>
 
                         <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Şirket E-postası *</label>
-                            <input type="email" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="isim@sirketiniz.com" />
-                        </div>
-
-                        <div>
-                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Çalıştığınız Marka / Web Sitesi *</label>
-                            <input type="url" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="https://..." />
+                            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Web Sitesi *</label>
+                            <input type="url" name="websiteUrl" required style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none' }} placeholder="https://..." />
                         </div>
 
                         <div>
                             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Aylık Tahmini Pazarlama Bütçesi</label>
-                            <select style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none', background: 'white' }}>
+                            <select name="estimatedBudget" style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none', background: 'white' }}>
                                 <option>50.000₺ - 200.000₺ (Gelişen Marka)</option>
                                 <option>200.000₺ - 1.000.000₺ (Ölçeklenen Marka)</option>
                                 <option>1.000.000₺+ (Kurumsal / Ajans)</option>
@@ -105,7 +140,7 @@ export default function BrandInquiryPage() {
 
                         <div>
                             <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#444', marginBottom: 8 }}>Ana Hedefiniz Ne?</label>
-                            <textarea rows={4} style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none', resize: 'vertical' }} placeholder="Örn: Yeni çıkacak yaz koleksiyonumuz için awareness yaratmak ve affiliate satışları artırmak..." />
+                            <textarea name="mainGoal" rows={4} style={{ width: '100%', padding: '14px', borderRadius: 8, border: '1px solid #ddd', fontSize: '1rem', outline: 'none', resize: 'vertical' }} placeholder="Örn: Yeni çıkacak yaz koleksiyonumuz için awareness yaratmak ve affiliate satışları artırmak..." />
                         </div>
 
                         <Button

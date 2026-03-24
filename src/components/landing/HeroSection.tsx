@@ -101,7 +101,7 @@ export default function HeroSection() {
                                 Insider Olarak Katıl
                             </Button>
                         </Link>
-                        <Link href="/brands" style={{ textDecoration: 'none' }}>
+                        <Link href="/for-brands" style={{ textDecoration: 'none' }}>
                             <Button variant="outline" style={{
                                 padding: '16px 36px',
                                 fontSize: '1.1rem',
@@ -134,50 +134,52 @@ export default function HeroSection() {
 
                 {/* Imagery / UI Mockup representing LTK/Room001 profile */}
                 <div style={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center', position: 'relative' }}>
-                    <div style={{
-                        position: 'relative',
-                        width: '100%',
-                        maxWidth: '420px',
-                        aspectRatio: '9/16',
-                        background: '#fff',
-                        borderRadius: '30px',
-                        boxShadow: '0 30px 60px rgba(0,0,0,0.12)',
-                        overflow: 'hidden',
-                        border: '8px solid #f9f9f9'
-                    }}>
-                        {/* Fake App UI Header */}
-                        <div style={{ padding: '20px', borderBottom: '1px solid #eee' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                                <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#ccc', backgroundImage: 'url(https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop)', backgroundSize: 'cover' }} />
-                                <div>
-                                    <div style={{ fontWeight: 800, fontSize: '1.1rem' }}>@stil_ikonu</div>
-                                    <div style={{ color: '#666', fontSize: '0.9rem' }}>Moda & Yaşam Tarzı Editörü</div>
+                    <div style={{ position: 'relative', width: '100%', maxWidth: '420px' }}>
+                        <div style={{
+                            position: 'relative',
+                            width: '100%',
+                            aspectRatio: '9/16',
+                            background: '#fff',
+                            borderRadius: '30px',
+                            boxShadow: '0 30px 60px rgba(0,0,0,0.12)',
+                            overflow: 'hidden',
+                            border: '8px solid #f9f9f9'
+                        }}>
+                            {/* Fake App UI Header */}
+                            <div style={{ padding: '20px', borderBottom: '1px solid #eee' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#ccc', backgroundImage: 'url(https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop)', backgroundSize: 'cover' }} />
+                                    <div>
+                                        <div style={{ fontWeight: 800, fontSize: '1.1rem' }}>@stil_ikonu</div>
+                                        <div style={{ color: '#666', fontSize: '0.9rem' }}>Moda & Yaşam Tarzı Editörü</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        {/* Fake Masonry Grid - Adjusted for better visual balance */}
-                        <div style={{ padding: '15px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', alignItems: 'start' }}>
-                            {/* Column 1 */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                <div style={{ height: '180px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                                <div style={{ height: '220px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                                <div style={{ height: '150px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1617019114594-c941e8656f70?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                                <div style={{ height: '190px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                            {/* Fake Masonry Grid - Adjusted for better visual balance */}
+                            <div style={{ padding: '15px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', alignItems: 'start' }}>
+                                {/* Column 1 */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <div style={{ height: '180px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div style={{ height: '220px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div style={{ height: '150px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1617019114594-c941e8656f70?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div style={{ height: '190px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                </div>
+                                {/* Column 2 */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    <div style={{ height: '140px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div style={{ height: '160px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div style={{ height: '190px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div style={{ height: '140px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                </div>
                             </div>
-                            {/* Column 2 */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                <div style={{ height: '140px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                                <div style={{ height: '160px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                                <div style={{ height: '190px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                                <div style={{ height: '140px', borderRadius: '12px', background: '#f0f0f0', backgroundImage: 'url(https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=400&auto=format&fit=crop)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
-                            </div>
+
                         </div>
 
-                        {/* Floating Earning Tag 1 */}
+                        {/* Floating Tag 1 */}
                         <div style={{
-                            position: 'absolute', top: '15%', right: '-5%', background: '#fff', padding: '12px 20px',
+                            position: 'absolute', top: '20%', right: '-20%', background: '#fff', padding: '12px 20px',
                             borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '10px',
-                            animation: 'float 3s ease-in-out infinite'
+                            animation: 'float 3s ease-in-out infinite', zIndex: 10
                         }}>
                             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#FCE4EC', color: '#C2185B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>✦</div>
                             <div>
@@ -186,29 +188,16 @@ export default function HeroSection() {
                             </div>
                         </div>
 
-                        {/* Floating Earning Tag 2 */}
+                        {/* Floating Tag 2 */}
                         <div style={{
-                            position: 'absolute', bottom: '25%', left: '-15%', background: '#fff', padding: '12px 20px',
+                            position: 'absolute', bottom: '25%', left: '-20%', background: '#fff', padding: '12px 20px',
                             borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '10px',
-                            animation: 'float 3.5s ease-in-out infinite 1s'
+                            animation: 'float 3.5s ease-in-out infinite 1s', zIndex: 10
                         }}>
                             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E3F2FD', color: '#1565C0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>⭐</div>
                             <div>
                                 <div style={{ fontSize: '0.75rem', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>Seçilmiş Marka</div>
                                 <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>Vakko</div>
-                            </div>
-                        </div>
-
-                        {/* Floating Earning Tag 3 */}
-                        <div style={{
-                            position: 'absolute', bottom: '5%', right: '10%', background: '#fff', padding: '12px 20px',
-                            borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '10px',
-                            animation: 'float 4s ease-in-out infinite 0.5s'
-                        }}>
-                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E8F5E9', color: '#2E7D32', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>💰</div>
-                            <div>
-                                <div style={{ fontSize: '0.75rem', color: '#666', fontWeight: 600, textTransform: 'uppercase' }}>Yeni Kazanç</div>
-                                <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>₺1,250.00</div>
                             </div>
                         </div>
                     </div>

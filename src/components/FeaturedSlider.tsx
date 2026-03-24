@@ -130,23 +130,49 @@ const FeaturedSlider: React.FC<FeaturedSliderProps> = ({ items, type, onSearchCh
 
                         {/* Title (Animated per slide) */}
                         <AnimatePresence mode="wait">
-                            <motion.h1
+                            <motion.div
                                 key={activeItem.title}
                                 initial={{ opacity: 0, y: 15 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -15 }}
                                 transition={{ duration: 0.4 }}
                                 style={{
-                                    fontFamily: 'var(--font-dm-sans), sans-serif',
-                                    fontSize: '3.5rem',
-                                    fontWeight: 700,
-                                    lineHeight: 1.1,
-                                    color: '#000',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-start',
                                     margin: '40px 0 20px 0'
                                 }}
                             >
-                                {activeItem.title}
-                            </motion.h1>
+                                {activeItem.isSpotlight && (
+                                    <div style={{
+                                        background: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)',
+                                        color: 'white',
+                                        padding: '4px 10px',
+                                        borderRadius: '4px',
+                                        fontSize: '0.7rem',
+                                        fontWeight: 800,
+                                        letterSpacing: '1px',
+                                        marginBottom: '10px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        boxShadow: '0 4px 10px rgba(234, 179, 8, 0.3)'
+                                    }}>
+                                        ÖNE ÇIKAN (SPOTLIGHT)
+                                    </div>
+                                )}
+                                <h1
+                                    style={{
+                                        fontFamily: 'var(--font-dm-sans), sans-serif',
+                                        fontSize: '3.5rem',
+                                        fontWeight: 700,
+                                        lineHeight: 1.1,
+                                        color: '#000',
+                                        margin: 0
+                                    }}
+                                >
+                                    {activeItem.title}
+                                </h1>
+                            </motion.div>
                         </AnimatePresence>
                     </div>
 

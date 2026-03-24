@@ -73,17 +73,18 @@ export async function getFeaturedCurators() {
     // Fetch users from DB
     let users = await prisma.user.findMany({
       where: {
+        role: 'creator',
         OR: [
           { id: { in: featuredIds } },
           { username: { in: featuredIds } },
-          // Also check slug if we had it, but username is close enough for now
         ],
       },
     });
 
-    // Fallback: If no specific featured curators found, fetch any 8 users
+    // Fallback: If no specific featured curators found, fetch 8 creators
     if (users.length === 0) {
       users = await prisma.user.findMany({
+        where: { role: 'creator' },
         take: 8,
         orderBy: { createdAt: "desc" },
       });
@@ -733,7 +734,7 @@ export interface TiktokPost {
 export async function getTiktokPosts(curatorId: string) {
   try {
     const posts = await readJsonFile(TIKTOK_FILE_PATH);
-    return posts.filter((p: TiktokPost) => p.curatorId === curatorId);
+    return posts.filter((p: any) => p.curatorId === curatorId);
   } catch (error) {
     return [];
   }
@@ -746,7 +747,6 @@ export async function getCuratorData(username: string) {
     // Fetch user with collections and products
     let user = await prisma.user.findUnique({
       where: { username },
-      relationLoadStrategy: "join",
       include: {
         collections: {
           orderBy: {
@@ -773,7 +773,6 @@ export async function getCuratorData(username: string) {
         where: {
           username: username.toLowerCase(),
         },
-        relationLoadStrategy: "join",
         include: {
           collections: {
             orderBy: {
@@ -815,7 +814,6 @@ export async function getCuratorData(username: string) {
         if (match) {
           user = await prisma.user.findUnique({
             where: { id: match.id },
-            relationLoadStrategy: "join",
             include: {
               collections: {
                 orderBy: { createdAt: "desc" },
@@ -831,18 +829,15 @@ export async function getCuratorData(username: string) {
             },
           });
         }
-      } catch (e) {
-        console.error("Error in fallback user search:", e);
+      } catch (error) {
+        console.error("Error in fallback user search:", error);
       }
     }
 
-    if (!user) {
-      console.log(`User not found for username: ${username}`);
-      return null;
-    }
+    // Final check for user
+    if (!user) return null;
 
     // Flatten products from all collections for the 'products' array
-    // (This mimics the old architecture)
     const allProducts = user.collections.flatMap((c: any) =>
       c.items
         .filter((i: any) => i.isVisible !== false) // Filter Hidden Items
@@ -905,13 +900,12 @@ export async function getCuratorData(username: string) {
       sections: sections,
       products: allProducts,
       instagramPosts: instagramPosts || [],
-      tiktokPosts: tiktokPosts || [],
     };
   } catch (error) {
-    console.error("Error fetching curator data DETAILED:", error);
-    return { error: "Failed to fetch curator data", details: error };
+    console.error("Critical error in getCuratorData:", error);
+    return null;
   }
-}
+} // Close function
 
 export async function toggleInstagramConnection(
   userId: string,
@@ -941,5 +935,174 @@ export async function toggleInstagramConnection(
   } catch (error) {
     console.error("Error toggling Instagram:", error);
     return { success: false, error: "Failed to update settings" };
+  }
+}
+
+export async function searchProducts(query: string) {
+  try {
+    if (!query || query.trim().length === 0) {
+      // Return popular/featured ones if empty query
+      const results = await prisma.product.findMany({
+        take: 20,
+        orderBy: { price: "desc" }, // Sort by price
+        include: { brand: true }
+      });
+      return results.map(p => ({
+        ...p,
+        price: p.price ? Number(p.price) : 0,
+        salePrice: p.salePrice ? Number(p.salePrice) : null,
+        estimatedRevenue: p.price && p.brand?.commissionRate ? Number(p.price) * (Number(p.brand.commissionRate) / 100) : 0, // Mock revenue mapping
+        brand: p.brand ? { ...p.brand, commissionRate: p.brand.commissionRate ? Number(p.brand.commissionRate) : 0 } : null
+      }));
+    }
+
+    const products = await prisma.product.findMany({
+      where: {
+        AND: [
+          { brandId: { not: null } },
+          {
+            OR: [
+              { title: { contains: query, mode: "insensitive" } as any },
+              { brand: { is: { name: { contains: query, mode: "insensitive" } as any } } }, // FIX: Prisma relationship filtering
+            ]
+          }
+        ]
+      },
+      include: { brand: true },
+      take: 20,
+    });
+
+    return products.map(p => ({
+      ...p,
+      price: p.price ? Number(p.price) : 0,
+      salePrice: p.salePrice ? Number(p.salePrice) : null,
+      estimatedRevenue: p.price && p.brand?.commissionRate ? Number(p.price) * (Number(p.brand.commissionRate) / 100) : 0, // Mock revenue mapping
+      brand: p.brand ? { ...p.brand, commissionRate: p.brand.commissionRate ? Number(p.brand.commissionRate) : 0 } : null
+    }));
+  } catch (error) {
+    console.error("Error searching products:", error);
+    return [];
+  }
+}
+
+// --- Brand Product Management Actions ---
+
+// Temporary mock mapping: map user emails/ids to brand names since ownerId doesn't exist yet
+const mockBrandUserMapping: Record<string, string> = {
+  "brand_1": "Beymen",
+  "brand@room001.tr": "Beymen"
+};
+
+export async function getBrandProducts(userId: string) {
+  try {
+    const brandName = mockBrandUserMapping[userId];
+    if (!brandName) return { success: false, error: "Kullanıcıya ait marka eşleşmesi bulunamadı." };
+
+    let brand = await prisma.brand.findFirst({
+      where: { name: brandName }
+    });
+
+    // Auto-create for dev/mock environment if missing
+    if (!brand) {
+      brand = await prisma.brand.create({
+        data: {
+          name: brandName,
+          slug: brandName.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000),
+          commissionRate: 10
+        }
+      });
+    }
+
+    const products = await prisma.product.findMany({
+      where: { brandId: brand.id },
+      orderBy: { createdAt: "desc" },
+      include: { brand: true }
+    });
+
+    const safeProducts = products.map(p => ({
+      ...p,
+      price: p.price ? Number(p.price) : 0,
+      salePrice: p.salePrice ? Number(p.salePrice) : null,
+      brand: p.brand ? { ...p.brand, commissionRate: p.brand.commissionRate ? Number(p.brand.commissionRate) : 0 } : null
+    }));
+
+    return { success: true, products: safeProducts };
+  } catch (error) {
+    console.error("Error fetching brand products:", error);
+    return { success: false, error: "Ürünler yüklenirken hata oluştu." };
+  }
+}
+
+export async function createBrandProduct(userId: string, data: { title: string, price: number, imageUrl: string, productUrl: string, commissionRate: number }) {
+  try {
+    const brandName = mockBrandUserMapping[userId];
+    if (!brandName) return { success: false, error: "Kullanıcıya ait marka eşleşmesi bulunamadı." };
+
+    let brand = await prisma.brand.findFirst({
+      where: { name: brandName }
+    });
+
+    // Auto-create for dev/mock environment if missing
+    if (!brand) {
+      brand = await prisma.brand.create({
+        data: {
+          name: brandName,
+          slug: brandName.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.floor(Math.random() * 1000),
+          commissionRate: 10
+        }
+      });
+    }
+
+    // Update brand commission rate if provided
+    if (data.commissionRate !== undefined) {
+      brand = await prisma.brand.update({
+        where: { id: brand.id },
+        data: { commissionRate: data.commissionRate }
+      });
+    }
+
+    const product = await prisma.product.create({
+      data: {
+        title: data.title,
+        price: data.price,
+        imageUrl: data.imageUrl,
+        productUrl: data.productUrl,
+        brandId: brand.id
+      }
+    });
+
+    return { success: true, product: { ...product, price: Number(product.price) } };
+  } catch (error) {
+    console.error("Error creating brand product:", error);
+    return { success: false, error: "Ürün eklenirken hata oluştu." };
+  }
+}
+
+export async function deleteBrandProduct(userId: string, productId: string) {
+  try {
+    const brandName = mockBrandUserMapping[userId];
+    if (!brandName) return { success: false, error: "Kullanıcıya ait marka eşleşmesi bulunamadı." };
+
+    const brand = await prisma.brand.findFirst({
+      where: { name: brandName }
+    });
+
+    if (!brand) return { success: false, error: "Marka profili bulunamadı." };
+
+    // Make sure the product actually belongs to this brand
+    const product = await prisma.product.findFirst({
+      where: { id: productId, brandId: brand.id }
+    });
+
+    if (!product) return { success: false, error: "Silinecek ürün bulunamadı veya yetkiniz yok." };
+
+    await prisma.product.delete({
+      where: { id: productId }
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting brand product:", error);
+    return { success: false, error: "Ürün silinirken hata oluştu." };
   }
 }

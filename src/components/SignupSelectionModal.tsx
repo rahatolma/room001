@@ -55,7 +55,7 @@ const SignupSelectionModal: React.FC<SignupSelectionModalProps> = ({
                         onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#eaeaea'; e.currentTarget.style.background = 'white'; }}
                     >
                         <div>
-                            <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: 4 }}>Alışveriş</div>
+                            <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: 4 }}>Alışveriş Sever</div>
                             <div style={{ fontSize: '0.85rem', color: '#666' }}>Favori içerik üreticilerinizin önerilerini keşfedin.</div>
                         </div>
                         <div style={{ color: '#000' }}>

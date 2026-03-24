@@ -34,6 +34,7 @@ export interface User {
     dolapAccountUrl?: string;
     gardropsAccountUrl?: string;
     totalEarnings?: number;
+    phoneNumber?: string;
 }
 
 export interface ThemePreferences {
@@ -45,10 +46,15 @@ export interface ThemePreferences {
 
 export interface Product {
     id: string;
-    name: string;
-    brand: string;
-    imageUrl: string;
-    link: string;
+    name?: string; // Legacy
+    title?: string; // New Schema
+    brand?: any; // Can be string or relation object
+    imageUrl?: string;
+    link?: string;
+    productUrl?: string; // New Schema
+    price?: number;
+    salePrice?: number | null;
+    estimatedRevenue?: number;
     clicks?: number;
     earnings?: number;
 }
