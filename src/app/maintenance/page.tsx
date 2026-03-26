@@ -7,36 +7,82 @@ export const metadata = {
 
 export default function MaintenancePage() {
     return (
-        <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 sm:p-12 relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent opacity-50"></div>
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
-
-            <div className="max-w-xl w-full text-center relative z-10 space-y-8">
-                {/* Logo / Icon Area */}
-                <div className="relative group cursor-pointer p-8 rounded-full bg-zinc-950 border border-white/10 shadow-[0_0_0_8px_rgba(255,255,255,0.02)] mx-auto inline-block">
-                    <Sparkles className="w-16 h-16 text-white relative z-10" />
-                    <div className="absolute inset-0 bg-white/10 blur-3xl opacity-50"></div>
+        <>
+            <style dangerouslySetInnerHTML={{ __html: `
+                header, footer { display: none !important; }
+                body { background: #000 !important; color: #fff !important; margin: 0; padding: 0; }
+                .maintenance-container {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 100vh;
+                    text-align: center;
+                    padding: 2rem;
+                    position: relative;
+                    z-index: 10;
+                    font-family: var(--font-dm-sans), sans-serif;
+                }
+                .maintenance-sparkles {
+                    margin-bottom: 2rem;
+                    color: #fff;
+                }
+                .maintenance-title {
+                    font-size: 3rem;
+                    font-weight: 800;
+                    margin-bottom: 1rem;
+                    letter-spacing: -1px;
+                }
+                .maintenance-desc {
+                    font-size: 1.2rem;
+                    color: #999;
+                    max-width: 500px;
+                    line-height: 1.6;
+                    margin: 0 auto;
+                }
+                .status-badge {
+                    margin-top: 2rem;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    background: rgba(255,255,255,0.1);
+                    padding: 8px 16px;
+                    border-radius: 50px;
+                    font-family: monospace;
+                    font-size: 0.9rem;
+                    letter-spacing: 1px;
+                    color: #fff;
+                }
+                .pulse-dot {
+                    width: 10px;
+                    height: 10px;
+                    background: #f5a623;
+                    border-radius: 50%;
+                    box-shadow: 0 0 10px #f5a623;
+                    animation: pulse 1.5s infinite;
+                }
+                @keyframes pulse {
+                    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 166, 35, 0.7); }
+                    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 166, 35, 0); }
+                    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 166, 35, 0); }
+                }
+            `}} />
+            <main className="maintenance-container">
+                <div className="maintenance-sparkles">
+                    <Sparkles size={64} />
                 </div>
-
-                {/* Typography */}
-                <div className="space-y-4">
-                    <h1 className="text-4xl md:text-5xl font-black tracking-tighter">Site Maintenance</h1>
-                    <p className="text-lg text-muted-foreground font-medium max-w-md mx-auto">
-                        Room001 is preparing the ultimate creator experience.<br />
-                        <span className="text-sm mt-3 inline-block opacity-80">We are refining our systems to serve you better.</span>
-                    </p>
+                <h1 className="maintenance-title">Site Maintenance</h1>
+                <p className="maintenance-desc">
+                    Room001 is preparing the ultimate creator experience.
+                    <br/><br/>
+                    We are refining our systems to serve you better.
+                </p>
+                <div className="status-badge">
+                    <div className="pulse-dot"></div>
+                    SYSTEMS OFFLINE
                 </div>
-
-                {/* Status Indicator */}
-                <div className="inline-flex items-center justify-center gap-3 bg-white/5 border border-white/10 px-6 py-3 rounded-full mt-4">
-                    <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
-                    </span>
-                    <span className="text-sm font-bold tracking-widest uppercase text-white/80 font-mono">Systems Offline</span>
-                </div>
-            </div>
-        </main>
+            </main>
+        </>
     );
 }
+
