@@ -15,9 +15,8 @@ cd ../turkishwatchguys && npm run dev -- -p 3001 &
 echo "3. WatchOS (Port: 3002)"
 cd ../watchos && npm run dev -- -p 3002 &
 
-echo "4. Shopmy-TR (Port: 3003)"
-# Not: Eğer ileride klasör ismini room001 yaparsan burayı güncellemeyi unutma!
-cd ../shopmy-tr && npm run dev -- -p 3003 &
+echo "4. Room001 (Port: 3003)"
+cd ../room001 && npm run dev -- -p 3003 &
 
 echo "✅ Tüm projeler arka planda başlatıldı."
 echo "Terminal loglarını görebilirsin. Hepsini aynı anda kapatmak için CTRL + C kombinasyonunu kullanabilirsin."
